@@ -15,7 +15,7 @@ class PDFPageTileLayer: CATiledLayer {
         
         super.init()
         
-        self.levelsOfDetail = 10
+        self.levelsOfDetail = 16
         self.levelsOfDetailBias = self.levelsOfDetail - 1
         
         let mainScreen = UIScreen.mainScreen()

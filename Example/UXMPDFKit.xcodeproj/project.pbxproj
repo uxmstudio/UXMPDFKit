@@ -13,6 +13,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		614D2EE31C8C8A9A00A856CD /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 614D2EE21C8C8A9A00A856CD /* sample.pdf */; };
 		666044342EA38DC370E5F435 /* Pods_UXMPDFKit_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1AA36528C76CCF2152583AD /* Pods_UXMPDFKit_Example.framework */; };
 		AE5144652E0471FC7CB6713E /* Pods_UXMPDFKit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEF90DD1352F94573E25AD0B /* Pods_UXMPDFKit_Tests.framework */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 		607FACE51AFB9204008FA782 /* UXMPDFKit_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UXMPDFKit_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		614D2EE21C8C8A9A00A856CD /* sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample.pdf; sourceTree = "<group>"; };
 		7779BF608B352FF8914675BA /* Pods-UXMPDFKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UXMPDFKit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-UXMPDFKit_Example/Pods-UXMPDFKit_Example.release.xcconfig"; sourceTree = "<group>"; };
 		DEF90DD1352F94573E25AD0B /* Pods_UXMPDFKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UXMPDFKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1AA36528C76CCF2152583AD /* Pods_UXMPDFKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UXMPDFKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +104,7 @@
 		607FACD21AFB9204008FA782 /* Example for UXMPDFKit */ = {
 			isa = PBXGroup;
 			children = (
+				614D2EE21C8C8A9A00A856CD /* sample.pdf */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -249,6 +252,7 @@
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				614D2EE31C8C8A9A00A856CD /* sample.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

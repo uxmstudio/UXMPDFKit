@@ -17,27 +17,43 @@ public class PDFSinglePageViewer: UICollectionView {
     
     
     public private(set) var currentPage = 0
-    public var singlePageDelegate:PDFSinglePageViewerProtocol
+    public var singlePageDelegate:PDFSinglePageViewerProtocol?
     
     private var document:PDFDocument
     private var bookmarkedPages:[String]?
     
+    
+    public init(frame: CGRect, document: PDFDocument) {
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .Horizontal
+        layout.sectionInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        layout.minimumLineSpacing = 0.0
+        layout.minimumInteritemSpacing = 0.0
+        
+        self.document = document
+        
+        super.init(frame: frame, collectionViewLayout: layout)
+        
+        self.pagingEnabled = true
+        self.backgroundColor = UIColor.groupTableViewBackgroundColor()
+        self.showsHorizontalScrollIndicator = false
+        self.registerClass(PDFSinglePageCell.self, forCellWithReuseIdentifier:"ContentCell")
+        
+        self.delegate = self
+        self.dataSource = self
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     func displayPage(page: Int, animated: Bool) {
         
+        let indexPath = NSIndexPath(forItem: (page - 1), inSection: 0)
+        self.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: animated)
     }
-    
-    
-    
-    
-    
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-    // Drawing code
-    }
-    */
-    
 }
 
 extension PDFSinglePageViewer: UICollectionViewDataSource {
@@ -52,7 +68,17 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
     
     public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
+        let cell:PDFSinglePageCell = self.dequeueReusableCellWithReuseIdentifier("ContentCell", forIndexPath: indexPath) as! PDFSinglePageCell
         
+        var contentSize:CGRect = CGRectZero
+        contentSize.size = self.collectionView(collectionView, layout: self.collectionViewLayout, sizeForItemAtIndexPath: indexPath)
+        
+        let page = indexPath.row + 1
+        
+        cell.contentView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
+        cell.pageContentView = PDFPageContentView(frame: contentSize, document: self.document, page: page)
+        
+        return cell
     }
 }
 
@@ -83,7 +109,7 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
     
     func didDisplayPage(scrollView: UIScrollView) {
         let page:Int = Int((scrollView.contentOffset.x + scrollView.frame.size.width) / scrollView.frame.size.width)
-        self.singlePageDelegate.singlePageViewer(self, didDisplayPage: page)
+        self.singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
     }
 }
 

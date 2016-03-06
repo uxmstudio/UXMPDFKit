@@ -63,11 +63,11 @@ public class PDFDocument: NSObject, NSCoding {
         self.loadDocumentInformation()
     }
     
-    convenience init(filePath: String) {
+    public convenience init(filePath: String) {
         self.init(filePath: filePath, password: nil)
     }
     
-    init(filePath: String, password: String?) {
+    public init(filePath: String, password: String?) {
         
         self.guid = PDFDocument.GUID()
         self.password = password
@@ -148,10 +148,10 @@ public class PDFDocument: NSObject, NSCoding {
                 }
             }
             
-            let majorVersion = UnsafeMutablePointer<Int32>()
-            let minorVersion = UnsafeMutablePointer<Int32>()
-            CGPDFDocumentGetVersion(pdfDocRef, majorVersion, minorVersion)
-            self.version = Float("\(majorVersion).\(minorVersion)")!
+//            let majorVersion = UnsafeMutablePointer<Int32>()
+//            let minorVersion = UnsafeMutablePointer<Int32>()
+//            CGPDFDocumentGetVersion(pdfDocRef, majorVersion, minorVersion)
+//            self.version = Float("\(majorVersion).\(minorVersion)")!
             
             self.pageCount = CGPDFDocumentGetNumberOfPages(pdfDocRef)
             
@@ -171,17 +171,17 @@ public class PDFDocument: NSObject, NSCoding {
         return NSProcessInfo.processInfo().globallyUniqueString
     }
     
-    static func documentsPath() -> String {
+    public static func documentsPath() -> String {
         return NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
     }
     
-    static func applicationPath() -> String {
+    public static func applicationPath() -> String {
         
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         return (paths.first! as NSString).stringByDeletingLastPathComponent
     }
     
-    static func applicationSupportPath() -> String {
+    public static func applicationSupportPath() -> String {
         
         let fileManager = NSFileManager()
         let pathURL = try! fileManager.URLForDirectory(.ApplicationSupportDirectory, inDomain: .UserDomainMask, appropriateForURL: nil, create: true)
@@ -190,6 +190,9 @@ public class PDFDocument: NSObject, NSCoding {
     
     static func archiveFilePathForFileAtPath(path: String) -> String {
         
+        let archivePath = PDFDocument.applicationSupportPath()
+        let archiveName = "random-name-fix-later.plist"
+        return (archivePath as NSString).stringByAppendingPathComponent(archiveName)
     }
     
     static func isPDF(filePath: String) -> Bool {

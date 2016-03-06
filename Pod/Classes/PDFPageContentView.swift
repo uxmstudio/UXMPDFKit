@@ -199,7 +199,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         let targetRect = CGRectInset(self.bounds, 0, 0)
         let zoomScale = PDFPageContentView.zoomScaleThatFits(targetRect.size, source: self.contentView.bounds.size)
         
-        self.minimumZoomScale = self.zoomScale
-        self.maximumZoomScale = self.zoomScale * 16.0
+        self.minimumZoomScale = zoomScale
+        self.maximumZoomScale = zoomScale * 16.0
     }
 }
