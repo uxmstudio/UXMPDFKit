@@ -1,0 +1,6 @@
+framework module Pods_UXMPDFKit_Tests {
+  umbrella header "Pods-UXMPDFKit_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
