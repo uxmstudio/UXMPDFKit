@@ -28,7 +28,7 @@ class PDFPageContent: UIView {
     }
     
     //MARK: - Init
-    init(url: NSURL, var page:Int, password:String) {
+    init(url: NSURL, var page:Int, password:String?) {
         
         var viewRect:CGRect = CGRectZero
         
@@ -90,6 +90,11 @@ class PDFPageContent: UIView {
         self.contentMode = .Redraw
         self.autoresizingMask = .None
         self.backgroundColor = UIColor.clearColor()
+    }
+    
+    convenience init(document: PDFDocument, page:Int) {
+        
+        self.init(url: document.fileUrl, page:page, password:document.password)
     }
     
     required init?(coder aDecoder: NSCoder) {
