@@ -15,13 +15,11 @@ public protocol PDFSinglePageViewerProtocol {
 
 public class PDFSinglePageViewer: UICollectionView {
     
-    
     public private(set) var currentPage = 0
     public var singlePageDelegate:PDFSinglePageViewerProtocol?
     
-    private var document:PDFDocument
+    public var document:PDFDocument?
     private var bookmarkedPages:[String]?
-    
     
     public init(frame: CGRect, document: PDFDocument) {
         
@@ -35,6 +33,25 @@ public class PDFSinglePageViewer: UICollectionView {
         
         super.init(frame: frame, collectionViewLayout: layout)
         
+        setupCollectionView()
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .Horizontal
+        layout.sectionInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        layout.minimumLineSpacing = 0.0
+        layout.minimumInteritemSpacing = 0.0
+        
+        super.init(coder: aDecoder)
+        self.collectionViewLayout = layout
+        
+        setupCollectionView()
+    }
+    
+    func setupCollectionView() {
+        
         self.pagingEnabled = true
         self.backgroundColor = UIColor.groupTableViewBackgroundColor()
         self.showsHorizontalScrollIndicator = false
@@ -42,10 +59,6 @@ public class PDFSinglePageViewer: UICollectionView {
         
         self.delegate = self
         self.dataSource = self
-    }
-
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     
@@ -63,7 +76,10 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
     }
     
     public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.document.pageCount
+        guard let document = self.document else {
+            return 0
+        }
+        return document.pageCount
     }
     
     public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -76,7 +92,7 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
         let page = indexPath.row + 1
         
         cell.contentView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
-        cell.pageContentView = PDFPageContentView(frame: contentSize, document: self.document, page: page)
+        cell.pageContentView = PDFPageContentView(frame: contentSize, document: self.document!, page: page)
         
         return cell
     }

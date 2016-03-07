@@ -16,8 +16,29 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="RQY-pS-dQA" customClass="PDFSinglePageViewer" customModule="UXMPDFKit">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zJH-Zp-75z">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="RQY-pS-dQA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="05Q-6A-GkG"/>
+                            <constraint firstItem="RQY-pS-dQA" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="ED6-pG-dE9"/>
+                            <constraint firstAttribute="trailing" secondItem="RQY-pS-dQA" secondAttribute="trailing" id="aN7-kc-VR8"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="RQY-pS-dQA" secondAttribute="bottom" id="dmS-gY-DVS"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="collectionView" destination="RQY-pS-dQA" id="dSN-Uw-Om0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
