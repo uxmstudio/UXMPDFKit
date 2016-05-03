@@ -73,11 +73,11 @@ class PDFPageContent: UIView {
         var pageHeight = Int(self.pageHeight)
         
         if pageWidth % 2 != 0 {
-            pageWidth--
+            pageWidth -= 1
         }
         
         if pageHeight % 2 != 0 {
-            pageHeight--
+            pageHeight -= 1
         }
         
         viewRect.size = CGSizeMake(CGFloat(pageWidth), CGFloat(pageHeight))

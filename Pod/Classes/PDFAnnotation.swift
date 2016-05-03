@@ -40,7 +40,7 @@ struct PDFTextAnnotation:PDFAnnotation {
         nsText.drawInRect(textRect, withAttributes: attributes)
         
         UIGraphicsPopContext()
-    }MARPAR10
+    }
 }
 
 struct PDFPathAnnotation:PDFAnnotation {
