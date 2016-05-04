@@ -4,20 +4,13 @@
 [![License](https://img.shields.io/cocoapods/l/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 [![Platform](https://img.shields.io/cocoapods/p/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 
-## Usage
+# Usage
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+This project is still in early stages. Right now the PDF reader works both programmatically and through interface builder, thumbnails & annotations are to come.
 
-## Requirements
+# Installation
 
-## Installation
-
-UXMPDFKit is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod "UXMPDFKit"
-```
+To install, drag the pod folder into your project.
 
 # Author
 Chris Anderson:
