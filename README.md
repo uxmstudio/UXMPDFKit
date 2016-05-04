@@ -1,6 +1,5 @@
-# UXMPDFKit
+![UXM Token Field](https://uxmstudio.com/public/images/uxmtokenfield.png)
 
-[![CI Status](http://img.shields.io/travis/Chris Anderson/UXMPDFKit.svg?style=flat)](https://travis-ci.org/Chris Anderson/UXMPDFKit)
 [![Version](https://img.shields.io/cocoapods/v/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 [![License](https://img.shields.io/cocoapods/l/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 [![Platform](https://img.shields.io/cocoapods/p/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
@@ -20,10 +19,11 @@ it, simply add the following line to your Podfile:
 pod "UXMPDFKit"
 ```
 
-## Author
+# Author
+Chris Anderson:
+- chris@uxmstudio.com
+- [Home Page](http://uxmstudio.com)
 
-Chris Anderson, hi@chrisanderson.io
-
-## License
+# License
 
 UXMPDFKit is available under the MIT license. See the LICENSE file for more info.
