@@ -103,6 +103,8 @@ public class PDFPageScrubber: UIToolbar {
         self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberValueChanged(_:)), forControlEvents: .ValueChanged)
         self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberTouchUp(_:)), forControlEvents: .TouchUpInside)
         self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberTouchUp(_:)), forControlEvents: .TouchUpOutside)
+        
+        self.containerView.addSubview(self.scrubber)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -112,29 +114,10 @@ public class PDFPageScrubber: UIToolbar {
     
     
     
-    func updatePageThumbView(page: Int) {
-        
-        let pages = document.pageCount
-        
-        if pages > 1 {
-            
-            let controlWidth:CGFloat = self.scrubber.bounds.size.width
-            let useableWidth:CGFloat = controlWidth - thumbLargeWidth
-            
-            let stride = useableWidth / CGFloat(pages - 1)
-            let x:Int = Int(stride) * (page - 1)
-            let pageThumbX:CGFloat = CGFloat(x)
-            let pageThumbRect = pageThumbView!.frame
-        }
-    }
     
     
     
-    
-    
-    public func updateScrubber() {
-        //self.updatePagebarViews()
-    }
+
     
     public override func layoutSubviews() {
         
@@ -221,6 +204,63 @@ public class PDFPageScrubber: UIToolbar {
     }
     
     
+    public func updateScrubber() {
+        self.updatePagebarViews()
+    }
+    
+    public func updatePagebarViews() {
+        
+        let page = self.document.currentPage
+        
+        self.updatePageNumberText(page)
+        self.updatePageThumbView(page)
+    }
+    
+    func updatePageNumberText(page: Int) {
+        
+        if page != self.pageNumberLabel.tag {
+            
+            let pages = document.pageCount
+
+            self.pageNumberLabel.text = "\(page) of \(pages)"
+            self.pageNumberLabel.tag = page
+        }
+    }
+    
+    func updatePageThumbView(page: Int) {
+        
+        let pages = document.pageCount
+        
+        if pages > 1 {
+            
+            let controlWidth:CGFloat = self.scrubber.bounds.size.width
+            let useableWidth:CGFloat = controlWidth - thumbLargeWidth
+            
+            let stride = useableWidth / CGFloat(pages - 1)
+            let x:Int = Int(stride) * (page - 1)
+            let pageThumbX:CGFloat = CGFloat(x)
+            var pageThumbRect = pageThumbView!.frame
+            
+            if pageThumbX != pageThumbRect.origin.x {
+                pageThumbRect.origin.x = pageThumbX
+                pageThumbView?.frame = pageThumbRect
+            }
+        }
+        
+        if page != pageThumbView?.tag {
+            
+            pageThumbView?.tag = page
+            
+            if let pageThumbView = self.pageThumbView {
+                let size = CGSizeMake(thumbLargeWidth, thumbLargeHeight)
+                let smallThumbView:PDFPageScrubberThumb = PDFPageScrubberThumb(frame: pageThumbView.frame,
+                                                                               small: true,
+                                                                               color: self.thumbBackgroundColor)
+                smallThumbView.showImage(self.document, page: page)
+            }
+        }
+    }
+    
     
     func scrubberPageNumber(scrubber: PDFPageScrubberTrackControl) -> Int {
         
@@ -247,6 +287,11 @@ public class PDFPageScrubber: UIToolbar {
 class PDFPageScrubberTrackControl: UIControl {
     
     var value:CGFloat = 0.0
+    
+    func limitValue(valueX: CGFloat) {
+        
+        
+    }
 }
 
 class PDFPageScrubberThumb:PDFThumbnailView {

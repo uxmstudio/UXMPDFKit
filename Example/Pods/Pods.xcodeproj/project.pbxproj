@@ -40,9 +40,10 @@
 		5B9DD7E2FE7401F5AB2F1BE62FCBE592 /* NSString+QCKSelectorName.h in Headers */ = {isa = PBXBuildFile; fileRef = 91EB10846A1D5A8B9A3BA28C5457DF56 /* NSString+QCKSelectorName.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		5BBAC94F883DBF8438BBA353FE292317 /* UXMPDFKit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E62FFAFF98C7D9B7D23C48C857DEED79 /* UXMPDFKit-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EF5C00C6AECE1FCFFF118577817F5CE /* Equal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3661DD977D936FA0FEA7FDE08D852 /* Equal.swift */; };
-		61D3B36C1CDCE33A00E7C3A6 /* PDFThumbnailCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B36A1CDCD4D300E7C3A6 /* PDFThumbnailCache.swift */; };
+		61D3B36C1CDCE33A00E7C3A6 /* PDFSnapshotCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B36A1CDCD4D300E7C3A6 /* PDFSnapshotCache.swift */; };
 		61D3B36F1CDCF03900E7C3A6 /* PDFPageScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B36D1CDCEFE500E7C3A6 /* PDFPageScrubber.swift */; };
 		61D3B3721CDCF13300E7C3A6 /* PDFThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B3701CDCF13000E7C3A6 /* PDFThumbnailView.swift */; };
+		61D3B3751CDE985A00E7C3A6 /* PDFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B3731CDE980000E7C3A6 /* PDFViewController.swift */; };
 		629A230D1CCEEFBE94AFB2B29B8B2257 /* NSString+QCKSelectorName.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A83F0092F039C6F7AFC5D9D1E55E3BE /* NSString+QCKSelectorName.m */; };
 		63BBD83995BA60FA7D2E6AD4138C0D71 /* Functional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354B5315AD30C24D1172D4F1524B068D /* Functional.swift */; };
 		64539BE196D1741570018FFF86F14133 /* MatcherFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971FBD63640E42D5B13E199D80A38E44 /* MatcherFunc.swift */; };
@@ -200,9 +201,10 @@
 		5C8C873CB5F43A0FA130C9B9FF74B6B0 /* SatisfyAnyOf.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SatisfyAnyOf.swift; path = Sources/Nimble/Matchers/SatisfyAnyOf.swift; sourceTree = "<group>"; };
 		5CE93FA4667205AEE386C8648ABDC57E /* BeCloseTo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BeCloseTo.swift; path = Sources/Nimble/Matchers/BeCloseTo.swift; sourceTree = "<group>"; };
 		5DB45E6FECC28A1C0D5DFA630CA85C16 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		61D3B36A1CDCD4D300E7C3A6 /* PDFThumbnailCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFThumbnailCache.swift; sourceTree = "<group>"; };
+		61D3B36A1CDCD4D300E7C3A6 /* PDFSnapshotCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFSnapshotCache.swift; sourceTree = "<group>"; };
 		61D3B36D1CDCEFE500E7C3A6 /* PDFPageScrubber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFPageScrubber.swift; sourceTree = "<group>"; };
 		61D3B3701CDCF13000E7C3A6 /* PDFThumbnailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFThumbnailView.swift; sourceTree = "<group>"; };
+		61D3B3731CDE980000E7C3A6 /* PDFViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFViewController.swift; sourceTree = "<group>"; };
 		627E4E84747227302312F1E22D114789 /* DSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DSL.swift; path = Sources/Nimble/DSL.swift; sourceTree = "<group>"; };
 		62ADCB0AE00199FEACED77BDE119552F /* AdapterProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AdapterProtocols.swift; path = Sources/Nimble/Adapters/AdapterProtocols.swift; sourceTree = "<group>"; };
 		62C9EA115D167F4132613835B0AA5585 /* BeLessThan.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = BeLessThan.swift; path = Sources/Nimble/Matchers/BeLessThan.swift; sourceTree = "<group>"; };
@@ -494,14 +496,15 @@
 		70514B5B7FBA528BC96F767321025EEE /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				61D3B3731CDE980000E7C3A6 /* PDFViewController.swift */,
+				1E17620919E5061E49F530D093D6FA4C /* PDFSinglePageViewer.swift */,
 				0AB1A655E8D22810F2042CBC393069CF /* CGPDFDocument.swift */,
 				BA8910EF78F59707FD07B6A2837162E6 /* PDFAnnotation.swift */,
 				BD9E1D3CEEC45EA96FF76293CA4924DF /* PDFDocument.swift */,
 				0D55F424C790AF78CE392FE039FE8BE9 /* PDFPageContent.swift */,
 				E9B03215B85C1326F9040077C96017CC /* PDFPageContentView.swift */,
 				D249AEEB3597BCD9D268DE65CEA1E9E4 /* PDFPageTileLayer.swift */,
-				1E17620919E5061E49F530D093D6FA4C /* PDFSinglePageViewer.swift */,
-				61D3B36A1CDCD4D300E7C3A6 /* PDFThumbnailCache.swift */,
+				61D3B36A1CDCD4D300E7C3A6 /* PDFSnapshotCache.swift */,
 				61D3B36D1CDCEFE500E7C3A6 /* PDFPageScrubber.swift */,
 				61D3B3701CDCF13000E7C3A6 /* PDFThumbnailView.swift */,
 			);
@@ -849,12 +852,13 @@
 				6729DBEA1A83541A50BF2B4662E0CF55 /* CGPDFDocument.swift in Sources */,
 				ACCBC7498782630263AB1CF87EEB6262 /* PDFAnnotation.swift in Sources */,
 				61D3B3721CDCF13300E7C3A6 /* PDFThumbnailView.swift in Sources */,
+				61D3B3751CDE985A00E7C3A6 /* PDFViewController.swift in Sources */,
 				E4C9436394542DEDF36089DB55E3F776 /* PDFDocument.swift in Sources */,
 				F3CF5976D0BAD4C56884DFBAD4183C0D /* PDFPageContent.swift in Sources */,
 				8F947115D4973C5C6EA31513936EF504 /* PDFPageContentView.swift in Sources */,
 				61D3B36F1CDCF03900E7C3A6 /* PDFPageScrubber.swift in Sources */,
 				7CAB1C8D67DDA16544FFBFD57EDBDC95 /* PDFPageTileLayer.swift in Sources */,
-				61D3B36C1CDCE33A00E7C3A6 /* PDFThumbnailCache.swift in Sources */,
+				61D3B36C1CDCE33A00E7C3A6 /* PDFSnapshotCache.swift in Sources */,
 				D94FFBBACAD9AC08BCF9F4543E470B17 /* PDFSinglePageViewer.swift in Sources */,
 				F9E4E55AA6AD3EE2E5C3E5D23EA6DF60 /* UXMPDFKit-dummy.m in Sources */,
 			);

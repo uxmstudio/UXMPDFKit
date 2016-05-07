@@ -50,7 +50,7 @@ class PDFThumbnailView: UIView {
 
     func showImage(document: PDFDocument, page: Int) {
         self.imageView.image = nil
-        PDFQueue.sharedQueue.fetchPage(document, page: page) { (thumbnail) in
+        PDFQueue.sharedQueue.fetchPage(document, page: page, size: self.frame.size) { (thumbnail) in
             self.imageView.image = thumbnail.image
         }
     }
