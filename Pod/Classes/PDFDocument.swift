@@ -90,7 +90,7 @@ public class PDFDocument: NSObject, NSCoding {
             let pdfDocRef:CGPDFDocumentRef = try CGPDFDocument.create(self.fileUrl, password: self.password)
             
             let infoDic:CGPDFDictionaryRef = CGPDFDocumentGetInfo(pdfDocRef)
-            var string = CGPDFStringRef()
+            var string:CGPDFStringRef = nil
             
             if CGPDFDictionaryGetString(infoDic, "Title", &string) {
                 
