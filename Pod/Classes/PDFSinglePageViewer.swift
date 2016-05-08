@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol PDFSinglePageViewerProtocol {
+public protocol PDFSinglePageViewerDelegate {
     
     func singlePageViewer(collectionView: PDFSinglePageViewer, didDisplayPage page:Int)
 }
@@ -16,7 +16,7 @@ public protocol PDFSinglePageViewerProtocol {
 public class PDFSinglePageViewer: UICollectionView {
     
     public private(set) var currentPage = 0
-    public var singlePageDelegate:PDFSinglePageViewerProtocol?
+    public var singlePageDelegate:PDFSinglePageViewerDelegate?
     
     public var document:PDFDocument?
     private var bookmarkedPages:[String]?

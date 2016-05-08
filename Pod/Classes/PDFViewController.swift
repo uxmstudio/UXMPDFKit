@@ -15,6 +15,7 @@ public class PDFViewController: UIViewController {
     lazy var collectionView:PDFSinglePageViewer = {
         var collectionView = PDFSinglePageViewer(frame: self.view.bounds, document: self.document)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.singlePageDelegate = self
         return collectionView
     }()
     
@@ -71,5 +72,14 @@ extension PDFViewController: PDFPageScrubberDelegate {
         
         self.document.currentPage = selectedPage
         self.collectionView.displayPage(selectedPage, animated: false)
+    }
+}
+
+extension PDFViewController: PDFSinglePageViewerDelegate {
+    
+    public func singlePageViewer(collectionView: PDFSinglePageViewer, didDisplayPage page: Int) {
+        
+        self.document.currentPage = page
+        self.pageScrubber.updateScrubber()
     }
 }
