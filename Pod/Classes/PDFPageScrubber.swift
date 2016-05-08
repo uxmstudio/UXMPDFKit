@@ -211,6 +211,10 @@ public class PDFPageScrubber: UIToolbar {
             
             thumbRect.origin.x += thumbWidth
         }
+        
+        for thumb in thumbsToHide.values {
+            thumb.hidden = true
+        }
     }
     
     
@@ -283,7 +287,7 @@ public class PDFPageScrubber: UIToolbar {
     func enableTimerFired(timer: NSTimer) {
         self.enableTimer?.invalidate()
         self.enableTimer = nil
-        self.scrubber.userInteractionEnabled = false
+        self.scrubber.userInteractionEnabled = true
     }
     
     func restartTrackTimer() {
