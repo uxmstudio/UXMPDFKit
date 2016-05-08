@@ -8,12 +8,17 @@
 
 import UIKit
 
+public protocol PDFPageScrubberDelegate {
+    
+    func scrubber(scrubber:PDFPageScrubber, selectedPage:Int)
+}
+
 public class PDFPageScrubber: UIToolbar {
     
     var document:PDFDocument
     var scrubber:PDFPageScrubberTrackControl = PDFPageScrubberTrackControl()
     
-    var scrubberDelegate:PDFPageScrubber?
+    var scrubberDelegate:PDFPageScrubberDelegate?
     var thumbBackgroundColor:UIColor = UIColor(white: 255, alpha: 0.7)
     
     var thumbSmallGap:CGFloat = 2.0
@@ -29,6 +34,9 @@ public class PDFPageScrubber: UIToolbar {
     var thumbViews:[Int:PDFThumbnailView] = [:]
     
     var pageThumbView:PDFPageScrubberThumb?
+    
+    var enableTimer:NSTimer?
+    var trackTimer:NSTimer?
     
     lazy var containerView:UIView = {
         
@@ -105,6 +113,8 @@ public class PDFPageScrubber: UIToolbar {
         self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberTouchUp(_:)), forControlEvents: .TouchUpOutside)
         
         self.containerView.addSubview(self.scrubber)
+        
+        self.updatePageNumberText(self.document.currentPage)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -252,7 +262,6 @@ public class PDFPageScrubber: UIToolbar {
             pageThumbView?.tag = page
             
             if let pageThumbView = self.pageThumbView {
-                let size = CGSizeMake(thumbLargeWidth, thumbLargeHeight)
                 let smallThumbView:PDFPageScrubberThumb = PDFPageScrubberThumb(frame: pageThumbView.frame,
                                                                                small: true,
                                                                                color: self.thumbBackgroundColor)
@@ -260,6 +269,50 @@ public class PDFPageScrubber: UIToolbar {
             }
         }
     }
+    
+    
+    
+    func trackTimerFired(timer: NSTimer) {
+        self.trackTimer?.invalidate()
+        self.trackTimer = nil
+        if self.scrubber.tag != document.currentPage {
+            self.scrubberDelegate?.scrubber(self, selectedPage: self.scrubber.tag)
+        }
+    }
+    
+    func enableTimerFired(timer: NSTimer) {
+        self.enableTimer?.invalidate()
+        self.enableTimer = nil
+        self.scrubber.userInteractionEnabled = false
+    }
+    
+    func restartTrackTimer() {
+        
+        if trackTimer != nil {
+            trackTimer?.invalidate()
+            trackTimer = nil
+        }
+        trackTimer = NSTimer.scheduledTimerWithTimeInterval(0.25,
+                                                            target: self,
+                                                            selector: #selector(PDFPageScrubber.trackTimerFired(_:)),
+                                                            userInfo: nil,
+                                                            repeats: false)
+    }
+    
+    func startEnableTimer() {
+        
+        if enableTimer != nil {
+            enableTimer?.invalidate()
+            enableTimer = nil
+        }
+
+        enableTimer = NSTimer.scheduledTimerWithTimeInterval(0.25,
+                                                             target: self,
+                                                             selector: #selector(PDFPageScrubber.enableTimerFired(_:)),
+                                                             userInfo: nil,
+                                                             repeats: false)
+    }
+    
     
     
     func scrubberPageNumber(scrubber: PDFPageScrubberTrackControl) -> Int {
@@ -272,15 +325,46 @@ public class PDFPageScrubber: UIToolbar {
     }
     
     func scrubberTouchDown(scrubber: PDFPageScrubberTrackControl) {
+        let page = self.scrubberPageNumber(scrubber)
         
+        if page != document.currentPage {
+            
+            self.updatePageNumberText(page)
+            self.updatePageThumbView(page)
+            
+            self.restartTrackTimer()
+        }
+        scrubber.tag = page
     }
     
     func scrubberTouchUp(scrubber: PDFPageScrubberTrackControl) {
         
+        if self.trackTimer != nil {
+            self.trackTimer?.invalidate()
+            self.trackTimer = nil
+        }
+
+        if scrubber.tag != document.currentPage {
+            scrubber.userInteractionEnabled = false
+            self.scrubberDelegate?.scrubber(self, selectedPage: scrubber.tag)
+            self.startEnableTimer()
+        }
+        
+        scrubber.tag = 0
     }
     
     func scrubberValueChanged(scrubber: PDFPageScrubberTrackControl) {
         
+        let page = self.scrubberPageNumber(scrubber)
+        if page != scrubber.tag {
+            
+            self.updatePageNumberText(page)
+            self.updatePageThumbView(page)
+            
+            scrubber.tag = page
+            
+            self.restartTrackTimer()
+        }
     }
 }
 
@@ -288,9 +372,47 @@ class PDFPageScrubberTrackControl: UIControl {
     
     var value:CGFloat = 0.0
     
-    func limitValue(valueX: CGFloat) {
+    func limitValue(x: CGFloat) -> CGFloat {
         
+        let minX:CGFloat = self.bounds.origin.x
+        let maxX:CGFloat = self.bounds.size.width - 1.0
         
+        if x < minX {
+            return minX
+        }
+        if x > maxX {
+            return maxX
+        }
+        
+        return x
+    }
+    
+    override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
+        
+        let point = touch.locationInView(self)
+        self.value = self.limitValue(point.x)
+        return true
+    }
+    
+    override func continueTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
+        
+        if self.touchInside {
+            
+            let point = touch.locationInView(touch.view)
+            let x:CGFloat = self.limitValue(point.x)
+            if x != self.value {
+                self.value = x
+                self.sendActionsForControlEvents(.ValueChanged)
+            }
+        }
+        return true
+    }
+    
+    override func endTrackingWithTouch(touch: UITouch?, withEvent event: UIEvent?) {
+        
+        if let point = touch?.locationInView(self) {
+            self.value = self.limitValue(point.x)
+        }
     }
 }
 

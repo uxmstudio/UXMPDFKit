@@ -12,7 +12,7 @@ public class PDFViewController: UIViewController {
 
     var document:PDFDocument!
     
-    lazy var collectionView:UICollectionView = {
+    lazy var collectionView:PDFSinglePageViewer = {
         var collectionView = PDFSinglePageViewer(frame: self.view.bounds, document: self.document)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -21,8 +21,7 @@ public class PDFViewController: UIViewController {
     lazy var pageScrubber:PDFPageScrubber = {
         
         var pageScrubber = PDFPageScrubber(frame: CGRectMake(0, self.view.frame.size.height - self.bottomLayoutGuide.length, self.view.frame.size.width, 44.0), document: self.document)
-        //pageScrubber.scrubberDelegate = self
-        pageScrubber.delegate = self
+        pageScrubber.scrubberDelegate = self
         pageScrubber.translatesAutoresizingMaskIntoConstraints = false
         return pageScrubber
     }()
@@ -63,20 +62,14 @@ public class PDFViewController: UIViewController {
         self.collectionView = PDFSinglePageViewer(frame: self.view.bounds, document: self.document)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
-extension PDFViewController: UIToolbarDelegate {
+
+extension PDFViewController: PDFPageScrubberDelegate {
     
+    public func scrubber(scrubber: PDFPageScrubber, selectedPage: Int) {
+        
+        self.document.currentPage = selectedPage
+        self.collectionView.displayPage(selectedPage, animated: false)
+    }
 }
