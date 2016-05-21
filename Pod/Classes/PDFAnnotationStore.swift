@@ -20,7 +20,7 @@ public class PDFAnnotationStore {
         }
         else {
             
-            var storePage = PDFAnnotationPage()
+            let storePage = PDFAnnotationPage()
             storePage.addAnnotation(annotation)
             storePage.page = page
             pages[page] = storePage

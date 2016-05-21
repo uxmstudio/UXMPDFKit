@@ -19,9 +19,7 @@ class PDFPageContent: UIView {
     private var pageOffsetX:CGFloat = 0.0
     private var pageOffsetY:CGFloat = 0.0
     private var page:Int = 0
-    
-    
-    
+
     
     override class func layerClass() -> AnyClass {
         return PDFPageTileLayer.self
@@ -90,6 +88,8 @@ class PDFPageContent: UIView {
         self.contentMode = .Redraw
         self.autoresizingMask = .None
         self.backgroundColor = UIColor.clearColor()
+        
+        self.buildAnnotationLinksList()
     }
     
     convenience init(document: PDFDocument, page:Int) {
@@ -130,9 +130,104 @@ class PDFPageContent: UIView {
         }
     }
     
-    func linkFromAnnotation(annotation: CGPDFDictionaryRef) {
+    func linkFromAnnotation(annotation: CGPDFDictionaryRef) -> PDFDocumentLink? {
         
+        var annotationRectArray:CGPDFArrayRef = nil
         
+        if CGPDFDictionaryGetArray(annotation, "Rect", &annotationRectArray) {
+            
+            var lowerLeftX:CGPDFReal = 0.0
+            var lowerLeftY:CGPDFReal = 0.0
+            
+            var upperRightX:CGPDFReal = 0.0
+            var upperRightY:CGPDFReal = 0.0
+            
+            CGPDFArrayGetNumber(annotationRectArray, 0, &lowerLeftX)
+            CGPDFArrayGetNumber(annotationRectArray, 1, &lowerLeftY)
+            CGPDFArrayGetNumber(annotationRectArray, 2, &upperRightX)
+            CGPDFArrayGetNumber(annotationRectArray, 3, &upperRightY)
+            
+            if lowerLeftX > upperRightX {
+                let t = lowerLeftX
+                lowerLeftX = upperRightX
+                upperRightX = t
+            }
+            
+            if lowerLeftY > upperRightY {
+                let t = lowerLeftY
+                lowerLeftY = upperRightY
+                upperRightY = t
+            }
+            
+            lowerLeftX -= self.pageOffsetX
+            lowerLeftY -= self.pageOffsetY
+            upperRightX -= self.pageOffsetX
+            upperRightY -= self.pageOffsetY
+            
+            switch self.pageAngle {
+            case 90:
+                var swap = lowerLeftY
+                lowerLeftY = lowerLeftX
+                lowerLeftX = swap
+                swap = upperRightY
+                upperRightY = upperRightX
+                upperRightX = swap
+                break
+            case 270:
+                var swap = lowerLeftY
+                lowerLeftY = lowerLeftX
+                lowerLeftX = swap
+                swap = upperRightY
+                upperRightY = upperRightX
+                upperRightX = swap
+                
+                lowerLeftX = 0.0 - lowerLeftX + self.pageWidth
+                upperRightX = 0.0 - upperRightX + self.pageWidth
+                break
+            case 0:
+                lowerLeftX = 0.0 - lowerLeftX + self.pageWidth
+                upperRightX = 0.0 - upperRightX + self.pageWidth
+                break
+            default:
+                break
+            }
+            
+            let x = lowerLeftX
+            let w = upperRightX - lowerLeftX
+            let y = lowerLeftY
+            let h = upperRightY - lowerLeftY
+            
+            let rect = CGRectMake(x, y, w, h)
+            
+            return PDFDocumentLink.init(rect: rect, dictionary:annotation)
+        }
+        return nil
+    }
+    
+    func buildAnnotationLinksList() {
+        
+        self.links = []
+        var pageAnnotations:CGPDFArrayRef = nil
+        let pageDictionary:CGPDFDictionaryRef = CGPDFPageGetDictionary(self.pdfPageRef)
+        
+        if CGPDFDictionaryGetArray(pageDictionary, "Annots", &pageAnnotations) {
+            
+            for i in 0...CGPDFArrayGetCount(pageAnnotations) {
+                
+                var annotationDictionary:CGPDFDictionaryRef = nil
+                if CGPDFArrayGetDictionary(pageAnnotations, i, &annotationDictionary) {
+                    
+                    var annotationSubtype:UnsafePointer<Int8> = nil
+                    if CGPDFDictionaryGetName(annotationDictionary, "Link", &annotationSubtype) {
+                        
+                        if let documentLink = self.linkFromAnnotation(annotationDictionary) {
+                            self.links.append(documentLink)
+                        }
+                    }
+                }
+            }
+        }
+        self.highlightPageLinks()
     }
     
     

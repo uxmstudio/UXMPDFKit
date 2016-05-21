@@ -40,9 +40,8 @@ public class PDFPageScrubber: UIToolbar {
     
     lazy var containerView:UIView = {
         
-        let containerWidth:CGFloat = UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) ? UIScreen.mainScreen().bounds.size.width : UIScreen.mainScreen().bounds.size.height
+        let containerWidth:CGFloat = UIScreen.mainScreen().bounds.size.width
         let containerView = UIView(frame: CGRectMake(0, 0, containerWidth - self.pageNumberSpace * 2, 44.0))
-        
         containerView.autoresizesSubviews = false
         containerView.userInteractionEnabled = false
         containerView.contentMode = .Redraw
@@ -131,11 +130,10 @@ public class PDFPageScrubber: UIToolbar {
     
     public override func layoutSubviews() {
         
-        let containerWidth:CGFloat = UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) ? UIScreen.mainScreen().bounds.size.width : UIScreen.mainScreen().bounds.size.height
+        let containerWidth:CGFloat = UIScreen.mainScreen().bounds.size.width
         self.containerView.frame = CGRectMake(0, 0, containerWidth - self.pageNumberSpace * 2, 44.0)
         
         super.layoutSubviews()
-        
         
         var controlRect:CGRect = CGRectInset(containerView.bounds, 4.0, 0.0)
         let thumbWidth:CGFloat = thumbSmallWidth + thumbSmallGap
@@ -378,17 +376,18 @@ class PDFPageScrubberTrackControl: UIControl {
     
     func limitValue(x: CGFloat) -> CGFloat {
         
+        var valueX = x
         let minX:CGFloat = self.bounds.origin.x
         let maxX:CGFloat = self.bounds.size.width - 1.0
         
-        if x < minX {
-            return minX
+        if valueX < minX {
+            valueX = minX
         }
-        if x > maxX {
-            return maxX
+        if valueX > maxX {
+            valueX = maxX
         }
         
-        return x
+        return valueX
     }
     
     override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
