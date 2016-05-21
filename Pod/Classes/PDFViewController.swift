@@ -9,7 +9,7 @@
 import UIKit
 
 public class PDFViewController: UIViewController {
-
+    
     var document:PDFDocument!
     
     lazy var collectionView:PDFSinglePageViewer = {
@@ -46,7 +46,6 @@ public class PDFViewController: UIViewController {
         self.view.addSubview(collectionView)
         self.view.addSubview(pageScrubber)
         
-        
         var constraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|[collectionView]|", options: .AlignAllBaseline, metrics: nil, views: [ "superview": self.view, "collectionView": self.collectionView])
         constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("V:|[collectionView]|", options: .AlignAllLeft, metrics: nil, views: [ "superview": self.view, "collectionView": self.collectionView]))
         
@@ -62,6 +61,30 @@ public class PDFViewController: UIViewController {
     func loadDocument(document: PDFDocument) {
         self.collectionView = PDFSinglePageViewer(frame: self.view.bounds, document: self.document)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0)
+        self.collectionView.collectionViewLayout.invalidateLayout()
+        
+        self.view.layoutSubviews()
+    }
+    
+    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        
+        coordinator.animateAlongsideTransition({ (context) in
+            
+            self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0)
+            self.collectionView.collectionViewLayout.invalidateLayout()
+            self.pageScrubber.sizeToFit()
+            
+            }, completion: { (context) in
+                self.collectionView.displayPage(self.document.currentPage, animated: false)
+        })
     }
 }
 

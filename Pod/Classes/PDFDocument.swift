@@ -81,8 +81,6 @@ public class PDFDocument: NSObject, NSCoding {
         self.save()
     }
     
-    
-    
     func loadDocumentInformation() {
         
         do {

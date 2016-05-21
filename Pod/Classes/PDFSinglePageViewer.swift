@@ -144,12 +144,16 @@ public class PDFSinglePageCell:UICollectionViewCell {
                 self.removeConstraints(self.constraints)
                 pageContentView.removeFromSuperview()
             }
-            if let pageContentView = newValue{
+            if let pageContentView = newValue {
                 self._pageContentView = pageContentView
                 self.contentView.addSubview(pageContentView)
             }
             
         }
+    }
+    
+    override public func layoutSubviews() {
+        super.layoutSubviews()
     }
     
     override public func prepareForReuse() {
