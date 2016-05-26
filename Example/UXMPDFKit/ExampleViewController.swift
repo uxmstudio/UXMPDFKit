@@ -24,9 +24,12 @@ class ExampleViewController: UIViewController {
     
     @IBAction func loadPDF() {
         
-        let url = NSBundle.mainBundle().pathForResource("sample", ofType: "pdf")!
-        let document = PDFDocument(filePath: url)
+        let url = NSBundle.mainBundle().pathForResource("sample2", ofType: "pdf")!
+        let document = PDFDocument(filePath: url, password: "")
+        //let document = PDFDocument(filePath: url)
+        
         let pdf = PDFViewController(document: document)
+        PDFObjectParser(document: document)
         
         self.navigationController?.pushViewController(pdf, animated: true)
     }

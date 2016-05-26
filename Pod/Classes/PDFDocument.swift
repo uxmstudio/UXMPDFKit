@@ -31,8 +31,6 @@ public class PDFDocument: NSObject, NSCoding {
     public var creationDate: NSDate?
     public var version:Float = 0.0
     
-    
-    
     static func documentFromFile(filePath: String, password: String?) -> PDFDocument? {
         
         var document:PDFDocument? = PDFDocument.unarchiveDocumentForFile(filePath, password: password)
@@ -209,6 +207,16 @@ public class PDFDocument: NSObject, NSCoding {
         //            }
         
         return state;
+    }
+    
+    
+    public func documentRef() -> CGPDFDocumentRef? {
+        do {
+            return try CGPDFDocument.create(self.fileUrl, password: self.password)
+        }
+        catch {
+            return nil
+        }
     }
     
     func archiveWithFileAtPath(filePath: String) -> Bool {
