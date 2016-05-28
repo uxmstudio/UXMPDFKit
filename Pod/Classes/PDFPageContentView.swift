@@ -18,11 +18,13 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     var contentView:PDFPageContent
     var containerView:UIView
     
+    public var page:Int
     public var contentDelegate: PDFPageContentViewDelegate?
     private var PDFPageContentViewContext = 0
     
     init(frame:CGRect, document: PDFDocument, page:Int) {
         
+        self.page = page
         self.contentView = PDFPageContent(document: document, page: page)
         
         self.containerView = UIView(frame: self.contentView.bounds)

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class PDFFormTextField: PDFWidgetAnnotationView {
+public class PDFFormTextField: PDFFormField {
     
     var multiline:Bool
     var textEntryBox:UIView
@@ -18,7 +18,7 @@ public class PDFFormTextField: PDFWidgetAnnotationView {
     
     init(frame: CGRect, multiline: Bool, alignment: NSTextAlignment) {
         
-        var rect = CGRectMake(0, 0, frame.size.width, frame.size.height)
+        let rect = CGRectMake(0, 0, frame.size.width, frame.size.height)
         
         self.textEntryBox = multiline
             ? UITextView(frame: rect)

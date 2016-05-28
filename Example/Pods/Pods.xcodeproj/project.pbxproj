@@ -42,8 +42,12 @@
 		5EF5C00C6AECE1FCFFF118577817F5CE /* Equal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3661DD977D936FA0FEA7FDE08D852 /* Equal.swift */; };
 		616B61001CF6455E00B743A7 /* PDFUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B60FF1CF6455E00B743A7 /* PDFUtility.swift */; };
 		616B61041CF71FE700B743A7 /* PDFObjectParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B60FD1CF6417600B743A7 /* PDFObjectParser.swift */; };
-		616B610F1CF7AC8500B743A7 /* PDFWidgetAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B610D1CF7AAA500B743A7 /* PDFWidgetAnnotationView.swift */; };
+		616B610F1CF7AC8500B743A7 /* PDFFormField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B610D1CF7AAA500B743A7 /* PDFFormField.swift */; };
 		616B61121CF7B27D00B743A7 /* PDFFormTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B61101CF7B27400B743A7 /* PDFFormTextField.swift */; };
+		616B61151CF7C5B800B743A7 /* PDFFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B61131CF7C4F400B743A7 /* PDFFormView.swift */; };
+		616B61181CF8736B00B743A7 /* PDFDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B61161CF8736800B743A7 /* PDFDictionary.swift */; };
+		616B611A1CF87B1B00B743A7 /* PDFArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B61191CF87B1B00B743A7 /* PDFArray.swift */; };
+		616B611C1CF8A85B00B743A7 /* PDFFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616B611B1CF8A85B00B743A7 /* PDFFormViewController.swift */; };
 		61D3B36C1CDCE33A00E7C3A6 /* PDFSnapshotCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B36A1CDCD4D300E7C3A6 /* PDFSnapshotCache.swift */; };
 		61D3B36F1CDCF03900E7C3A6 /* PDFPageScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B36D1CDCEFE500E7C3A6 /* PDFPageScrubber.swift */; };
 		61D3B3721CDCF13300E7C3A6 /* PDFThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B3701CDCF13000E7C3A6 /* PDFThumbnailView.swift */; };
@@ -208,8 +212,12 @@
 		5DB45E6FECC28A1C0D5DFA630CA85C16 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		616B60FD1CF6417600B743A7 /* PDFObjectParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFObjectParser.swift; sourceTree = "<group>"; };
 		616B60FF1CF6455E00B743A7 /* PDFUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFUtility.swift; sourceTree = "<group>"; };
-		616B610D1CF7AAA500B743A7 /* PDFWidgetAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFWidgetAnnotationView.swift; sourceTree = "<group>"; };
+		616B610D1CF7AAA500B743A7 /* PDFFormField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFFormField.swift; sourceTree = "<group>"; };
 		616B61101CF7B27400B743A7 /* PDFFormTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFFormTextField.swift; sourceTree = "<group>"; };
+		616B61131CF7C4F400B743A7 /* PDFFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFFormView.swift; sourceTree = "<group>"; };
+		616B61161CF8736800B743A7 /* PDFDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFDictionary.swift; sourceTree = "<group>"; };
+		616B61191CF87B1B00B743A7 /* PDFArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFArray.swift; sourceTree = "<group>"; };
+		616B611B1CF8A85B00B743A7 /* PDFFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFFormViewController.swift; sourceTree = "<group>"; };
 		61D3B36A1CDCD4D300E7C3A6 /* PDFSnapshotCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFSnapshotCache.swift; sourceTree = "<group>"; };
 		61D3B36D1CDCEFE500E7C3A6 /* PDFPageScrubber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFPageScrubber.swift; sourceTree = "<group>"; };
 		61D3B3701CDCF13000E7C3A6 /* PDFThumbnailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFThumbnailView.swift; sourceTree = "<group>"; };
@@ -516,10 +524,22 @@
 			isa = PBXGroup;
 			children = (
 				616B60FD1CF6417600B743A7 /* PDFObjectParser.swift */,
-				616B610D1CF7AAA500B743A7 /* PDFWidgetAnnotationView.swift */,
+				616B610D1CF7AAA500B743A7 /* PDFFormField.swift */,
 				616B61101CF7B27400B743A7 /* PDFFormTextField.swift */,
+				616B61131CF7C4F400B743A7 /* PDFFormView.swift */,
+				616B611B1CF8A85B00B743A7 /* PDFFormViewController.swift */,
+				616B611D1CF8ADEB00B743A7 /* Objects */,
 			);
 			name = Form;
+			sourceTree = "<group>";
+		};
+		616B611D1CF8ADEB00B743A7 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				616B61161CF8736800B743A7 /* PDFDictionary.swift */,
+				616B61191CF87B1B00B743A7 /* PDFArray.swift */,
+			);
+			name = Objects;
 			sourceTree = "<group>";
 		};
 		70514B5B7FBA528BC96F767321025EEE /* Classes */ = {
@@ -884,12 +904,16 @@
 				ACCBC7498782630263AB1CF87EEB6262 /* PDFAnnotation.swift in Sources */,
 				616B61041CF71FE700B743A7 /* PDFObjectParser.swift in Sources */,
 				61D3B3721CDCF13300E7C3A6 /* PDFThumbnailView.swift in Sources */,
-				616B610F1CF7AC8500B743A7 /* PDFWidgetAnnotationView.swift in Sources */,
+				616B61151CF7C5B800B743A7 /* PDFFormView.swift in Sources */,
+				616B610F1CF7AC8500B743A7 /* PDFFormField.swift in Sources */,
 				61D3B3751CDE985A00E7C3A6 /* PDFViewController.swift in Sources */,
+				616B611C1CF8A85B00B743A7 /* PDFFormViewController.swift in Sources */,
 				E4C9436394542DEDF36089DB55E3F776 /* PDFDocument.swift in Sources */,
 				F3CF5976D0BAD4C56884DFBAD4183C0D /* PDFPageContent.swift in Sources */,
 				616B61121CF7B27D00B743A7 /* PDFFormTextField.swift in Sources */,
+				616B61181CF8736B00B743A7 /* PDFDictionary.swift in Sources */,
 				8F947115D4973C5C6EA31513936EF504 /* PDFPageContentView.swift in Sources */,
+				616B611A1CF87B1B00B743A7 /* PDFArray.swift in Sources */,
 				61D3B36F1CDCF03900E7C3A6 /* PDFPageScrubber.swift in Sources */,
 				7CAB1C8D67DDA16544FFBFD57EDBDC95 /* PDFPageTileLayer.swift in Sources */,
 				61D3B36C1CDCE33A00E7C3A6 /* PDFSnapshotCache.swift in Sources */,

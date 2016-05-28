@@ -1,5 +1,5 @@
 //
-//  PDFWidgetAnnotationView.swift
+//  PDFFormField.swift
 //  Pods
 //
 //  Created by Chris Anderson on 5/26/16.
@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol PDFWidgetAnnotationViewDelegate {
+protocol PDFFormViewDelegate {
     
-    func widgetAnnotationValueChanged(widget: PDFWidgetAnnotationView)
-    func widgetAnnotationEntered(widget: PDFWidgetAnnotationView)
-    func widgetAnnotationOptionsChanged(widget: PDFWidgetAnnotationView)
+    func widgetAnnotationValueChanged(widget: PDFFormField)
+    func widgetAnnotationEntered(widget: PDFFormField)
+    func widgetAnnotationOptionsChanged(widget: PDFFormField)
 }
 
-public class PDFWidgetAnnotationView: UIView {
+public class PDFFormField: UIView {
     
     var zoomScale:CGFloat = 1.0 {
         didSet {
@@ -29,7 +29,7 @@ public class PDFWidgetAnnotationView: UIView {
     var options:[AnyObject] = []
     var baseFrame:CGRect
     
-    var delegate:PDFWidgetAnnotationViewDelegate?
+    var delegate:PDFFormViewDelegate?
     
     override init(frame: CGRect) {
         self.baseFrame = frame
@@ -42,6 +42,12 @@ public class PDFWidgetAnnotationView: UIView {
         
         self.value = value
     }
+    
+//    convenience init(dictionary:PDFDictionary) {
+//        
+//        var value = dictionary["V"]
+//        var type = dictionary["FT"]
+//    }
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
