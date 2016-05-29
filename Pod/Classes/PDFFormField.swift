@@ -43,14 +43,12 @@ public class PDFFormField: UIView {
         self.value = value
     }
     
-//    convenience init(dictionary:PDFDictionary) {
-//        
-//        var value = dictionary["V"]
-//        var type = dictionary["FT"]
-//    }
-    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func adjustBaseOrigin(rect: CGRect, cropBox: CGRect) {
+        
     }
     
     public func refresh() {

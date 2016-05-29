@@ -20,6 +20,7 @@ class PDFPageContent: UIView {
     private var pageOffsetY:CGFloat = 0.0
     private var page:Int = 0
 
+    var cropBoxRect:CGRect
     
     override class func layerClass() -> AnyClass {
         return PDFPageTileLayer.self
@@ -43,7 +44,7 @@ class PDFPageContent: UIView {
         
         self.pdfPageRef = CGPDFDocumentGetPage(self.pdfDocRef, page)!
         
-        let cropBoxRect = CGPDFPageGetBoxRect(pdfPageRef, .CropBox)
+        cropBoxRect = CGPDFPageGetBoxRect(pdfPageRef, .CropBox)
         let mediaBoxRect = CGPDFPageGetBoxRect(pdfPageRef, .MediaBox)
         let effectiveRect = CGRectIntersection(cropBoxRect, mediaBoxRect)
         

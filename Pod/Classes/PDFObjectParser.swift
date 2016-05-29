@@ -12,13 +12,13 @@ class PDFObjectParserContext {
     
     var dictionaryRef:CGPDFDictionaryRef
     var info:UnsafeMutablePointer<Void>
-    var attributes:[String:AnyObject] = [:]
+    var keys:[UnsafePointer<Int8>] = []
     
-    init(dictionaryRef: CGPDFDictionaryRef, info: UnsafeMutablePointer<Void>, attributes: [String:AnyObject]) {
+    init(dictionaryRef: CGPDFDictionaryRef, info: UnsafeMutablePointer<Void>, keys: [UnsafePointer<Int8>]) {
         
         self.dictionaryRef = dictionaryRef
         self.info = info
-        self.attributes = attributes
+        self.keys = keys
     }
 }
 
@@ -43,11 +43,8 @@ public class PDFObjectParser: NSObject {
         }
         
         let catalogue = CGPDFDocumentGetCatalog(ref)
-        
-        if CGPDFDictionaryGetDictionary(catalogue, "AcroForm", &acroForm) {
-            
-            self.attributes = PDFDictionary(dictionaryRef: acroForm)
-        }
+
+        self.attributes = PDFDictionary(dictionaryRef: catalogue)
 
         return self.attributes
     }

@@ -14,7 +14,7 @@ class PDFArray: NSObject, PDFObject {
     
     var array:[AnyObject] = []
     
-    init(arrayRef: CGPDFArrayRef) {
+    required init(arrayRef: CGPDFArrayRef) {
         self.arr = arrayRef
         super.init()
         
@@ -45,7 +45,7 @@ class PDFArray: NSObject, PDFObject {
         let x1 = self.array[2] as! CGFloat
         let y1 = self.array[3] as! CGFloat
 
-        return CGRectMake(min(x0, x1), min(y0, y1), abs(x1-x0), abs(y1-x0))
+        return CGRectMake(min(x0, x1), min(y0, y1), abs(x1-x0), abs(y1-y0))
     }
     
     func pdfObjectAtIndex(index: Int) -> AnyObject? {
@@ -143,13 +143,23 @@ class PDFArray: NSObject, PDFObject {
     func copyAsArray() -> [AnyObject] {
         
         var temp:[AnyObject] = []
-        for i in 0...CGPDFArrayGetCount(self.arr) {
+        var count = CGPDFArrayGetCount(self.arr)
+        
+        for i in 0.stride(to: count, by: 1) {
             if let obj = self.pdfObjectAtIndex(i) {
                 temp.append(obj)
             }
         }
         
         return temp
+    }
+}
+
+extension PDFArray: NSCopying {
+    
+    func copyWithZone(zone: NSZone) -> AnyObject {
+        
+        return self.dynamicType.init(arrayRef: self.arr)
     }
 }
 

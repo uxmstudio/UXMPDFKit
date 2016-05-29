@@ -29,7 +29,6 @@ class ExampleViewController: UIViewController {
         //let document = PDFDocument(filePath: url)
         
         let pdf = PDFViewController(document: document)
-        let forms = PDFFormViewController(document: document)
         
         self.navigationController?.pushViewController(pdf, animated: true)
     }

@@ -10,7 +10,7 @@ import Foundation
 
 public class PDFFormViewController:NSObject {
     
-    var formViews:[PDFFormView] = []
+    var formViews:[Int:PDFFormView] = [:]
     var currentForm:PDFFormView?
     
     var document:PDFDocument
@@ -31,7 +31,11 @@ public class PDFFormViewController:NSObject {
         guard let attributes = self.parser.attributes else {
             return
         }
-        guard let fields = attributes.arrayForKey("Fields") else {
+        
+        guard let forms = attributes["AcroForm"] as? PDFDictionary else {
+            return
+        }
+        guard let fields = forms.arrayForKey("Fields") else {
             return
         }
         
@@ -42,7 +46,12 @@ public class PDFFormViewController:NSObject {
         }
     }
     
-    func enumerate(fieldDict:PDFDictionary, page:Int? = nil) {
+    func enumerate(fieldDict:PDFDictionary) {
+
+        if fieldDict["Subtype"] != nil {
+            self.createFormField(fieldDict)
+            return
+        }
         
         guard let array = fieldDict.arrayForKey("Kids") else {
             return
@@ -53,32 +62,84 @@ public class PDFFormViewController:NSObject {
         for dict in array {
             if let innerFieldDict:PDFDictionary = dict as? PDFDictionary {
                 
-                if innerFieldDict["Annot"] != nil {
-                    self.createAnnotationForm(innerFieldDict, page: (page ?? i))
+                if let type = innerFieldDict["Type"] as? String where type == "Annot" {
+                    self.createFormField(innerFieldDict)
                 }
                 else {
-                    self.enumerate(innerFieldDict, page: (page ?? i))
+                    self.enumerate(innerFieldDict)
                 }
                 i = i-1
             }
         }
     }
     
-    
-    func createAnnotationForm(dict: PDFDictionary, page: Int) {
+    func getPageNumber(field:PDFDictionary) -> Int? {
         
-        print("Page \(page)")
+        
+        guard let attributes = self.parser.attributes else {
+            return nil
+        }
+        guard let pages = attributes["Pages"] as? PDFDictionary else {
+            return nil
+        }
+        guard let kids = pages.arrayForKey("Kids") else {
+            return nil
+        }
+        
+        var page = kids.count()
+        
+        for kid in kids {
+            if let dict = kid as? PDFDictionary,
+                let annots = dict.arrayForKey("Annots") {
+                for subField in annots {
+                    if field.isEqual(subField) {
+                        return page
+                    }
+                }
+            }
+            page--
+        }
+        
+        return page
+    }
+    
+    
+    func createFormField(dict: PDFDictionary) {
+        
         print(dict.allKeys())
+        print(dict.arrayForKey("Rect")?.rect())
         print(dict["T"])
-        print(dict["Tx"])
-        //
-        //        PDFFormField(frame: dict)
+        print(dict["FT"])
+        
+        guard let page = self.getPageNumber(dict) else {
+            return
+        }
+        print(page)
+        
+        if let formView = self.formViewForPage(page) {
+            formView.createFormField(dict)
+        }
+        else {
+            
+            var formView = PDFFormView(frame: CGRectZero, page: page)
+            formView.createFormField(dict)
+            self.formViews[page] = formView
+        }
     }
     
     
     func showForm(contentView:PDFPageContentView) {
         
         var page = contentView.page
+        if let formView = self.formViewForPage(page) {
+            
+            formView.zoomScale = contentView.zoomScale
+            print(contentView.contentView.cropBoxRect)
+            print(contentView.contentView.frame)
+            print(contentView.containerView.frame)
+            formView.setSize(contentView.frame, boundingBox: contentView.containerView.frame, cropBox: contentView.contentView.cropBoxRect)
+            contentView.addSubview(formView)
+        }
     }
     
     func formViewForPage(page: Int) -> PDFFormView? {

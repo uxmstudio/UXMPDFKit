@@ -14,24 +14,45 @@ protocol PDFObject {
 }
 
 class PDFDictionary:NSObject, PDFObject {
-
+    
     var dict:CGPDFDictionaryRef
     var attributes:[String:AnyObject] = [:]
+    
+    var keys:[UnsafePointer<Int8>] = []
+    var stringKeys:[String] = []
+    
+    var isParent:Bool = false
     
     init(dictionaryRef: CGPDFDictionaryRef) {
         
         self.dict = dictionaryRef
+        
         super.init()
         
         var context = PDFObjectParserContext(
             dictionaryRef: self.dict,
             info: UnsafeMutablePointer(Unmanaged.passUnretained(self).toOpaque()),
-            attributes: self.attributes
+            keys: self.keys
         )
         
         CGPDFDictionaryApplyFunction(dictionaryRef, getDictionaryObjects, &context)
         
-        self.attributes = context.attributes
+        self.keys = context.keys
+        
+        for key in keys {
+            if let stringKey = String.fromCString(key) {
+                self.stringKeys.append(stringKey)
+            }
+        }
+        
+        for key in keys {
+            guard let stringKey = String.fromCString(key) else {
+                return
+            }
+            if let obj = self.pdfObjectForKey(key) {
+                self.attributes[stringKey] = obj
+            }
+        }
     }
     
     subscript(key: String) -> AnyObject? {
@@ -50,7 +71,25 @@ class PDFDictionary:NSObject, PDFObject {
         return Array(attributes.keys)
     }
     
-    func booleanFromKey(key: UnsafePointer<Int8>) -> Bool? {
+    override func isEqual(object: AnyObject?) -> Bool {
+        if let object = object as? PDFDictionary {
+            
+            let rect1 = self.arrayForKey("Rect")?.rect()
+            let rect2 = object.arrayForKey("Rect")?.rect()
+            
+            let keys1 = self.allKeys()
+            let keys2 = object.allKeys()
+            
+            let t1 = self["T"] as? String
+            let t2 = object["T"] as? String
+            
+            return rect1 == rect2 && keys1 == keys2 && t1 == t2
+        }
+        return false
+    }
+    
+    
+    private func booleanFromKey(key: UnsafePointer<Int8>) -> Bool? {
         var boolObj:CGPDFBoolean = 0
         if CGPDFDictionaryGetBoolean(self.dict, key, &boolObj) {
             return Bool(Int(boolObj))
@@ -58,7 +97,7 @@ class PDFDictionary:NSObject, PDFObject {
         return nil
     }
     
-    func integerFromKey(key: UnsafePointer<Int8>) -> Int? {
+    private func integerFromKey(key: UnsafePointer<Int8>) -> Int? {
         var intObj:CGPDFInteger = 0
         if CGPDFDictionaryGetInteger(self.dict, key, &intObj) {
             return Int(intObj)
@@ -66,7 +105,7 @@ class PDFDictionary:NSObject, PDFObject {
         return nil
     }
     
-    func realFromKey(key: UnsafePointer<Int8>) -> CGFloat? {
+    private func realFromKey(key: UnsafePointer<Int8>) -> CGFloat? {
         var floatObj:CGPDFReal = 0
         if CGPDFDictionaryGetNumber(self.dict, key, &floatObj) {
             return CGFloat(floatObj)
@@ -74,18 +113,21 @@ class PDFDictionary:NSObject, PDFObject {
         return nil
     }
     
-    func nameFromKey(key: UnsafePointer<Int8>) -> String? {
+    private func nameFromKey(key: UnsafePointer<Int8>) -> String? {
+        guard let stringKey = String.fromCString(key) else {
+            return nil
+        }
         var nameObj:UnsafePointer<Int8> = nil
         if CGPDFDictionaryGetName(self.dict, key, &nameObj) {
             if let dictionaryName = String.fromCString(nameObj) {
-                print(dictionaryName)
+                print("\(stringKey) : \(dictionaryName)")
                 return dictionaryName
             }
         }
         return nil
     }
     
-    func stringFromKey(key: UnsafePointer<Int8>) -> String? {
+    private func stringFromKey(key: UnsafePointer<Int8>) -> String? {
         var stringObj:CGPDFStringRef = nil
         if CGPDFDictionaryGetString(self.dict, key, &stringObj) {
             if let ref:CFStringRef = CGPDFStringCopyTextString(stringObj) {
@@ -95,7 +137,7 @@ class PDFDictionary:NSObject, PDFObject {
         return nil
     }
     
-    func arrayFromKey(key: UnsafePointer<Int8>) -> PDFArray? {
+    private func arrayFromKey(key: UnsafePointer<Int8>) -> PDFArray? {
         var arrayObj:CGPDFArrayRef = nil
         if CGPDFDictionaryGetArray(self.dict, key, &arrayObj) {
             return PDFArray(arrayRef: arrayObj)
@@ -103,11 +145,12 @@ class PDFDictionary:NSObject, PDFObject {
         return nil
     }
     
-    func dictionaryFromKey(key: UnsafePointer<Int8>) -> PDFDictionary? {
+    private func dictionaryFromKey(key: UnsafePointer<Int8>) -> PDFDictionary? {
         
         guard let stringKey = String.fromCString(key) else {
             return nil
         }
+        
         if stringKey == "Parent" || stringKey == "P" {
             return nil
         }
@@ -119,11 +162,12 @@ class PDFDictionary:NSObject, PDFObject {
         return nil
     }
     
-    func streamFromKey(key: UnsafePointer<Int8>) -> PDFDictionary? {
+    private func streamFromKey(key: UnsafePointer<Int8>) -> PDFDictionary? {
         
         guard let stringKey = String.fromCString(key) else {
             return nil
         }
+        
         if stringKey == "Parent" || stringKey == "P" {
             return nil
         }
@@ -161,17 +205,10 @@ class PDFDictionary:NSObject, PDFObject {
     
     var getDictionaryObjects:CGPDFDictionaryApplierFunction = { (key, object, info) in
         
-        guard let stringKey = String.fromCString(key) else {
-            return
-        }
-        
         let context = UnsafeMutablePointer<PDFObjectParserContext>(info).memory
         let contentDict:CGPDFDictionaryRef = context.dictionaryRef
         let objSelf = Unmanaged<PDFDictionary>.fromOpaque(COpaquePointer(context.info)).takeUnretainedValue()
-        let type:CGPDFObjectType = CGPDFObjectGetType(object)
         
-        if let obj = objSelf.pdfObjectForKey(key) {
-            context.attributes[stringKey] = obj
-        }
+        context.keys.append(key)
     }
 }

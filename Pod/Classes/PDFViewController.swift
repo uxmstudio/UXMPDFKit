@@ -27,6 +27,11 @@ public class PDFViewController: UIViewController {
         return pageScrubber
     }()
     
+    lazy var formController:PDFFormViewController = {
+        var formController = PDFFormViewController(document: self.document)
+        return formController
+    }()
+    
     public init(document: PDFDocument) {
         super.init(nibName: nil, bundle: nil)
         self.document = document
@@ -104,5 +109,10 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
         
         self.document.currentPage = page
         self.pageScrubber.updateScrubber()
+    }
+    
+    public func singlePageViewer(collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView) {
+        
+        self.formController.showForm(content)
     }
 }
