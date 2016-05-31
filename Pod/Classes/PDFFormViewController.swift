@@ -35,6 +35,7 @@ public class PDFFormViewController:NSObject {
         guard let forms = attributes["AcroForm"] as? PDFDictionary else {
             return
         }
+        
         guard let fields = forms.arrayForKey("Fields") else {
             return
         }
@@ -47,7 +48,7 @@ public class PDFFormViewController:NSObject {
     }
     
     func enumerate(fieldDict:PDFDictionary) {
-
+        
         if fieldDict["Subtype"] != nil {
             self.createFormField(fieldDict)
             return
@@ -56,8 +57,6 @@ public class PDFFormViewController:NSObject {
         guard let array = fieldDict.arrayForKey("Kids") else {
             return
         }
-        
-        var i = array.count()
         
         for dict in array {
             if let innerFieldDict:PDFDictionary = dict as? PDFDictionary {
@@ -68,7 +67,6 @@ public class PDFFormViewController:NSObject {
                 else {
                     self.enumerate(innerFieldDict)
                 }
-                i = i-1
             }
         }
     }
@@ -106,24 +104,22 @@ public class PDFFormViewController:NSObject {
     
     func createFormField(dict: PDFDictionary) {
         
-        print(dict.allKeys())
-        print(dict.arrayForKey("Rect")?.rect())
-        print(dict["T"])
-        print(dict["FT"])
+        //        print(dict.allKeys())
+        //        print(dict.arrayForKey("Rect")?.rect())
+        //        print(dict["T"])
+        //        print(dict["FT"])
         
-        guard let page = self.getPageNumber(dict) else {
-            return
-        }
-        print(page)
-        
-        if let formView = self.formViewForPage(page) {
-            formView.createFormField(dict)
-        }
-        else {
+        if let page = self.getPageNumber(dict) {
             
-            var formView = PDFFormView(frame: CGRectZero, page: page)
-            formView.createFormField(dict)
-            self.formViews[page] = formView
+            if let formView = self.formViewForPage(page) {
+                formView.createFormField(dict)
+            }
+            else {
+                
+                var formView = PDFFormView(frame: CGRectZero, page: page)
+                formView.createFormField(dict)
+                self.formViews[page] = formView
+            }
         }
     }
     
@@ -139,6 +135,10 @@ public class PDFFormViewController:NSObject {
             print(contentView.containerView.frame)
             formView.setSize(contentView.frame, boundingBox: contentView.containerView.frame, cropBox: contentView.contentView.cropBoxRect)
             contentView.addSubview(formView)
+            contentView.viewDidZoom = { scale in
+                print(scale)
+                formView.updateWithZoom(scale)
+            }
         }
     }
     

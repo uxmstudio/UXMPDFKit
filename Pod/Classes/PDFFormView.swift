@@ -24,9 +24,11 @@ public class PDFFormView:UIView {
     
     var cropBox:CGRect = CGRectZero
     var boundingBox:CGRect = CGRectZero
+    var baseFrame:CGRect
     
     init(frame: CGRect, page:Int) {
         self.page = page
+        self.baseFrame = frame
         super.init(frame: frame)
     }
     
@@ -37,6 +39,7 @@ public class PDFFormView:UIView {
     func setSize(rect: CGRect, boundingBox:CGRect, cropBox:CGRect) {
         
         self.frame = rect
+        self.baseFrame = rect
         self.cropBox = cropBox
         self.boundingBox = boundingBox
         
@@ -45,16 +48,34 @@ public class PDFFormView:UIView {
         }
     }
     
+    func updateWithZoom(zoomScale: CGFloat) {
+        var newWidth = self.baseFrame.width * zoomScale
+        var left = (newWidth - self.baseFrame.width) / 2
+        self.frame = CGRectMake(self.baseFrame.origin.x - left, 0, newWidth, self.baseFrame.height * zoomScale)
+        for field in fields {
+            field.zoomScale = zoomScale
+        }
+    }
+    
     func adjustFrame(field: PDFFormField) {
         
         var offsetX = (self.frame.width - boundingBox.width) / 2
         var factor = boundingBox.width / cropBox.width
+        var zoomLevel = 1 / self.zoomScale
         var correctedFrame = CGRectMake(
-            (field.frame.origin.x - cropBox.origin.x + offsetX) * factor,
+            (field.frame.origin.x - cropBox.origin.x) * factor + offsetX,
             (cropBox.height - field.frame.origin.y - field.frame.height - self.cropBox.origin.y) * factor,
             field.frame.width * factor,
             field.frame.height * factor)
+        
         field.frame = correctedFrame
+        
+        field.baseFrame = CGRectMake(
+            correctedFrame.origin.x * zoomLevel,
+            correctedFrame.origin.y * zoomLevel,
+            correctedFrame.width * zoomLevel,
+            correctedFrame.height * zoomLevel
+        )
     }
     
     func createFormField(dictionary: PDFDictionary) {

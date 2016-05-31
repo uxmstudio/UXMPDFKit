@@ -10,6 +10,15 @@ import UIKit
 
 public class PDFDocument: NSObject, NSCoding {
     
+    lazy public var documentRef:CGPDFDocument? = {
+        do {
+            return try CGPDFDocument.create(self.fileUrl, password: self.password)
+        }
+        catch {
+            return nil
+        }
+    }()
+    
     /// Document Properties
     public var password: String?
     public var lastOpen: NSDate?
@@ -207,16 +216,6 @@ public class PDFDocument: NSObject, NSCoding {
         //            }
         
         return state;
-    }
-    
-    
-    public func documentRef() -> CGPDFDocumentRef? {
-        do {
-            return try CGPDFDocument.create(self.fileUrl, password: self.password)
-        }
-        catch {
-            return nil
-        }
     }
     
     func archiveWithFileAtPath(filePath: String) -> Bool {

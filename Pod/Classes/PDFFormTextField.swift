@@ -85,20 +85,20 @@ extension PDFFormTextField: UITextFieldDelegate {
     }
     
     public func textFieldDidBeginEditing(textField: UITextField) {
-        self.delegate?.widgetAnnotationEntered(self)
+        self.delegate?.formFieldEntered(self)
     }
 }
 
 extension PDFFormTextField: UITextViewDelegate {
     public func textViewDidBeginEditing(textView: UITextView) {
-        self.delegate?.widgetAnnotationEntered(self)
+        self.delegate?.formFieldEntered(self)
     }
     
     public func textViewDidChange(textView: UITextView) {
-        self.delegate?.widgetAnnotationValueChanged(self)
+        self.delegate?.formFieldValueChanged(self)
     }
     
     func textChanged() {
-        self.delegate?.widgetAnnotationValueChanged(self)
+        self.delegate?.formFieldValueChanged(self)
     }
 }

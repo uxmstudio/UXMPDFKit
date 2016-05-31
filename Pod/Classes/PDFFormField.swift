@@ -10,15 +10,16 @@ import UIKit
 
 protocol PDFFormViewDelegate {
     
-    func widgetAnnotationValueChanged(widget: PDFFormField)
-    func widgetAnnotationEntered(widget: PDFFormField)
-    func widgetAnnotationOptionsChanged(widget: PDFFormField)
+    func formFieldValueChanged(widget: PDFFormField)
+    func formFieldEntered(widget: PDFFormField)
+    func formFieldOptionsChanged(widget: PDFFormField)
 }
 
 public class PDFFormField: UIView {
     
     var zoomScale:CGFloat = 1.0 {
         didSet {
+            
             self.frame = CGRectMake(self.baseFrame.origin.x * zoomScale,
                                     self.baseFrame.origin.y * zoomScale,
                                     self.baseFrame.size.width * zoomScale,
@@ -39,16 +40,11 @@ public class PDFFormField: UIView {
     convenience init(rect: CGRect, value: String) {
         
         self.init(frame: rect)
-        
         self.value = value
     }
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func adjustBaseOrigin(rect: CGRect, cropBox: CGRect) {
-        
     }
     
     public func refresh() {

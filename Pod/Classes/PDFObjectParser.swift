@@ -10,14 +10,9 @@ import UIKit
 
 class PDFObjectParserContext {
     
-    var dictionaryRef:CGPDFDictionaryRef
-    var info:UnsafeMutablePointer<Void>
     var keys:[UnsafePointer<Int8>] = []
     
-    init(dictionaryRef: CGPDFDictionaryRef, info: UnsafeMutablePointer<Void>, keys: [UnsafePointer<Int8>]) {
-        
-        self.dictionaryRef = dictionaryRef
-        self.info = info
+    init(keys: [UnsafePointer<Int8>]) {
         self.keys = keys
     }
 }
@@ -38,7 +33,7 @@ public class PDFObjectParser: NSObject {
     func getFormFields() -> AnyObject? {
         var acroForm:CGPDFDictionaryRef = nil
         
-        guard let ref = self.document.documentRef() else {
+        guard let ref = self.document.documentRef else {
             return nil
         }
         
@@ -51,7 +46,7 @@ public class PDFObjectParser: NSObject {
     
     func getCatalogue() -> CGPDFDictionaryRef? {
         
-        guard let ref = self.document.documentRef() else {
+        guard let ref = self.document.documentRef else {
             return nil
         }
         return CGPDFDocumentGetCatalog(ref)

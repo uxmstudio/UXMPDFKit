@@ -20,6 +20,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     
     public var page:Int
     public var contentDelegate: PDFPageContentViewDelegate?
+    public var viewDidZoom:((CGFloat) -> Void)?
     private var PDFPageContentViewContext = 0
     
     init(frame:CGRect, document: PDFDocument, page:Int) {
@@ -167,6 +168,10 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     //MARK: - UIScrollViewDelegate methods
     public func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
         return self.containerView
+    }
+    
+    public func scrollViewDidZoom(scrollView: UIScrollView) {
+        self.viewDidZoom?(scrollView.zoomScale)
     }
     
     
