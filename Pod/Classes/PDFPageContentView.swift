@@ -22,6 +22,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     public var contentDelegate: PDFPageContentViewDelegate?
     public var viewDidZoom:((CGFloat) -> Void)?
     private var PDFPageContentViewContext = 0
+    private var previousScale:CGFloat = 1.0
     
     init(frame:CGRect, document: PDFDocument, page:Int) {
         
@@ -29,7 +30,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         self.contentView = PDFPageContent(document: document, page: page)
         
         self.containerView = UIView(frame: self.contentView.bounds)
-        self.containerView.userInteractionEnabled = false
+        self.containerView.userInteractionEnabled = true
         self.containerView.contentMode = .Redraw
         self.containerView.backgroundColor = UIColor.whiteColor()
         self.containerView.autoresizesSubviews = true
@@ -178,6 +179,11 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     //MARK: - UIResponder methods
     override public func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesBegan(touches, withEvent: event)
+//        for subview in self.subviews.reverse() {
+//            if subview is PDFPageContent {
+//                subview.touchesBegan(touches, withEvent: event)
+//            }
+//        }
     }
     
     override public func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
@@ -202,7 +208,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     func updateMinimumMaximumZoom() {
-        
+        self.previousScale = self.zoomScale
         let targetRect = CGRectInset(self.bounds, 0, 0)
         let zoomScale = PDFPageContentView.zoomScaleThatFits(targetRect.size, source: self.contentView.bounds.size)
         

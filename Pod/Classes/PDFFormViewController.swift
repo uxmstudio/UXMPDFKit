@@ -73,7 +73,6 @@ public class PDFFormViewController:NSObject {
     
     func getPageNumber(field:PDFDictionary) -> Int? {
         
-        
         guard let attributes = self.parser.attributes else {
             return nil
         }
@@ -134,10 +133,11 @@ public class PDFFormViewController:NSObject {
             print(contentView.contentView.frame)
             print(contentView.containerView.frame)
             formView.setSize(contentView.frame, boundingBox: contentView.containerView.frame, cropBox: contentView.contentView.cropBoxRect)
-            contentView.addSubview(formView)
+            contentView.contentView.addSubview(formView)
             contentView.viewDidZoom = { scale in
                 print(scale)
                 formView.updateWithZoom(scale)
+                //formView.updateWithZoom(scale)
             }
         }
     }

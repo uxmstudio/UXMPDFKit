@@ -85,7 +85,7 @@ class PDFPageContent: UIView {
         super.init(frame: viewRect)
         
         self.autoresizesSubviews = false
-        self.userInteractionEnabled = false
+        self.userInteractionEnabled = true
         self.contentMode = .Redraw
         self.autoresizingMask = .None
         self.backgroundColor = UIColor.clearColor()
@@ -234,7 +234,10 @@ class PDFPageContent: UIView {
     
     //MARK: - Gesture Recognizer
     func processSingleTap(recognizer: UIGestureRecognizer) {
-        
+        if recognizer.state == UIGestureRecognizerState.Recognized {
+            let tapPoint = recognizer.locationInView(recognizer.view)
+            print(tapPoint)
+        }
     }
     
     //MARK: - CATiledLayer Delegate Methods
@@ -250,8 +253,6 @@ class PDFPageContent: UIView {
         /// Render the PDF page into the context
         CGContextDrawPDFPage(ctx, self.pdfPageRef);
     }
-    
-    
 }
 
 

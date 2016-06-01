@@ -17,15 +17,7 @@ protocol PDFFormViewDelegate {
 
 public class PDFFormField: UIView {
     
-    var zoomScale:CGFloat = 1.0 {
-        didSet {
-            
-            self.frame = CGRectMake(self.baseFrame.origin.x * zoomScale,
-                                    self.baseFrame.origin.y * zoomScale,
-                                    self.baseFrame.size.width * zoomScale,
-                                    self.baseFrame.size.height * zoomScale)
-        }
-    }
+    var zoomScale:CGFloat = 1.0
     var value:String = ""
     var options:[AnyObject] = []
     var baseFrame:CGRect
@@ -49,5 +41,30 @@ public class PDFFormField: UIView {
     
     public func refresh() {
         self.setNeedsDisplay()
+    }
+    
+    func updateForZoomScale(scale: CGFloat) {
+        self.zoomScale = scale
+        let screenAndZoomScale = scale * UIScreen.mainScreen().scale
+        self.applyScale(screenAndZoomScale, toView: self)
+        self.applyScale(screenAndZoomScale, toLayer: self.layer)
+    }
+    
+    func applyScale(scale: CGFloat, toView view:UIView) {
+        view.contentScaleFactor = scale
+        for subview in view.subviews {
+            self.applyScale(scale, toView: subview)
+        }
+    }
+    
+    func applyScale(scale: CGFloat, toLayer layer:CALayer) {
+        layer.contentsScale = scale
+        
+        guard let sublayers = layer.sublayers else {
+            return
+        }
+        for sublayer in sublayers {
+            self.applyScale(scale, toLayer: sublayer)
+        }
     }
 }

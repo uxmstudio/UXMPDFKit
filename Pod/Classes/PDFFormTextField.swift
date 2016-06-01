@@ -43,8 +43,8 @@ public class PDFFormTextField: PDFFormField {
                 textView.delegate = self
                 textView.scrollEnabled = true
                 textView.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4)
+                textView.font = UIFont.systemFontOfSize(self.fontSizeForRect(self.frame))
             }
-            
         }
         else {
             if let textField = self.textEntryBox as? UITextField {
@@ -52,8 +52,9 @@ public class PDFFormTextField: PDFFormField {
                 textField.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
                 textField.delegate = self
                 textField.adjustsFontSizeToFitWidth = true
-                textField.minimumFontSize = 8.0
-                textField.addTarget(self, action: "textChanged", forControlEvents: .ValueChanged)
+                textField.minimumFontSize = 6.0
+                textField.font = UIFont.systemFontOfSize(self.fontSizeForRect(self.frame))
+                textField.addTarget(self, action: #selector(PDFFormTextField.textChanged), forControlEvents: .ValueChanged)
             }
             
             self.layer.cornerRadius = self.frame.size.height / 6
@@ -72,6 +73,11 @@ public class PDFFormTextField: PDFFormField {
     override public func refresh() {
         self.setNeedsDisplay()
         self.textEntryBox.setNeedsDisplay()
+    }
+    
+    func fontSizeForRect(rect: CGRect) -> CGFloat {
+        
+        return rect.size.height * 0.7
     }
 }
 

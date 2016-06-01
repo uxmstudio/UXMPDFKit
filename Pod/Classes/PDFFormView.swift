@@ -10,10 +10,32 @@ import UIKit
 
 struct PDFFormViewOptions {
     var type:String
-    var flags:String
-    var uname:String?
     var rect:CGRect
+    var flags:[PDFFormFlag]?
+    var name:String = ""
+    var exportValue:String = ""
     var options:[String]?
+}
+
+struct PDFFormFlag: Equatable {
+    
+    let rawValue: UInt
+    
+    static let  ReadOnly             = PDFFormFlag(rawValue:1 << 0)
+    static let  Required             = PDFFormFlag(rawValue:1 << 1)
+    static let  NoExport             = PDFFormFlag(rawValue:1 << 2)
+    static let  TextFieldMultiline   = PDFFormFlag(rawValue:1 << 12)
+    static let  TextFieldPassword    = PDFFormFlag(rawValue:1 << 13)
+    static let  ButtonNoToggleToOff  = PDFFormFlag(rawValue:1 << 14)
+    static let  ButtonRadio          = PDFFormFlag(rawValue:1 << 15)
+    static let  ButtonPushButton     = PDFFormFlag(rawValue:1 << 16)
+    static let  ChoiceFieldIsCombo   = PDFFormFlag(rawValue:1 << 17)
+    static let  ChoiceFieldEditable  = PDFFormFlag(rawValue:1 << 18)
+    static let  ChoiceFieldSorted    = PDFFormFlag(rawValue:1 << 19)
+}
+
+func ==(lhs: PDFFormFlag, rhs: PDFFormFlag) -> Bool {
+    return lhs.rawValue == rhs.rawValue
 }
 
 public class PDFFormView:UIView {
@@ -49,21 +71,28 @@ public class PDFFormView:UIView {
     }
     
     func updateWithZoom(zoomScale: CGFloat) {
-        var newWidth = self.baseFrame.width * zoomScale
-        var left = (newWidth - self.baseFrame.width) / 2
-        self.frame = CGRectMake(self.baseFrame.origin.x - left, 0, newWidth, self.baseFrame.height * zoomScale)
         for field in fields {
-            field.zoomScale = zoomScale
+            field.updateForZoomScale(zoomScale)
+            field.refresh()
         }
+//        var zoomLevel = 1 / self.zoomScale * zoomScale
+//        if zoomLevel > 1 {
+//            
+//        }
+//        var newWidth = self.baseFrame.width * zoomLevel
+//        var left = (newWidth - self.baseFrame.width) / 2
+//        self.frame = CGRectMake(self.baseFrame.origin.x - left, 0, newWidth, self.baseFrame.height * zoomLevel)
+//        for field in fields {
+//            field.zoomScale = zoomScale
+//        }
     }
     
     func adjustFrame(field: PDFFormField) {
         
-        var offsetX = (self.frame.width - boundingBox.width) / 2
-        var factor = boundingBox.width / cropBox.width
-        var zoomLevel = 1 / self.zoomScale
-        var correctedFrame = CGRectMake(
-            (field.frame.origin.x - cropBox.origin.x) * factor + offsetX,
+        let factor:CGFloat = 1.0
+        let zoomLevel = 1 / self.zoomScale
+        let correctedFrame = CGRectMake(
+            (field.frame.origin.x - cropBox.origin.x) * factor,
             (cropBox.height - field.frame.origin.y - field.frame.height - self.cropBox.origin.y) * factor,
             field.frame.width * factor,
             field.frame.height * factor)
@@ -81,6 +110,7 @@ public class PDFFormView:UIView {
     func createFormField(dictionary: PDFDictionary) {
         
         print(dictionary["T"])
+        print(dictionary["TU"])
         
         guard let type = dictionary["FT"] as? String else {
             return
@@ -91,13 +121,26 @@ public class PDFFormView:UIView {
         
         print(rect)
         
-        var flags = dictionary["Ff"]
-        var uname = dictionary["TU"] as? String
+        var flags:[PDFFormFlag] = []
+        if let flagsObj = dictionary["Ff"] as? UInt {
+            flags = determineFlags(flagsObj)
+        }
         
-        var options = PDFFormViewOptions(type: type, flags: "", uname: uname, rect: rect, options: [])
+        let export:String = determineExportValue(dictionary)
+        let name:String = dictionary.stringForKey("T") ?? ""
+        let uname:String = dictionary.stringForKey("TU") ?? ""
+        
+        let options = PDFFormViewOptions(
+            type: type,
+            rect: rect,
+            flags: flags,
+            name: name,
+            exportValue: export,
+            options: []
+        )
         
         if type == "Btn" {
-            //fields.append(self.createButtonField(options))
+            self.addFormField(self.createButtonField(options))
         }
         else if type == "Tx" {
             self.addFormField(self.createTextField(options))
@@ -119,9 +162,63 @@ public class PDFFormView:UIView {
         field.removeFromSuperview()
     }
     
+    func determineFlags(flags: UInt) -> [PDFFormFlag] {
+        
+        var flagsArr:[PDFFormFlag] = []
+        if ((flags & PDFFormFlag.ReadOnly.rawValue) > 0) {
+            flagsArr.append(PDFFormFlag.ReadOnly)
+        }
+        if ((flags & PDFFormFlag.Required.rawValue) > 0) {
+            flagsArr.append(PDFFormFlag.Required)
+        }
+        if ((flags & PDFFormFlag.NoExport.rawValue) > 0) {
+            flagsArr.append(PDFFormFlag.NoExport)
+        }
+        if ((flags & PDFFormFlag.ButtonNoToggleToOff.rawValue) > 0) {
+            flagsArr.append(PDFFormFlag.ButtonNoToggleToOff)
+        }
+        if ((flags & PDFFormFlag.ButtonRadio.rawValue) > 0) {
+            flagsArr.append(PDFFormFlag.ButtonRadio)
+        }
+        if ((flags & PDFFormFlag.ButtonPushButton.rawValue) > 0) {
+            flagsArr.append(PDFFormFlag.ButtonPushButton)
+        }
+        if ((flags & PDFFormFlag.TextFieldMultiline.rawValue) > 0) {
+            flagsArr.append(PDFFormFlag.TextFieldMultiline)
+        }
+        return flagsArr
+    }
+    
+    func determineExportValue(dict: PDFDictionary) -> String {
+        if let apObj = dict["AP"] as? PDFDictionary {
+            if let nObj = apObj["N"] as? PDFDictionary {
+                for key in nObj.allKeys() {
+                    if key == "Off" || key == "OFF" {
+                        return key
+                    }
+                }
+            }
+        }
+        
+        if let asObj = dict["AS"] as? String {
+            return asObj
+        }
+        return ""
+    }
+    
     func createTextField(options: PDFFormViewOptions) -> PDFFormField {
         
         return PDFFormTextField(frame: options.rect, multiline: false, alignment: NSTextAlignment.Left)
+    }
+    
+    func createButtonField(options: PDFFormViewOptions) -> PDFFormField {
+        
+        let radio:Bool = options.flags?.contains({ $0 == PDFFormFlag.ButtonRadio }) ?? false
+        var field = PDFFormButtonField(frame: options.rect, radio: radio)
+        field.name = options.name
+        field.exportValue = options.exportValue
+        
+        return field
     }
     
     //    func createSignatureField(options: PDFFormViewOptions) -> PDFFormField {

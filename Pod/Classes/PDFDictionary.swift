@@ -67,6 +67,10 @@ class PDFDictionary:NSObject, PDFObject {
         return attributes[key] as? PDFArray
     }
     
+    func stringForKey(key: String) -> String? {
+        return attributes[key] as? String
+    }
+    
     func allKeys() -> [String] {
         return stringKeys
     }
