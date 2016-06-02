@@ -58,7 +58,7 @@ public class PDFDocument: NSObject, NSCoding {
     }
     
     public required init?(coder aDecoder: NSCoder) {
-
+        
         self.guid = aDecoder.decodeObjectForKey("fileGUID") as! String
         self.currentPage = aDecoder.decodeObjectForKey("currentPage") as! Int
         self.bookmarks = aDecoder.decodeObjectForKey("bookmarks") as! NSMutableIndexSet
@@ -84,7 +84,7 @@ public class PDFDocument: NSObject, NSCoding {
         super.init()
         
         self.loadDocumentInformation()
-
+        
         self.save()
     }
     
@@ -153,10 +153,10 @@ public class PDFDocument: NSObject, NSCoding {
                 }
             }
             
-//            let majorVersion = UnsafeMutablePointer<Int32>()
-//            let minorVersion = UnsafeMutablePointer<Int32>()
-//            CGPDFDocumentGetVersion(pdfDocRef, majorVersion, minorVersion)
-//            self.version = Float("\(majorVersion).\(minorVersion)")!
+            //            let majorVersion = UnsafeMutablePointer<Int32>()
+            //            let minorVersion = UnsafeMutablePointer<Int32>()
+            //            CGPDFDocumentGetVersion(pdfDocRef, majorVersion, minorVersion)
+            //            self.version = Float("\(majorVersion).\(minorVersion)")!
             
             self.pageCount = CGPDFDocumentGetNumberOfPages(pdfDocRef)
             
@@ -233,15 +233,50 @@ public class PDFDocument: NSObject, NSCoding {
         self.loadDocumentInformation()
     }
     
-//    func setCurrentPage(currentPage: Int) {
-//        
-//        if currentPage < 1 {
-//            self.currentPage = 1
-//        }
-//        else if currentPage > self.pageCount {
-//            self.currentPage = self.pageCount
-//        }
-//    }
+    public func boundsForPDFPage(page:Int) -> CGRect {
+        let pageRef = CGPDFDocumentGetPage(documentRef, page)
+        
+        let cropBoxRect:CGRect = CGPDFPageGetBoxRect(pageRef, .CropBox)
+        let mediaBoxRect:CGRect = CGPDFPageGetBoxRect(pageRef, .MediaBox)
+        let effectiveRect:CGRect = CGRectIntersection(cropBoxRect, mediaBoxRect)
+        
+        let pageAngle = CGPDFPageGetRotationAngle(pageRef)
+        
+        switch (pageAngle) {
+        case 0, 180: // 0 and 180 degrees
+            
+            return CGRectMake(
+                effectiveRect.origin.x,
+                effectiveRect.origin.y,
+                effectiveRect.size.width,
+                effectiveRect.size.height
+            )
+        case 90, 270: // 90 and 270 degrees
+            return CGRectMake(
+                effectiveRect.origin.y,
+                effectiveRect.origin.x,
+                effectiveRect.size.height,
+                effectiveRect.size.width
+            )
+        default:
+            return CGRectMake(
+                effectiveRect.origin.x,
+                effectiveRect.origin.y,
+                effectiveRect.size.width,
+                effectiveRect.size.height
+            )
+        }
+    }
+    
+    //    func setCurrentPage(currentPage: Int) {
+    //
+    //        if currentPage < 1 {
+    //            self.currentPage = 1
+    //        }
+    //        else if currentPage > self.pageCount {
+    //            self.currentPage = self.pageCount
+    //        }
+    //    }
     
     
     /////

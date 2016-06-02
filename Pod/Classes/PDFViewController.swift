@@ -60,6 +60,9 @@ public class PDFViewController: UIViewController {
         
         self.view.addConstraints(constraints)
         
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save Form", style: .Plain, target: self, action: #selector(PDFViewController.saveForm))
+        
         self.pageScrubber.sizeToFit()
     }
     
@@ -90,6 +93,11 @@ public class PDFViewController: UIViewController {
             }, completion: { (context) in
                 self.collectionView.displayPage(self.document.currentPage, animated: false)
         })
+    }
+    
+    func saveForm() {
+        print("saved")
+        self.formController.renderFormOntoPDF()
     }
 }
 

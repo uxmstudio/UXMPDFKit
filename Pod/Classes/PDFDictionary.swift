@@ -118,13 +118,9 @@ class PDFDictionary:NSObject, PDFObject {
     }
     
     private func nameFromKey(key: UnsafePointer<Int8>) -> String? {
-        guard let stringKey = String.fromCString(key) else {
-            return nil
-        }
         var nameObj:UnsafePointer<Int8> = nil
         if CGPDFDictionaryGetName(self.dict, key, &nameObj) {
             if let dictionaryName = String.fromCString(nameObj) {
-                //print("\(stringKey) : \(dictionaryName)")
                 return dictionaryName
             }
         }

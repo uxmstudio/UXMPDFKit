@@ -108,18 +108,13 @@ public class PDFFormView:UIView {
     }
     
     func createFormField(dictionary: PDFDictionary) {
-        
-        print(dictionary["T"])
-        print(dictionary["TU"])
-        
+
         guard let type = dictionary["FT"] as? String else {
             return
         }
         guard let rect = dictionary.arrayForKey("Rect")?.rect() else {
             return
         }
-        
-        print(rect)
         
         var flags:[PDFFormFlag] = []
         if let flagsObj = dictionary["Ff"] as? UInt {
@@ -128,7 +123,6 @@ public class PDFFormView:UIView {
         
         let export:String = determineExportValue(dictionary)
         let name:String = dictionary.stringForKey("T") ?? ""
-        let uname:String = dictionary.stringForKey("TU") ?? ""
         
         let options = PDFFormViewOptions(
             type: type,
@@ -138,7 +132,6 @@ public class PDFFormView:UIView {
             exportValue: export,
             options: []
         )
-        
         if type == "Btn" {
             self.addFormField(self.createButtonField(options))
         }
@@ -149,7 +142,7 @@ public class PDFFormView:UIView {
             //fields.append(self.createChoiceField(options))
         }
         else if type == "Sig" {
-            //fields.append(self.createSignatureField(options))
+            self.addFormField(self.createSignatureField(options))
         }
     }
     
@@ -214,22 +207,24 @@ public class PDFFormView:UIView {
     func createButtonField(options: PDFFormViewOptions) -> PDFFormField {
         
         let radio:Bool = options.flags?.contains({ $0 == PDFFormFlag.ButtonRadio }) ?? false
-        var field = PDFFormButtonField(frame: options.rect, radio: radio)
+        let field = PDFFormButtonField(frame: options.rect, radio: radio)
         field.name = options.name
         field.exportValue = options.exportValue
         
         return field
     }
     
-    //    func createSignatureField(options: PDFFormViewOptions) -> PDFFormField {
-    //
-    //    }
-    //
-    //    func createChoiceField(options: PDFFormViewOptions) -> PDFFormField {
-    //
-    //    }
-    //
-    //    func createButtonField(options: PDFFormViewOptions) -> PDFFormField {
-    //        
-    //    }
+    func createSignatureField(options: PDFFormViewOptions) -> PDFFormField {
+        
+        return PDFFormSignatureField(frame: options.rect)
+    }
+
+    
+    func renderInContext(context: CGContext) {
+        
+        for field in fields {
+            
+            field.renderInContext(context)
+        }
+    }
 }

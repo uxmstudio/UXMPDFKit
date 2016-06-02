@@ -94,19 +94,13 @@ public class PDFFormViewController:NSObject {
                     }
                 }
             }
-            page--
+            page -= 1
         }
         
         return page
     }
     
-    
     func createFormField(dict: PDFDictionary) {
-        
-        //        print(dict.allKeys())
-        //        print(dict.arrayForKey("Rect")?.rect())
-        //        print(dict["T"])
-        //        print(dict["FT"])
         
         if let page = self.getPageNumber(dict) {
             
@@ -115,29 +109,28 @@ public class PDFFormViewController:NSObject {
             }
             else {
                 
-                var formView = PDFFormView(frame: CGRectZero, page: page)
+                let formView = PDFFormView(frame: CGRectZero, page: page)
                 formView.createFormField(dict)
                 self.formViews[page] = formView
             }
         }
     }
-    
-    
+
     func showForm(contentView:PDFPageContentView) {
         
-        var page = contentView.page
+        let page = contentView.page
         if let formView = self.formViewForPage(page) {
             
             formView.zoomScale = contentView.zoomScale
-            print(contentView.contentView.cropBoxRect)
-            print(contentView.contentView.frame)
-            print(contentView.containerView.frame)
-            formView.setSize(contentView.frame, boundingBox: contentView.containerView.frame, cropBox: contentView.contentView.cropBoxRect)
+            formView.setSize(
+                contentView.frame,
+                boundingBox: contentView.containerView.frame,
+                cropBox: contentView.contentView.cropBoxRect
+            )
             contentView.contentView.addSubview(formView)
             contentView.viewDidZoom = { scale in
-                print(scale)
+
                 formView.updateWithZoom(scale)
-                //formView.updateWithZoom(scale)
             }
         }
     }
@@ -148,5 +141,37 @@ public class PDFFormViewController:NSObject {
             return nil
         }
         return self.formViews[page]
+    }
+    
+    
+    func renderFormOntoPDF() {
+        let documentRef = document.documentRef
+        let pages = document.pageCount
+        let tempPath = NSTemporaryDirectory().stringByAppendingString("annotated.pdf")
+        
+        UIGraphicsBeginPDFContextToFile(tempPath, CGRectZero, nil)
+        for i in 1...pages {
+            let page = CGPDFDocumentGetPage(documentRef, i)
+            let bounds = self.document.boundsForPDFPage(i)
+            
+            if let context = UIGraphicsGetCurrentContext() {
+                UIGraphicsBeginPDFPageWithInfo(bounds, nil)
+                CGContextTranslateCTM(context, 0, bounds.size.height)
+                CGContextScaleCTM(context, 1.0, -1.0)
+                CGContextDrawPDFPage (context, page)
+                
+                CGContextScaleCTM(context, 1.0, -1.0)
+                CGContextTranslateCTM(context, 0, -bounds.size.height)
+                
+                if let form = formViewForPage(i) {
+                    form.renderInContext(context)
+                }
+            }
+        }
+        UIGraphicsEndPDFContext()
+    }
+    
+    func saveToPDF() -> Bool {
+        return false
     }
 }

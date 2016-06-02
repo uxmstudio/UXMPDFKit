@@ -64,14 +64,29 @@ public class PDFFormButtonField: PDFFormField {
         }
     }
     
+    func isSelected() -> Bool {
+        return self.value == exportValue
+    }
+    
     func buttonPressed() {
-        print("select \(name)")
         
-        self.value = self.value == exportValue ? "" : exportValue
+        self.value = isSelected() ? "" : exportValue
         self.delegate?.formFieldValueChanged(self)
     }
     
-    override public func drawRect(rect: CGRect) {
+    override func renderInContext(context: CGContext) {
         
+        var frame = self.button.frame
+        frame.origin.x += self.frame.origin.x
+        frame.origin.y += self.frame.origin.y
+        
+        if isSelected() {
+            CGContextSetFillColorWithColor(context, UIColor.blackColor().CGColor)
+        }
+        else {
+            CGContextSetFillColorWithColor(context, UIColor.clearColor().CGColor)
+        }
+        CGContextAddRect(context, frame)
+        CGContextDrawPath(context, .FillStroke)
     }
 }

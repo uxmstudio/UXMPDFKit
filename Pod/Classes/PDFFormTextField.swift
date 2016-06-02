@@ -79,11 +79,30 @@ public class PDFFormTextField: PDFFormField {
         
         return rect.size.height * 0.7
     }
+    
+    override func renderInContext(context: CGContext) {
+        
+        var text = ""
+        var font:UIFont? = nil
+        if let textField = self.textEntryBox as? UITextField {
+            text = textField.text ?? ""
+            font = textField.font
+        }
+        if let textView = self.textEntryBox as? UITextView {
+            text = textView.text
+            font = textView.font
+        }
+        
+        /// UGLY
+        (text as NSString!).drawInRect(self.frame, withAttributes: [
+            NSFontAttributeName: font!
+        ])
+    }
 }
 
 extension PDFFormTextField: UITextFieldDelegate {
     public func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        var newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
+        let newString = (textField.text! as NSString).stringByReplacingCharactersInRange(range, withString: string)
         if newString.characters.count <= textField.text?.characters.count {
             return true
         }

@@ -67,4 +67,8 @@ public class PDFFormField: UIView {
             self.applyScale(scale, toLayer: sublayer)
         }
     }
+    
+    func renderInContext(context: CGContext) {
+        
+    }
 }

@@ -143,7 +143,7 @@ class PDFArray: NSObject, PDFObject {
     func copyAsArray() -> [AnyObject] {
         
         var temp:[AnyObject] = []
-        var count = CGPDFArrayGetCount(self.arr)
+        let count = CGPDFArrayGetCount(self.arr)
         
         for i in 0.stride(to: count, by: 1) {
             if let obj = self.pdfObjectAtIndex(i) {
