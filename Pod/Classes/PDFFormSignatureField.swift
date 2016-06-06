@@ -23,6 +23,8 @@ public class PDFFormSignatureField: PDFFormField {
         button.titleLabel?.font = UIFont.systemFontOfSize(14.0)
         button.setTitleColor(UIColor.blackColor(), forState: .Normal)
         button.addTarget(self, action: #selector(PDFFormSignatureField.addSignature), forControlEvents: .TouchUpInside)
+        button.userInteractionEnabled = true
+        button.exclusiveTouch = true
         return button
     }()
     
@@ -44,8 +46,8 @@ public class PDFFormSignatureField: PDFFormField {
         
         self.backgroundColor = UIColor.clearColor()
         
-        self.addSubview(self.signButton)
         self.addSubview(self.signImage)
+        self.addSubview(self.signButton)
     }
     
     required public init?(coder aDecoder: NSCoder) {

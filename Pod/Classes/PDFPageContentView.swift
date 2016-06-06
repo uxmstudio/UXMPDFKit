@@ -24,6 +24,8 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     private var PDFPageContentViewContext = 0
     private var previousScale:CGFloat = 1.0
     
+    let bottomKeyboardPadding:CGFloat = 20.0
+    
     init(frame:CGRect, document: PDFDocument, page:Int) {
         
         self.page = page
@@ -63,12 +65,29 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         
         self.zoomScale = self.minimumZoomScale
         self.tag = page
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: #selector(PDFPageContentView.keyboardWillShowNotification(_:)),
+            name: UIKeyboardWillShowNotification,
+            object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: #selector(PDFPageContentView.keyboardWillHideNotification(_:)),
+            name: UIKeyboardWillHideNotification,
+            object: nil
+        )
     }
 
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
     
     override public func layoutSubviews() {
         
@@ -173,6 +192,29 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     
     public func scrollViewDidZoom(scrollView: UIScrollView) {
         self.viewDidZoom?(scrollView.zoomScale)
+    }
+    
+    
+    func keyboardWillShowNotification(notification: NSNotification) {
+        updateBottomLayoutConstraintWithNotification(notification, show: true)
+    }
+    
+    func keyboardWillHideNotification(notification: NSNotification) {
+        updateBottomLayoutConstraintWithNotification(notification, show: false)
+    }
+    
+    func updateBottomLayoutConstraintWithNotification(notification: NSNotification, show:Bool) {
+        let userInfo = notification.userInfo!
+        
+        let keyboardEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let convertedKeyboardEndFrame = self.convertRect(keyboardEndFrame, fromView: self.window)
+        
+        var height:CGFloat = 0.0
+        if convertedKeyboardEndFrame.height > 0 && show {
+            height = convertedKeyboardEndFrame.height + bottomKeyboardPadding
+        }
+
+        self.contentInset = UIEdgeInsetsMake(0, 0, height, 0)
     }
     
     

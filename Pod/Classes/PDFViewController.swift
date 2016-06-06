@@ -53,8 +53,6 @@ public class PDFViewController: UIViewController {
         
         var constraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|[collectionView]|", options: .AlignAllBaseline, metrics: nil, views: [ "superview": self.view, "collectionView": self.collectionView])
         constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("V:|[collectionView]|", options: .AlignAllLeft, metrics: nil, views: [ "superview": self.view, "collectionView": self.collectionView]))
-        
-        
         constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("H:|[scrubber]|", options: .AlignAllBaseline, metrics: nil, views: [ "superview": self.view, "scrubber": self.pageScrubber]))
         constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("V:[scrubber(44)]-0-[bottomLayout]", options: .AlignAllLeft, metrics: nil, views: [ "scrubber": self.pageScrubber, "bottomLayout": self.bottomLayoutGuide ]))
         
@@ -64,6 +62,10 @@ public class PDFViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save Form", style: .Plain, target: self, action: #selector(PDFViewController.saveForm))
         
         self.pageScrubber.sizeToFit()
+        
+//        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "handleTap:")
+//        gestureRecognizer.cancelsTouchesInView = false
+//        self.view.addGestureRecognizer(gestureRecognizer)
     }
     
     func loadDocument(document: PDFDocument) {
@@ -95,8 +97,20 @@ public class PDFViewController: UIViewController {
         })
     }
     
+    func handleTap(gestureRecognizer: UIGestureRecognizer) {
+        
+        if let nvc = self.navigationController where nvc.navigationBarHidden {
+            self.navigationController?.setNavigationBarHidden(false, animated: true)
+            self.pageScrubber.hidden = false
+        }
+        else {
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+            self.pageScrubber.hidden = true
+        }
+        self.collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     func saveForm() {
-        print("saved")
         self.formController.renderFormOntoPDF()
     }
 }

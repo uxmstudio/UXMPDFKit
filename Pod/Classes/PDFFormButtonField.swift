@@ -52,6 +52,7 @@ public class PDFFormButtonField: PDFFormField {
         self.button.backgroundColor = UIColor.clearColor()
         self.button.addTarget(self, action: #selector(PDFFormButtonField.buttonPressed), forControlEvents: .TouchUpInside)
         self.button.userInteractionEnabled = true
+        self.button.exclusiveTouch = true
         self.addSubview(self.button)
     }
     

@@ -15,6 +15,11 @@ public class PDFFormTextField: PDFFormField {
     var baseFontSize:CGFloat
     var currentFontSize:CGFloat
     var alignment:NSTextAlignment
+    override internal var value:String {
+        didSet {
+            self.setText(value)
+        }
+    }
     
     init(frame: CGRect, multiline: Bool, alignment: NSTextAlignment) {
         
@@ -54,7 +59,7 @@ public class PDFFormTextField: PDFFormField {
                 textField.adjustsFontSizeToFitWidth = true
                 textField.minimumFontSize = 6.0
                 textField.font = UIFont.systemFontOfSize(self.fontSizeForRect(self.frame))
-                textField.addTarget(self, action: #selector(PDFFormTextField.textChanged), forControlEvents: .ValueChanged)
+                textField.addTarget(self, action: #selector(PDFFormTextField.textChanged), forControlEvents: .EditingChanged)
             }
             
             self.layer.cornerRadius = self.frame.size.height / 6
@@ -78,6 +83,27 @@ public class PDFFormTextField: PDFFormField {
     func fontSizeForRect(rect: CGRect) -> CGFloat {
         
         return rect.size.height * 0.7
+    }
+    
+    func setText(text: String) {
+        
+        if let textField = self.textEntryBox as? UITextField {
+            textField.text = text
+        }
+        if let textView = self.textEntryBox as? UITextView {
+            textView.text = text
+        }
+    }
+    
+    func getText() -> String {
+        
+        if let textField = self.textEntryBox as? UITextField {
+            return textField.text ?? ""
+        }
+        if let textView = self.textEntryBox as? UITextView {
+            return textView.text ?? ""
+        }
+        return ""
     }
     
     override func renderInContext(context: CGContext) {
@@ -124,6 +150,7 @@ extension PDFFormTextField: UITextViewDelegate {
     }
     
     func textChanged() {
+        self.value = self.getText()
         self.delegate?.formFieldValueChanged(self)
     }
 }

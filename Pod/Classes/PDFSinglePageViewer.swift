@@ -49,7 +49,7 @@ public class PDFSinglePageViewer: UICollectionView {
         self.collectionViewLayout = layout
         
         setupCollectionView()
-        
+
         if let pageContentView = self.getPageContent(0) {
             self.singlePageDelegate?.singlePageViewer(self, loadedContent: pageContentView)
         }
@@ -60,7 +60,7 @@ public class PDFSinglePageViewer: UICollectionView {
         self.pagingEnabled = true
         self.backgroundColor = UIColor.groupTableViewBackgroundColor()
         self.showsHorizontalScrollIndicator = false
-        self.registerClass(PDFSinglePageCell.self, forCellWithReuseIdentifier:"ContentCell")
+        self.registerClass(PDFSinglePageCell.self, forCellWithReuseIdentifier: "ContentCell")
         
         self.delegate = self
         self.dataSource = self
@@ -74,6 +74,7 @@ public class PDFSinglePageViewer: UICollectionView {
     }
     
     public func getPageContent(page: Int) -> PDFPageContentView? {
+        if self.document == nil { return nil }
         if let cell = self.collectionView(self, cellForItemAtIndexPath: NSIndexPath(forItem: page, inSection: 0)) as? PDFSinglePageCell,
             let pageContentView = cell.pageContentView {
             return pageContentView
@@ -146,10 +147,6 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
     func didDisplayPage(scrollView: UIScrollView) {
         let page:Int = Int((scrollView.contentOffset.x + scrollView.frame.size.width) / scrollView.frame.size.width)
         self.singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
-        
-        if let pageContentView = self.getPageContent(page) {
-            self.singlePageDelegate?.singlePageViewer(self, loadedContent: pageContentView)
-        }
     }
 }
 

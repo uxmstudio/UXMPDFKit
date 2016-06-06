@@ -10,8 +10,7 @@ import Foundation
 
 public class PDFFormViewController:NSObject {
     
-    var formViews:[Int:PDFFormView] = [:]
-    var currentForm:PDFFormView?
+    var formPages:[Int:PDFFormPage] = [:]
     
     var document:PDFDocument
     var parser:PDFObjectParser
@@ -104,14 +103,14 @@ public class PDFFormViewController:NSObject {
         
         if let page = self.getPageNumber(dict) {
             
-            if let formView = self.formViewForPage(page) {
+            if let formView = self.formPage(page) {
                 formView.createFormField(dict)
             }
             else {
                 
-                let formView = PDFFormView(frame: CGRectZero, page: page)
+                let formView = PDFFormPage(page: page)
                 formView.createFormField(dict)
-                self.formViews[page] = formView
+                self.formPages[page] = formView
             }
         }
     }
@@ -119,28 +118,17 @@ public class PDFFormViewController:NSObject {
     func showForm(contentView:PDFPageContentView) {
         
         let page = contentView.page
-        if let formView = self.formViewForPage(page) {
-            
-            formView.zoomScale = contentView.zoomScale
-            formView.setSize(
-                contentView.frame,
-                boundingBox: contentView.containerView.frame,
-                cropBox: contentView.contentView.cropBoxRect
-            )
-            contentView.contentView.addSubview(formView)
-            contentView.viewDidZoom = { scale in
-
-                formView.updateWithZoom(scale)
-            }
+        if let formPage = self.formPage(page) {
+            formPage.showForm(contentView)
         }
     }
     
-    func formViewForPage(page: Int) -> PDFFormView? {
+    func formPage(page: Int) -> PDFFormPage? {
         
-        if page > self.formViews.count {
+        if page > self.formPages.count {
             return nil
         }
-        return self.formViews[page]
+        return self.formPages[page]
     }
     
     
@@ -163,8 +151,8 @@ public class PDFFormViewController:NSObject {
                 CGContextScaleCTM(context, 1.0, -1.0)
                 CGContextTranslateCTM(context, 0, -bounds.size.height)
                 
-                if let form = formViewForPage(i) {
-                    form.renderInContext(context)
+                if let form = formPage(i) {
+                    form.renderInContext(context, size: bounds)
                 }
             }
         }
