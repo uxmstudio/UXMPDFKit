@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "UXMPDFKit"
-  s.version          = "0.0.1"
+  s.version          = "0.1.0"
   s.summary          = "A fully functioning PDF reader written completely in Swift"
 
   s.homepage         = "https://github.com/uxmstudio/UXMPDFKit"
@@ -16,17 +16,9 @@ Pod::Spec.new do |s|
   s.license          = 'MIT'
   s.author           = { "Chris Anderson" => "chris@uxmstudio.com" }
   s.source           = { :git => "https://github.com/uxmstudio/UXMPDFKit.git", :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.platform     = :ios, '8.0'
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*'
-  s.resource_bundles = {
-    'UXMPDFKit' => ['Pod/Assets/*.png']
-  }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

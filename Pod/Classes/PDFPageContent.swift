@@ -27,7 +27,7 @@ class PDFPageContent: UIView {
     }
     
     //MARK: - Init
-    init(url: NSURL, var page:Int, password:String?) {
+    init(url: NSURL, page:Int, password:String?) {
         
         var viewRect:CGRect = CGRectZero
         
@@ -35,6 +35,7 @@ class PDFPageContent: UIView {
         
         /// Limit the page
         let pages = CGPDFDocumentGetNumberOfPages(self.pdfDocRef)
+        var page = page
         if page < 1 {
             page = 1
         }

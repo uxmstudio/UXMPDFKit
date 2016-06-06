@@ -31,8 +31,7 @@ public class PDFObjectParser: NSObject {
     }
     
     func getFormFields() -> AnyObject? {
-        var acroForm:CGPDFDictionaryRef = nil
-        
+
         guard let ref = self.document.documentRef else {
             return nil
         }
