@@ -11,7 +11,7 @@
 
 ## Note
 
-This project is still in early stages. Right now the PDF reader works both programmatically and through interface builder. This PDF reader supports interactive forms on and provides methods for overlaying form elements as well as rendering a PDF with the elements burned back onto the PDF. See the example project for how to implement.
+This project is still in early stages. Right now the PDF reader works both programmatically and through interface builder. This PDF reader supports interactive forms and provides methods for overlaying text, signature and checkbox elements onto the page, as well as rendering a PDF with the elements burned back onto the PDF. See the example project for how to implement.
 
 ## Installation
 
