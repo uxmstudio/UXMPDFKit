@@ -10,8 +10,9 @@ import UIKit
 
 public class PDFViewController: UIViewController {
     
+    public var hidesBarsOnTap:Bool = false
+    
     var document:PDFDocument!
-    var hidesBarsOnTap:Bool = false
     
     lazy var collectionView:PDFSinglePageViewer = {
         var collectionView = PDFSinglePageViewer(frame: self.view.bounds, document: self.document)

@@ -147,7 +147,7 @@ public class PDFFormViewController:NSObject {
     }
     
     
-    func renderFormOntoPDF() -> NSURL {
+    public func renderFormOntoPDF() -> NSURL {
         let documentRef = document.documentRef
         let pages = document.pageCount
         let title = document.fileUrl.lastPathComponent ?? "annotated.pdf"
@@ -177,7 +177,14 @@ public class PDFFormViewController:NSObject {
         return NSURL.fileURLWithPath(tempPath)
     }
     
-    func saveToPDF() -> Bool {
-        return false
+    public func save(url: NSURL) -> Bool {
+        
+        let tempUrl = renderFormOntoPDF()
+        let fileManger = NSFileManager.defaultManager()
+        do {
+            try fileManger.copyItemAtURL(tempUrl, toURL: url)
+        }
+        catch _ { return false }
+        return true
     }
 }
