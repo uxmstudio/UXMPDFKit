@@ -14,10 +14,12 @@ public class PDFFormViewController:NSObject {
     
     var document:PDFDocument
     var parser:PDFObjectParser
+    var lastPage:PDFPageContentView?
     
     public init(document: PDFDocument) {
         
         self.document = document
+        
         self.parser = PDFObjectParser(document: document)
         
         super.init()
@@ -27,21 +29,30 @@ public class PDFFormViewController:NSObject {
     
     func setupUI() {
         
-        guard let attributes = self.parser.attributes else {
-            return
-        }
-        
-        guard let forms = attributes["AcroForm"] as? PDFDictionary else {
-            return
-        }
-        
-        guard let fields = forms.arrayForKey("Fields") else {
-            return
-        }
-        
-        for field in fields {
-            if let dictField:PDFDictionary = field as? PDFDictionary {
-                self.enumerate(dictField)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            
+            guard let attributes = self.parser.attributes else {
+                return
+            }
+            
+            guard let forms = attributes["AcroForm"] as? PDFDictionary else {
+                return
+            }
+            
+            guard let fields = forms.arrayForKey("Fields") else {
+                return
+            }
+
+            for field in fields {
+                if let dictField:PDFDictionary = field as? PDFDictionary {
+                    self.enumerate(dictField)
+                }
+            }
+
+            if let lastPage = self.lastPage {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.showForm(lastPage)
+                }
             }
         }
     }
@@ -102,21 +113,25 @@ public class PDFFormViewController:NSObject {
     func createFormField(dict: PDFDictionary) {
         
         if let page = self.getPageNumber(dict) {
-            
-            if let formView = self.formPage(page) {
-                formView.createFormField(dict)
-            }
-            else {
-                
-                let formView = PDFFormPage(page: page)
-                formView.createFormField(dict)
-                self.formPages[page] = formView
+
+            dispatch_async(dispatch_get_main_queue()) {
+
+                if let formView = self.formPage(page) {
+                    formView.createFormField(dict)
+                }
+                else {
+                    
+                    let formView = PDFFormPage(page: page)
+                    formView.createFormField(dict)
+                    self.formPages[page] = formView
+                }
             }
         }
     }
-
+    
     func showForm(contentView:PDFPageContentView) {
         
+        self.lastPage = contentView
         let page = contentView.page
         if let formPage = self.formPage(page) {
             formPage.showForm(contentView)
@@ -132,10 +147,11 @@ public class PDFFormViewController:NSObject {
     }
     
     
-    func renderFormOntoPDF() {
+    func renderFormOntoPDF() -> NSURL {
         let documentRef = document.documentRef
         let pages = document.pageCount
-        let tempPath = NSTemporaryDirectory().stringByAppendingString("annotated.pdf")
+        let title = document.fileUrl.lastPathComponent ?? "annotated.pdf"
+        let tempPath = NSTemporaryDirectory().stringByAppendingString(title)
         
         UIGraphicsBeginPDFContextToFile(tempPath, CGRectZero, nil)
         for i in 1...pages {
@@ -157,6 +173,8 @@ public class PDFFormViewController:NSObject {
             }
         }
         UIGraphicsEndPDFContext()
+        
+        return NSURL.fileURLWithPath(tempPath)
     }
     
     func saveToPDF() -> Bool {

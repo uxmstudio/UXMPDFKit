@@ -28,8 +28,7 @@ public class PDFViewController: UIViewController {
     }()
     
     lazy var formController:PDFFormViewController = {
-        var formController = PDFFormViewController(document: self.document)
-        return formController
+        return PDFFormViewController(document: self.document)
     }()
     
     public init(document: PDFDocument) {
@@ -58,8 +57,7 @@ public class PDFViewController: UIViewController {
         
         self.view.addConstraints(constraints)
         
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save Form", style: .Plain, target: self, action: #selector(PDFViewController.saveForm))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(PDFViewController.saveForm))
         
         self.pageScrubber.sizeToFit()
         
@@ -111,7 +109,25 @@ public class PDFViewController: UIViewController {
     }
     
     func saveForm() {
-        self.formController.renderFormOntoPDF()
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            
+            let pdf = self.formController.renderFormOntoPDF()
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                let items = [pdf]
+                let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
+                
+                if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+                    activityVC.modalPresentationStyle = .Popover
+                    var popController = activityVC.popoverPresentationController
+                    popController?.sourceView = self.view
+                    popController?.sourceRect = CGRectMake(self.view.frame.width - 34, 64, 0, 0)
+                    popController?.permittedArrowDirections = .Up
+                }
+                self.presentViewController(activityVC, animated: true, completion: nil)
+            }
+        }
     }
 }
 
