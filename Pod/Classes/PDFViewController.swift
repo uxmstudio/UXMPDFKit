@@ -120,7 +120,7 @@ public class PDFViewController: UIViewController {
                 
                 if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
                     activityVC.modalPresentationStyle = .Popover
-                    var popController = activityVC.popoverPresentationController
+                    let popController = activityVC.popoverPresentationController
                     popController?.sourceView = self.view
                     popController?.sourceRect = CGRectMake(self.view.frame.width - 34, 64, 0, 0)
                     popController?.permittedArrowDirections = .Up
