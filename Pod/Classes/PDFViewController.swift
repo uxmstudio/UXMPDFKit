@@ -11,6 +11,7 @@ import UIKit
 public class PDFViewController: UIViewController {
     
     var document:PDFDocument!
+    var hidesBarsOnTap:Bool = false
     
     lazy var collectionView:PDFSinglePageViewer = {
         var collectionView = PDFSinglePageViewer(frame: self.view.bounds, document: self.document)
@@ -61,9 +62,11 @@ public class PDFViewController: UIViewController {
         
         self.pageScrubber.sizeToFit()
         
-//        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "handleTap:")
-//        gestureRecognizer.cancelsTouchesInView = false
-//        self.view.addGestureRecognizer(gestureRecognizer)
+        if self.hidesBarsOnTap {
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PDFViewController.handleTap(_:)))
+            gestureRecognizer.cancelsTouchesInView = false
+            self.view.addGestureRecognizer(gestureRecognizer)
+        }
     }
     
     func loadDocument(document: PDFDocument) {

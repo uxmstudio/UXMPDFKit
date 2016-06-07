@@ -48,6 +48,8 @@ public class PDFFormSignatureField: PDFFormField {
         
         self.addSubview(self.signImage)
         self.addSubview(self.signButton)
+        
+        self.bringSubviewToFront(self.signButton)
     }
     
     required public init?(coder aDecoder: NSCoder) {
