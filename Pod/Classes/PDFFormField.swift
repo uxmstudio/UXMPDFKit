@@ -143,7 +143,6 @@ public class PDFFormFieldObject: NSObject {
 extension PDFFormFieldObject: PDFFormViewDelegate {
     
     func formFieldValueChanged(widget: PDFFormField) {
-        print("save")
         self.value = widget.value
     }
     

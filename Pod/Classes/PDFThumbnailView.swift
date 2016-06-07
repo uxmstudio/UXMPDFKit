@@ -22,7 +22,7 @@ class PDFThumbnailView: UIView {
         imageView.contentMode = .ScaleAspectFit
         
         super.init(frame: frame)
-        
+
         imageView.frame = frame
         self.addSubview(imageView)
         
@@ -33,7 +33,7 @@ class PDFThumbnailView: UIView {
         self.backgroundColor = UIColor.clearColor()
         
         var constraints = NSLayoutConstraint.constraintsWithVisualFormat("H:[image]|", options: .AlignAllBaseline, metrics: nil, views: [ "superview": self, "image": imageView ])
-        constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("H:[image]|", options: .AlignAllBaseline, metrics: nil, views: [ "superview": self, "image": imageView ]))
+        constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("V:[image]|", options: .AlignAllBaseline, metrics: nil, views: [ "superview": self, "image": imageView ]))
         
         self.addConstraints(constraints)
     }

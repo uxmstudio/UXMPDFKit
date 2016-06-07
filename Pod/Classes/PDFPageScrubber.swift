@@ -61,8 +61,9 @@ public class PDFPageScrubber: UIToolbar {
         
         pageNumberView.autoresizesSubviews = false
         pageNumberView.userInteractionEnabled = false
-        pageNumberView.clipsToBounds = false
+        pageNumberView.clipsToBounds = true
         pageNumberView.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin]
+        pageNumberView.layer.cornerRadius = 3.0
         
         return pageNumberView
     }()
@@ -121,13 +122,6 @@ public class PDFPageScrubber: UIToolbar {
     }
     
     
-    
-    
-    
-    
-    
-
-    
     public override func layoutSubviews() {
         
         let containerWidth:CGFloat = UIScreen.mainScreen().bounds.size.width
@@ -177,7 +171,7 @@ public class PDFPageScrubber: UIToolbar {
         let heightDelta = controlRect.size.height - thumbSmallHeight
         let thumbY:CGFloat = heightDelta / 2.0
         let thumbX:CGFloat = 0.0
-        var thumbRect = CGRectMake(thumbX, thumbY, thumbLargeWidth, thumbLargeHeight)
+        var thumbRect = CGRectMake(thumbX, thumbY, thumbSmallWidth, thumbSmallHeight)
         
         var thumbsToHide = self.thumbViews
         
@@ -264,10 +258,7 @@ public class PDFPageScrubber: UIToolbar {
             pageThumbView?.tag = page
             
             if let pageThumbView = self.pageThumbView {
-                let smallThumbView:PDFPageScrubberThumb = PDFPageScrubberThumb(frame: pageThumbView.frame,
-                                                                               small: true,
-                                                                               color: self.thumbBackgroundColor)
-                smallThumbView.showImage(self.document, page: page)
+                pageThumbView.showImage(self.document, page: page)
             }
         }
     }
@@ -374,6 +365,21 @@ class PDFPageScrubberTrackControl: UIControl {
     
     var value:CGFloat = 0.0
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.autoresizesSubviews = false
+        self.userInteractionEnabled = true
+        self.contentMode = .Redraw
+        self.autoresizingMask = .None
+        self.backgroundColor = UIColor.clearColor()
+        self.exclusiveTouch = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func limitValue(x: CGFloat) -> CGFloat {
         
         var valueX = x
@@ -383,6 +389,7 @@ class PDFPageScrubberTrackControl: UIControl {
         if valueX < minX {
             valueX = minX
         }
+        
         if valueX > maxX {
             valueX = maxX
         }
