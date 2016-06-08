@@ -45,6 +45,7 @@
 		607FACE51AFB9204008FA782 /* UXMPDFKit_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UXMPDFKit_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		611BF2C21D08B78100F863A4 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		614D2EE21C8C8A9A00A856CD /* sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample.pdf; sourceTree = "<group>"; };
 		616B61051CF7395100B743A7 /* sample2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample2.pdf; sourceTree = "<group>"; };
 		61D3B3761CDE9C1600E7C3A6 /* ExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
@@ -153,6 +154,7 @@
 				2796C7F95FF0FCF4538111B7 /* UXMPDFKit.podspec */,
 				21803DAC4DC99E3892836720 /* README.md */,
 				E9B04CB08B51CFCD484BF776 /* LICENSE */,
+				611BF2C21D08B78100F863A4 /* Package.swift */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
