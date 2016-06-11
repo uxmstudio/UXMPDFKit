@@ -56,6 +56,12 @@ public class PDFFormSignatureField: PDFFormField {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func didSetValue(value: AnyObject?) {
+        if let value = value as? UIImage {
+            self.signImage.image = value
+        }
+    }
+    
     func addSignature() {
         let bounds = UIScreen.mainScreen().bounds
         let width = bounds.width
@@ -79,6 +85,7 @@ public class PDFFormSignatureField: PDFFormField {
         var frame = self.frame
         frame.origin.y -= signatureExtraPadding
         frame.size.height += signatureExtraPadding * 2
+
         self.signImage.image?.drawInRect(frame)
     }
 }
@@ -90,6 +97,9 @@ extension PDFFormSignatureField: PDFFormSignatureViewDelegate {
         self.signatureView?.removeFromSuperview()
         self.signatureView = nil
         self.signButton.alpha = 0.0
+
+        self.value = field.getSignature()
+        self.delegate?.formFieldValueChanged(self)
     }
 }
 

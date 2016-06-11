@@ -19,12 +19,6 @@ public class PDFFormButtonField: PDFFormField {
     private var button:UIButton = UIButton(type: .Custom)
     private let inset:CGFloat = 0.8
     
-    override internal var value:String {
-        didSet {
-            self.setButtonState(value == self.exportValue)
-        }
-    }
-    
     init(frame: CGRect, radio: Bool) {
         self.radio = radio
         super.init(frame: frame)
@@ -56,6 +50,12 @@ public class PDFFormButtonField: PDFFormField {
         self.addSubview(self.button)
     }
     
+    override func didSetValue(value: AnyObject?) {
+        if let value = value as? String {
+            self.setButtonState(value == self.exportValue)
+        }
+    }
+    
     func setButtonState(selected: Bool) {
         if selected {
             self.button.backgroundColor = UIColor.blackColor()
@@ -66,7 +66,10 @@ public class PDFFormButtonField: PDFFormField {
     }
     
     func isSelected() -> Bool {
-        return self.value == exportValue
+        if let value = self.value as? String {
+            return value == exportValue
+        }
+        return false
     }
     
     func buttonPressed() {

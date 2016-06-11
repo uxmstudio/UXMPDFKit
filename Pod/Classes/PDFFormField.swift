@@ -17,7 +17,7 @@ protocol PDFFormViewDelegate {
 
 public class PDFFormFieldObject: NSObject {
     
-    var value:String = ""
+    var value:AnyObject?
     var options:PDFFormViewOptions?
     
     var dict:PDFDictionary
@@ -116,7 +116,9 @@ public class PDFFormFieldObject: NSObject {
         
         let field = PDFFormTextField(frame: options.rect, multiline: false, alignment: NSTextAlignment.Left)
         field.delegate = self
-        field.value = self.value
+        if let value = self.value {
+            field.value = value
+        }
         return field
     }
     
@@ -127,7 +129,9 @@ public class PDFFormFieldObject: NSObject {
         field.name = options.name
         field.exportValue = options.exportValue
         field.delegate = self
-        field.value = self.value
+        if let value = self.value {
+            field.value = value
+        }
         
         return field
     }
@@ -136,6 +140,9 @@ public class PDFFormFieldObject: NSObject {
         
         let field = PDFFormSignatureField(frame: options.rect)
         field.delegate = self
+        if let value = self.value {
+            field.value = value
+        }
         return field
     }
 }
@@ -154,9 +161,13 @@ extension PDFFormFieldObject: PDFFormViewDelegate {
 public class PDFFormField: UIView {
     
     var zoomScale:CGFloat = 1.0
-    var value:String = ""
     var options:[AnyObject] = []
     var baseFrame:CGRect
+    var value:AnyObject? {
+        didSet {
+            self.didSetValue(value)
+        }
+    }
     
     var delegate:PDFFormViewDelegate?
     
@@ -178,6 +189,8 @@ public class PDFFormField: UIView {
     public func refresh() {
         self.setNeedsDisplay()
     }
+    
+    func didSetValue(value: AnyObject?) { }
     
     func updateForZoomScale(scale: CGFloat) {
         self.zoomScale = scale

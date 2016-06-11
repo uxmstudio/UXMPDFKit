@@ -15,11 +15,6 @@ public class PDFFormTextField: PDFFormField {
     var baseFontSize:CGFloat
     var currentFontSize:CGFloat
     var alignment:NSTextAlignment
-    override internal var value:String {
-        didSet {
-            self.setText(value)
-        }
-    }
     
     init(frame: CGRect, multiline: Bool, alignment: NSTextAlignment) {
         
@@ -78,6 +73,12 @@ public class PDFFormTextField: PDFFormField {
     override public func refresh() {
         self.setNeedsDisplay()
         self.textEntryBox.setNeedsDisplay()
+    }
+    
+    override func didSetValue(value: AnyObject?) {
+        if let value = value as? String {
+            self.setText(value)
+        }
     }
     
     func fontSizeForRect(rect: CGRect) -> CGFloat {
