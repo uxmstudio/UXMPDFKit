@@ -43,7 +43,7 @@ public class PDFFormTextField: PDFFormField {
                 textView.delegate = self
                 textView.scrollEnabled = true
                 textView.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4)
-                var fontSize = self.fontSizeForRect(self.frame) < 13.0 ? self.fontSizeForRect(self.frame) : 13.0
+                let fontSize = self.fontSizeForRect(self.frame) < 13.0 ? self.fontSizeForRect(self.frame) : 13.0
                 textView.font = UIFont.systemFontOfSize(fontSize)
             }
         }

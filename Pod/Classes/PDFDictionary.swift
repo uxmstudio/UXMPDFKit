@@ -211,7 +211,7 @@ class PDFDictionary:NSObject, PDFObject {
     
     func description(level: Int = 0) -> String {
         var spacer = ""
-        for i in 0..<(level*2) { spacer += " " }
+        for _ in 0..<(level*2) { spacer += " " }
         
         var string = "\n\(spacer){\n"
         for (key, value) in attributes {
