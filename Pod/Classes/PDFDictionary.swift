@@ -208,4 +208,25 @@ class PDFDictionary:NSObject, PDFObject {
         let context = UnsafeMutablePointer<PDFObjectParserContext>(info).memory
         context.keys.append(key)
     }
+    
+    func description(level: Int = 0) -> String {
+        var spacer = ""
+        for i in 0..<(level*2) { spacer += " " }
+        
+        var string = "\n\(spacer){\n"
+        for (key, value) in attributes {
+            if let value = value as? PDFDictionary {
+                string += "\(spacer)\(key) : \(value.description(level+1))"
+            }
+            else {
+                string += "\(spacer)\(key) : \(value)\n"
+            }
+        }
+        string += "\(spacer)}\n"
+        return string
+    }
+    
+    override var description: String {
+        return description(0)
+    }
 }

@@ -111,7 +111,7 @@ public class PDFFormViewController:NSObject {
     }
     
     func createFormField(dict: PDFDictionary) {
-        
+
         if let page = self.getPageNumber(dict) {
 
             dispatch_async(dispatch_get_main_queue()) {
@@ -139,8 +139,8 @@ public class PDFFormViewController:NSObject {
     }
     
     func formPage(page: Int) -> PDFFormPage? {
-        
-        if page > self.formPages.count {
+
+        if page > (self.formPages.count + 1) {
             return nil
         }
         return self.formPages[page]

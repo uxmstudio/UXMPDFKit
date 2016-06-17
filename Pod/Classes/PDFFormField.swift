@@ -114,7 +114,8 @@ public class PDFFormFieldObject: NSObject {
     
     func createTextField(options: PDFFormViewOptions) -> PDFFormField {
         
-        let field = PDFFormTextField(frame: options.rect, multiline: false, alignment: NSTextAlignment.Left)
+        let multiline = options.flags?.contains(PDFFormFlag.TextFieldMultiline) ?? false
+        let field = PDFFormTextField(frame: options.rect, multiline: multiline, alignment: NSTextAlignment.Left)
         field.delegate = self
         if let value = self.value {
             field.value = value
