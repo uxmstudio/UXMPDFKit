@@ -11,6 +11,11 @@ import UIKit
 public class PDFViewController: UIViewController {
     
     public var hidesBarsOnTap:Bool = false
+    public var showsScrubber:Bool = true {
+        didSet {
+            self.pageScrubber.hidden = !self.showsScrubber
+        }
+    }
     
     var document:PDFDocument!
     
@@ -26,6 +31,7 @@ public class PDFViewController: UIViewController {
         var pageScrubber = PDFPageScrubber(frame: CGRectMake(0, self.view.frame.size.height - self.bottomLayoutGuide.length, self.view.frame.size.width, 44.0), document: self.document)
         pageScrubber.scrubberDelegate = self
         pageScrubber.translatesAutoresizingMaskIntoConstraints = false
+        pageScrubber.hidden = !self.showsScrubber
         return pageScrubber
     }()
     
@@ -59,10 +65,17 @@ public class PDFViewController: UIViewController {
         
         self.view.addConstraints(constraints)
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(PDFViewController.saveForm))
-        
         self.pageScrubber.sizeToFit()
         
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(PDFViewController.saveForm))
+        if self.navigationController?.navigationBar.backItem == nil {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done",
+                                                                   style: .Plain,
+                                                                   target: self,
+                                                                   action: #selector(PDFViewController.dismissModal))
+        }
+
         if self.hidesBarsOnTap {
             let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PDFViewController.handleTap(_:)))
             gestureRecognizer.cancelsTouchesInView = false
@@ -132,6 +145,10 @@ public class PDFViewController: UIViewController {
                 self.presentViewController(activityVC, animated: true, completion: nil)
             }
         }
+    }
+    
+    func dismissModal() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 

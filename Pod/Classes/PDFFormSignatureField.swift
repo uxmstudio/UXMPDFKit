@@ -44,7 +44,7 @@ public class PDFFormSignatureField: PDFFormField {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.7)
         
         self.addSubview(self.signImage)
         self.addSubview(self.signButton)
