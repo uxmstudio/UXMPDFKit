@@ -16,6 +16,9 @@ public class PDFViewController: UIViewController {
             self.pageScrubber.hidden = !self.showsScrubber
         }
     }
+    public var allowsFormFilling:Bool = true
+    public var allowsAnnotations:Bool = true
+    
     
     var document:PDFDocument!
     
@@ -35,9 +38,11 @@ public class PDFViewController: UIViewController {
         return pageScrubber
     }()
     
-    lazy var formController:PDFFormViewController = {
-        return PDFFormViewController(document: self.document)
-    }()
+    lazy var formController:PDFFormViewController = PDFFormViewController(document: self.document)
+    lazy var annotationController:PDFAnnotationController = PDFAnnotationController(document: self.document)
+    
+    private var showingAnnotations:Bool = false
+    private var showingFormFilling:Bool = true
     
     public init(document: PDFDocument) {
         super.init(nibName: nil, bundle: nil)
@@ -57,6 +62,7 @@ public class PDFViewController: UIViewController {
         
         self.view.addSubview(collectionView)
         self.view.addSubview(pageScrubber)
+        self.view.addSubview(annotationController.view)
         
         var constraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|[collectionView]|", options: .AlignAllBaseline, metrics: nil, views: [ "superview": self.view, "collectionView": self.collectionView])
         constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("V:|[collectionView]|", options: .AlignAllLeft, metrics: nil, views: [ "superview": self.view, "collectionView": self.collectionView]))
@@ -68,14 +74,9 @@ public class PDFViewController: UIViewController {
         self.pageScrubber.sizeToFit()
         
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: #selector(PDFViewController.saveForm))
-        if self.navigationController?.navigationBar.backItem == nil {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done",
-                                                                   style: .Plain,
-                                                                   target: self,
-                                                                   action: #selector(PDFViewController.dismissModal))
-        }
-
+        self.reloadBarButtons()
+        
+        
         if self.hidesBarsOnTap {
             let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PDFViewController.handleTap(_:)))
             gestureRecognizer.cancelsTouchesInView = false
@@ -112,6 +113,86 @@ public class PDFViewController: UIViewController {
         })
     }
     
+    //MARK: - Private helpers
+    private func reloadBarButtons() {
+        self.navigationItem.rightBarButtonItems = self.rightBarButtons()
+        
+        if self.navigationController?.navigationBar.backItem == nil {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done",
+                                                                    style: .Plain,
+                                                                    target: self,
+                                                                    action: #selector(PDFViewController.dismissModal))
+        }
+    }
+    
+    private func rightBarButtons() -> [UIBarButtonItem] {
+        
+        var buttons:[UIBarButtonItem] = []
+        
+        buttons.append(UIBarButtonItem(
+            barButtonSystemItem: .Action,
+            target: self,
+            action: #selector(PDFViewController.saveForm)
+            )
+        )
+        
+        buttons.append(UIBarButtonItem(
+            image: UIImage.bundledImage("form"),
+            style: .Plain,
+            target: self,
+            action: #selector(PDFViewController.showForm)
+            )
+        )
+        
+        if self.showingAnnotations {
+            buttons.append(UIBarButtonItem(
+                image: UIImage.bundledImage("text-symbol"),
+                style: .Plain,
+                target: self.annotationController,
+                action: #selector(PDFAnnotationController.selectedText)
+                )
+            )
+            buttons.append(UIBarButtonItem(
+                image: UIImage.bundledImage("pen"),
+                style: .Plain,
+                target: self.annotationController,
+                action: #selector(PDFAnnotationController.selectedPen)
+                )
+            )
+            buttons.append(UIBarButtonItem(
+                image: UIImage.bundledImage("highlighter"),
+                style: .Plain,
+                target: self.annotationController,
+                action: #selector(PDFAnnotationController.selectedHighlighter)
+                )
+            )
+        }
+        
+        buttons.append(UIBarButtonItem(
+            barButtonSystemItem: .Compose,
+            target: self,
+            action: #selector(PDFViewController.toggleAnnotations)
+            )
+        )
+        
+        
+        return buttons
+    }
+    
+    func toggleAnnotations() {
+        self.showingAnnotations = !self.showingAnnotations
+        self.reloadBarButtons()
+    }
+    
+    func showForm() {
+        self.showingFormFilling = true
+        self.showingAnnotations = false
+        
+        self.annotationController.finishAnnotation()
+        self.reloadBarButtons()
+    }
+    
+    //MARK: - IBActions
     func handleTap(gestureRecognizer: UIGestureRecognizer) {
         
         if let nvc = self.navigationController where nvc.navigationBarHidden {
@@ -173,5 +254,6 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
     public func singlePageViewer(collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView) {
         
         self.formController.showForm(content)
+        self.annotationController.showAnnotations(content)
     }
 }

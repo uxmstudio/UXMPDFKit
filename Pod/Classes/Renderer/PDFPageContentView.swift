@@ -229,15 +229,15 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     override public func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        
+        super.touchesCancelled(touches, withEvent: event)
     }
     
     override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
+        super.touchesEnded(touches, withEvent: event)
     }
     
     override public func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
+        super.touchesMoved(touches, withEvent: event)
     }
     
     
