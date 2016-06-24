@@ -145,33 +145,17 @@ public class PDFViewController: UIViewController {
         )
         
         if self.showingAnnotations {
-            buttons.append(UIBarButtonItem(
-                image: UIImage.bundledImage("text-symbol"),
-                style: .Plain,
-                target: self.annotationController,
-                action: #selector(PDFAnnotationController.selectedText)
-                )
-            )
-            buttons.append(UIBarButtonItem(
-                image: UIImage.bundledImage("pen"),
-                style: .Plain,
-                target: self.annotationController,
-                action: #selector(PDFAnnotationController.selectedPen)
-                )
-            )
-            buttons.append(UIBarButtonItem(
-                image: UIImage.bundledImage("highlighter"),
-                style: .Plain,
-                target: self.annotationController,
-                action: #selector(PDFAnnotationController.selectedHighlighter)
-                )
-            )
+            
+            buttons.append(self.annotationController.highlighterButton)
+            buttons.append(self.annotationController.penButton)
+            buttons.append(self.annotationController.textButton)
         }
         
-        buttons.append(UIBarButtonItem(
-            barButtonSystemItem: .Compose,
+        buttons.append(PDFBarButton(
+            image: UIImage.bundledImage("annot"),
+            toggled: self.showingAnnotations,
             target: self,
-            action: #selector(PDFViewController.toggleAnnotations)
+            action: #selector(PDFViewController.toggleAnnotations(_:))
             )
         )
         
@@ -179,7 +163,7 @@ public class PDFViewController: UIViewController {
         return buttons
     }
     
-    func toggleAnnotations() {
+    func toggleAnnotations(button: PDFBarButton) {
         self.showingAnnotations = !self.showingAnnotations
         self.reloadBarButtons()
     }
@@ -255,5 +239,54 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
         
         self.formController.showForm(content)
         self.annotationController.showAnnotations(content)
+    }
+}
+
+
+public class PDFBarButton:UIBarButtonItem {
+    
+    private var button:UIButton = UIButton(frame: CGRectMake(0,0,32,32))
+    private var toggled:Bool = false
+    private lazy var defaultTint:UIColor = UIColor.blueColor()
+    
+    override public var tintColor: UIColor? {
+        didSet {
+            self.button.tintColor = tintColor
+        }
+    }
+    
+    convenience init(image: UIImage?, toggled: Bool, target: AnyObject?, action: Selector) {
+        
+        self.init()
+        
+        self.customView = button
+        self.defaultTint = self.button.tintColor
+
+        self.toggle(toggled)
+        
+        self.target = target
+        self.action = action
+        
+        self.button.addTarget(self, action: #selector(PDFBarButton.tapped), forControlEvents: .TouchUpInside)
+        self.button.setImage(image?.imageWithRenderingMode(.AlwaysTemplate), forState: .Normal)
+    }
+    
+    public func toggle(state: Bool) {
+
+        self.toggled = state
+        if self.toggled {
+            button.tintColor = UIColor.whiteColor()
+            button.layer.backgroundColor = (self.tintColor ?? self.defaultTint).CGColor
+            button.layer.cornerRadius = 4.0
+        }
+        else {
+            button.tintColor = self.tintColor
+            button.layer.backgroundColor = UIColor.clearColor().CGColor
+            button.layer.cornerRadius = 4.0
+        }
+    }
+    
+    func tapped() {
+        self.target?.performSelector(self.action, withObject: self)
     }
 }

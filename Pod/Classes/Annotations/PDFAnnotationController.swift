@@ -26,6 +26,29 @@ public class PDFAnnotationController:UIViewController {
     
     var currentAnnotation:PDFAnnotation?
     
+    //MARK: - Bar button items
+    lazy var penButton:PDFBarButton = PDFBarButton(
+        image: UIImage.bundledImage("pen"),
+        toggled: false,
+        target: self,
+        action: #selector(PDFAnnotationController.selectedPen(_:))
+    )
+    
+    lazy var highlighterButton:PDFBarButton = PDFBarButton(
+        image: UIImage.bundledImage("highlighter"),
+        toggled: false,
+        target: self,
+        action: #selector(PDFAnnotationController.selectedHighlighter(_:))
+    )
+    
+    lazy var textButton:PDFBarButton = PDFBarButton(
+        image: UIImage.bundledImage("text-symbol"),
+        toggled: false,
+        target: self,
+        action: #selector(PDFAnnotationController.selectedText(_:))
+    )
+    
+    //MARK: - Init
     public init(document: PDFDocument) {
         
         self.document = document
@@ -46,6 +69,8 @@ public class PDFAnnotationController:UIViewController {
         self.view.backgroundColor = UIColor.clearColor()
     }
     
+    
+    //MARK: - Annotation handling
     func showAnnotations(contentView:PDFPageContentView) {
         
         self.currentPage = contentView
@@ -88,31 +113,37 @@ public class PDFAnnotationController:UIViewController {
     }
     
     
-    @IBAction func selectedPen() {
-        if self.annotationType == .Pen {
-            self.finishAnnotation()
-        }
-        else {
-            self.startAnnotation(.Pen)
+    
+    //MARK: - Bar button actions 
+    
+    func unselectAll() {
+        for button in [penButton, highlighterButton, textButton] {
+            button.toggle(false)
         }
     }
     
-    @IBAction func selectedHighlighter() {
-        if self.annotationType == .Highlighter {
+    func selectedType(button:PDFBarButton, type: PDFAnnotationType) {
+        self.unselectAll()
+        if self.annotationType == type {
             self.finishAnnotation()
+            button.toggle(false)
         }
         else {
-           self.startAnnotation(.Highlighter)
+            self.startAnnotation(type)
+            button.toggle(true)
         }
     }
     
-    @IBAction func selectedText() {
-        if self.annotationType == .Text {
-            self.finishAnnotation()
-        }
-        else {
-            self.startAnnotation(.Text)
-        }
+    @IBAction func selectedPen(button: PDFBarButton) {
+        self.selectedType(button, type: .Pen)
+    }
+    
+    @IBAction func selectedHighlighter(button: PDFBarButton) {
+        self.selectedType(button, type: .Highlighter)
+    }
+    
+    @IBAction func selectedText(button: PDFBarButton) {
+        self.selectedType(button, type: .Text)
     }
     
     func hide() {
@@ -128,6 +159,8 @@ public class PDFAnnotationController:UIViewController {
     }
     
     
+    
+    //MARK: - Touches methods to pass to annotation
     public override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
 
         guard let touch = touches.first else { return }
