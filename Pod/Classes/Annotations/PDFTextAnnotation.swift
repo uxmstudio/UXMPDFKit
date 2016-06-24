@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PDFTextAnnotation:UIView {
+class PDFTextAnnotation:NSObject {
     
     var text:String = "" {
         didSet {
@@ -18,8 +18,7 @@ class PDFTextAnnotation:UIView {
     
     var rect:CGRect = CGRectZero {
         didSet {
-            self.frame = self.rect
-            self.textView.frame = CGRectMake(2.0, 2.0, self.rect.width + 4.0, self.rect.height + 4.0)
+            self.textView.frame = self.rect
         }
     }
     
@@ -29,62 +28,39 @@ class PDFTextAnnotation:UIView {
         }
     }
     
-    lazy var textView:UITextView = {
-        let textView = UITextView(frame: self.rect)
-        textView.delegate = self
-        return textView
-    }()
+    lazy var textView:UITextView = self.createTextView()
     
     private var startTouch:CGPoint = CGPointZero
     private var startInternalPosition:CGPoint = CGPointZero
     private var isDragging:Bool = false
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.setupUI()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.setupUI()
-    }
-    
-    func setupUI() {
+    func createTextView() -> UITextView {
+        let textView = UITextView(frame: self.rect)
+        textView.delegate = self
+        textView.font = self.font
+        textView.text = self.text
         
-        self.addSubview(self.textView)
+        textView.layer.borderWidth = 2.0
+        textView.layer.borderColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.9).CGColor
+        textView.backgroundColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.2)
         
-        self.layer.borderColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.9).CGColor
-        self.layer.borderWidth = 2.0
-        self.backgroundColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.2)
-    }
-    
-    func textFieldDidChange() {
-        self.textView.sizeToFit()
-        
-        var width:CGFloat = 300.0
-        if self.textView.frame.width > width {
-            width = self.textView.frame.width
-        }
-        
-        self.rect = CGRectMake(self.frame.origin.x,
-                               self.frame.origin.y,
-                               width,
-                               self.textView.frame.height)
+        return textView
     }
 }
 
 extension PDFTextAnnotation:PDFAnnotation {
     
     func mutableView() -> UIView {
-        return self
+        self.textView = self.createTextView()
+        return self.textView
     }
     
     func touchStarted(touch: UITouch, point: CGPoint) {
         
         self.startTouch = point
-        self.startInternalPosition = touch.locationInView(self)
+        self.startInternalPosition = touch.locationInView(self.textView)
         
-        if (CGRectContainsPoint(self.frame, point)) {
+        if (CGRectContainsPoint(self.textView.frame, point)) {
             self.isDragging = true
         }
         else {
@@ -150,9 +126,13 @@ extension PDFTextAnnotation:UITextViewDelegate {
             width = self.textView.frame.width
         }
         
-        self.rect = CGRectMake(self.frame.origin.x,
-                               self.frame.origin.y,
+        self.rect = CGRectMake(self.textView.frame.origin.x,
+                               self.textView.frame.origin.y,
                                width,
                                self.textView.frame.height)
+        
+        if self.text != self.textView.text {
+            self.text = self.textView.text
+        }
     }
 }
