@@ -117,7 +117,7 @@ public class PDFViewController: UIViewController {
     private func reloadBarButtons() {
         self.navigationItem.rightBarButtonItems = self.rightBarButtons()
         
-        if self.navigationController?.navigationBar.backItem == nil {
+        if self.isModal() {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done",
                                                                     style: .Plain,
                                                                     target: self,
@@ -217,6 +217,18 @@ public class PDFViewController: UIViewController {
     
     func dismissModal() {
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func isModal() -> Bool {
+        
+        if self.presentingViewController != nil
+        || self.presentingViewController?.presentedViewController == self
+        || self.navigationController?.presentingViewController?.presentedViewController == self.navigationController
+        || self.tabBarController?.presentingViewController is UITabBarController {
+            return true
+        }
+        
+        return false
     }
 }
 
