@@ -136,29 +136,33 @@ public class PDFViewController: UIViewController {
             )
         )
         
-        buttons.append(UIBarButtonItem(
-            image: UIImage.bundledImage("form"),
-            style: .Plain,
-            target: self,
-            action: #selector(PDFViewController.showForm)
-            )
-        )
-        
-        if self.showingAnnotations {
+        if self.allowsFormFilling {
             
-            buttons.append(self.annotationController.highlighterButton)
-            buttons.append(self.annotationController.penButton)
-            buttons.append(self.annotationController.textButton)
+            buttons.append(UIBarButtonItem(
+                image: UIImage.bundledImage("form"),
+                style: .Plain,
+                target: self,
+                action: #selector(PDFViewController.showForm)
+                )
+            )
         }
         
-        buttons.append(PDFBarButton(
-            image: UIImage.bundledImage("annot"),
-            toggled: self.showingAnnotations,
-            target: self,
-            action: #selector(PDFViewController.toggleAnnotations(_:))
+        if self.allowsAnnotations {
+            if self.showingAnnotations {
+                
+                buttons.append(self.annotationController.highlighterButton)
+                buttons.append(self.annotationController.penButton)
+                buttons.append(self.annotationController.textButton)
+            }
+            
+            buttons.append(PDFBarButton(
+                image: UIImage.bundledImage("annot"),
+                toggled: self.showingAnnotations,
+                target: self,
+                action: #selector(PDFViewController.toggleAnnotations(_:))
+                )
             )
-        )
-        
+        }
         
         return buttons
     }

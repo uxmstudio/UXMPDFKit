@@ -74,9 +74,48 @@ func save(url: NSURL) -> Bool // Writes
 
 
 ### Annotations
-Coming soon
+User annotations are supported at a basic level, however instead of being written onto the PDF, are burned on at the time of saving. 
 
+Current annotation types available: 
+* Pen
+* Highlighter
+* Textbox
 
+All annotations are stored in memory until being rendered back onto the PDF by the PDFRenderer.
+
+To create a new annotation type, you must extend the following protocol:
+
+```swift
+protocol PDFAnnotation {
+
+    func mutableView() -> UIView
+    func touchStarted(touch: UITouch, point:CGPoint)
+    func touchMoved(touch:UITouch, point:CGPoint)
+    func touchEnded(touch:UITouch, point:CGPoint)
+    func drawInContext(context: CGContextRef)
+}
+```
+
+An annotation should be an object that contains its position and value, not a view. Because annotations are written onto temporary objects, they should be created, not passed by reference each time ```mutableView()``` is called. 
+
+### Renderer 
+In order to perform write operations back onto a PDF in an efficient format, a renderer is used. Each type of form, annotation, etc that needs to be rendered back onto the PDF should extend the following protocol:
+
+```swift
+protocol PDFRenderer {
+    func render(page: Int, context:CGContext, bounds: CGRect)
+}
+```
+
+Controllers or objects that extend this protocol can then be passed to the PDFRenderer to be written onto a temporary document or saved permanently onto the document.
+
+```swift
+let renderer = PDFRenderController(document: self.document, controllers: [
+    self.annotationController,
+    self.formController
+])
+let pdf = renderer.renderOntoPDF()
+```
 
 # Author
 Chris Anderson:

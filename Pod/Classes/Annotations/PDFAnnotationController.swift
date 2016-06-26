@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum PDFAnnotationType {
+public enum PDFAnnotationType {
     case None
     case Pen
     case Text
@@ -71,7 +71,7 @@ public class PDFAnnotationController:UIViewController {
     
     
     //MARK: - Annotation handling
-    func showAnnotations(contentView:PDFPageContentView) {
+    public func showAnnotations(contentView:PDFPageContentView) {
         
         self.currentPage = contentView
         let page = contentView.page
@@ -84,7 +84,7 @@ public class PDFAnnotationController:UIViewController {
         }
     }
     
-    func startAnnotation(type: PDFAnnotationType) {
+    public func startAnnotation(type: PDFAnnotationType) {
         
         self.finishAnnotation()
         self.annotationType = type
@@ -100,7 +100,7 @@ public class PDFAnnotationController:UIViewController {
         }
     }
     
-    func finishAnnotation() {
+    public func finishAnnotation() {
         
         guard let annotation = self.currentAnnotation else { return }
         guard let currentPage = self.currentPage else { return }
