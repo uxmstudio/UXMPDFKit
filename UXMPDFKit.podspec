@@ -22,6 +22,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Pod/Classes/**/*'
   s.resource_bundles = {
-    'UXMPDFKit' => ['UXMPDFKit/Assets/*.xcassets']
+    'UXMPDFKit' => ['Pod/Assets/**/*.xcassets']
   }
 end
