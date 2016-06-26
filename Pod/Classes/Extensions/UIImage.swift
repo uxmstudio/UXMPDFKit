@@ -12,11 +12,16 @@ extension UIImage {
     
     class func bundledImage(named: String) -> UIImage? {
         let image = UIImage(named: named)
+        let podBundle = NSBundle(forClass: PDFViewController.classForCoder())
+        
         if image == nil {
-            return UIImage(
-                named: named,
-                inBundle: NSBundle(forClass: PDFViewController.classForCoder()),
-                compatibleWithTraitCollection: nil)
+            if let bundleURL = podBundle.URLForResource("UXMPDFKit", withExtension: "bundle"),
+                let bundle = NSBundle(URL: bundleURL) {
+                return UIImage(
+                    named: named,
+                    inBundle: bundle,
+                    compatibleWithTraitCollection: nil)
+            }
         }
         return image
     }
