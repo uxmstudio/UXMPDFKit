@@ -12,7 +12,7 @@ public protocol PDFRenderer {
     func render(page: Int, context:CGContext, bounds: CGRect)
 }
 
-class PDFRenderController {
+public class PDFRenderController {
     
     var document:PDFDocument
     var renderControllers:[PDFRenderer] = []

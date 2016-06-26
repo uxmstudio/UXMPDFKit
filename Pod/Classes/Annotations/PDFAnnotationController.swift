@@ -78,7 +78,7 @@ public class PDFAnnotationController:UIViewController {
         
         self.pageView = contentView.contentView
         
-        var annotations = self.annotations.annotationsForPage(page)
+        let annotations = self.annotations.annotationsForPage(page)
         for annot in annotations {
             self.pageView?.addSubview(annot.mutableView())
         }
