@@ -197,3 +197,13 @@ public class PDFAnnotationController:UIViewController {
         self.lastPoint = point
     }
 }
+
+extension PDFAnnotationController: PDFRenderer {
+    
+    public func render(page: Int, context:CGContext, bounds: CGRect) {
+        
+        if let page = annotations.get(page) {
+            page.renderInContext(context, size: bounds)
+        }
+    }
+}

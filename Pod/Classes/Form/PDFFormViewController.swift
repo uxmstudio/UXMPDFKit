@@ -145,46 +145,14 @@ public class PDFFormViewController:NSObject {
         }
         return self.formPages[page]
     }
+}
+
+extension PDFFormViewController: PDFRenderer {
     
-    
-    public func renderFormOntoPDF() -> NSURL {
-        let documentRef = document.documentRef
-        let pages = document.pageCount
-        let title = document.fileUrl.lastPathComponent ?? "annotated.pdf"
-        let tempPath = NSTemporaryDirectory().stringByAppendingString(title)
+    public func render(page: Int, context:CGContext, bounds: CGRect) {
         
-        UIGraphicsBeginPDFContextToFile(tempPath, CGRectZero, nil)
-        for i in 1...pages {
-            let page = CGPDFDocumentGetPage(documentRef, i)
-            let bounds = self.document.boundsForPDFPage(i)
-            
-            if let context = UIGraphicsGetCurrentContext() {
-                UIGraphicsBeginPDFPageWithInfo(bounds, nil)
-                CGContextTranslateCTM(context, 0, bounds.size.height)
-                CGContextScaleCTM(context, 1.0, -1.0)
-                CGContextDrawPDFPage (context, page)
-                
-                CGContextScaleCTM(context, 1.0, -1.0)
-                CGContextTranslateCTM(context, 0, -bounds.size.height)
-                
-                if let form = formPage(i) {
-                    form.renderInContext(context, size: bounds)
-                }
-            }
+        if let form = formPage(page) {
+            form.renderInContext(context, size: bounds)
         }
-        UIGraphicsEndPDFContext()
-        
-        return NSURL.fileURLWithPath(tempPath)
-    }
-    
-    public func save(url: NSURL) -> Bool {
-        
-        let tempUrl = renderFormOntoPDF()
-        let fileManger = NSFileManager.defaultManager()
-        do {
-            try fileManger.copyItemAtURL(tempUrl, toURL: url)
-        }
-        catch _ { return false }
-        return true
     }
 }

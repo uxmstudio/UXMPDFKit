@@ -192,24 +192,23 @@ public class PDFViewController: UIViewController {
     
     func saveForm() {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            
-            let pdf = self.formController.renderFormOntoPDF()
-            dispatch_async(dispatch_get_main_queue()) {
-                
-                let items = [pdf]
-                let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
-                
-                if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-                    activityVC.modalPresentationStyle = .Popover
-                    let popController = activityVC.popoverPresentationController
-                    popController?.sourceView = self.view
-                    popController?.sourceRect = CGRectMake(self.view.frame.width - 34, 64, 0, 0)
-                    popController?.permittedArrowDirections = .Up
-                }
-                self.presentViewController(activityVC, animated: true, completion: nil)
-            }
+        var renderer = PDFRenderController(document: self.document, controllers: [
+            self.annotationController,
+            self.formController
+            ])
+        let pdf = renderer.renderOntoPDF()
+        
+        let items = [pdf]
+        let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            activityVC.modalPresentationStyle = .Popover
+            let popController = activityVC.popoverPresentationController
+            popController?.sourceView = self.view
+            popController?.sourceRect = CGRectMake(self.view.frame.width - 34, 64, 0, 0)
+            popController?.permittedArrowDirections = .Up
         }
+        self.presentViewController(activityVC, animated: true, completion: nil)
     }
     
     func dismissModal() {
@@ -261,7 +260,7 @@ public class PDFBarButton:UIBarButtonItem {
         
         self.customView = button
         self.defaultTint = self.button.tintColor
-
+        
         self.toggle(toggled)
         
         self.target = target
@@ -272,7 +271,7 @@ public class PDFBarButton:UIBarButtonItem {
     }
     
     public func toggle(state: Bool) {
-
+        
         self.toggled = state
         if self.toggled {
             button.tintColor = UIColor.whiteColor()

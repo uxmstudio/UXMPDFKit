@@ -27,18 +27,13 @@ public class PDFAnnotationStore {
         }
     }
     
+    func get(page: Int) -> PDFAnnotationPage? {
+        return self.pages[page]
+    }
+    
     func annotationsForPage(page: Int) -> [PDFAnnotation] {
         guard let storePage = pages[page] else { return [] }
         return storePage.annotations
-    }
-    
-    func drawAnnotations(page: Int, context:CGContextRef) {
-        
-        if let storePage = pages[page] {
-            for annotation in storePage.annotations {
-                annotation.drawInContext(context)
-            }
-        }
     }
 }
 
@@ -49,5 +44,12 @@ public class PDFAnnotationPage {
     
     func addAnnotation(annotation: PDFAnnotation) {
         annotations.append(annotation)
+    }
+    
+    func renderInContext(context: CGContext, size: CGRect) {
+        
+        for annotation in self.annotations {
+            annotation.drawInContext(context)
+        }
     }
 }

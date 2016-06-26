@@ -126,6 +126,7 @@ extension PDFPathAnnotation:PDFAnnotation {
     func drawInContext(context: CGContextRef) {
         
         self.drawBitmap()
+        self.drawRect(self.rect)
     }
 }
 
