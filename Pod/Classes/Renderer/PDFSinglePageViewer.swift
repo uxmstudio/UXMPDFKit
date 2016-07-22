@@ -16,7 +16,6 @@ public protocol PDFSinglePageViewerDelegate {
 
 public class PDFSinglePageViewer: UICollectionView {
     
-    public private(set) var currentPage = 0
     public var singlePageDelegate:PDFSinglePageViewerDelegate?
     
     public var document:PDFDocument?
@@ -49,10 +48,6 @@ public class PDFSinglePageViewer: UICollectionView {
         self.collectionViewLayout = layout
         
         setupCollectionView()
-
-        if let pageContentView = self.getPageContent(0) {
-            self.singlePageDelegate?.singlePageViewer(self, loadedContent: pageContentView)
-        }
     }
     
     func setupCollectionView() {
@@ -64,11 +59,17 @@ public class PDFSinglePageViewer: UICollectionView {
         
         self.delegate = self
         self.dataSource = self
+        
+        let currentPage = self.document?.currentPage ?? 0
+        self.displayPage(currentPage, animated: false)
+        
+        if let pageContentView = self.getPageContent(currentPage) {
+            self.singlePageDelegate?.singlePageViewer(self, loadedContent: pageContentView)
+        }
     }
     
     
     public func displayPage(page: Int, animated: Bool) {
-        
         let indexPath = NSIndexPath(forItem: (page - 1), inSection: 0)
         self.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: animated)
     }
