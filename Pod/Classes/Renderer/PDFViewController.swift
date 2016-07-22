@@ -18,6 +18,7 @@ public class PDFViewController: UIViewController {
     }
     public var allowsFormFilling:Bool = true
     public var allowsAnnotations:Bool = true
+    public var allowsSharing:Bool = true
     
     
     var document:PDFDocument!
@@ -129,12 +130,14 @@ public class PDFViewController: UIViewController {
         
         var buttons:[UIBarButtonItem] = []
         
-        buttons.append(UIBarButtonItem(
-            barButtonSystemItem: .Action,
-            target: self,
-            action: #selector(PDFViewController.saveForm)
+        if self.allowsSharing {
+            buttons.append(UIBarButtonItem(
+                barButtonSystemItem: .Action,
+                target: self,
+                action: #selector(PDFViewController.shareForm)
+                )
             )
-        )
+        }
         
         if self.allowsFormFilling {
             
@@ -194,7 +197,7 @@ public class PDFViewController: UIViewController {
         self.collectionView.collectionViewLayout.invalidateLayout()
     }
     
-    func saveForm() {
+    func shareForm() {
         
         let renderer = PDFRenderController(document: self.document, controllers: [
             self.annotationController,
@@ -222,9 +225,9 @@ public class PDFViewController: UIViewController {
     func isModal() -> Bool {
         
         if self.presentingViewController != nil
-        || self.presentingViewController?.presentedViewController == self
-        || self.navigationController?.presentingViewController?.presentedViewController == self.navigationController
-        || self.tabBarController?.presentingViewController is UITabBarController {
+            || self.presentingViewController?.presentedViewController == self
+            || self.navigationController?.presentingViewController?.presentedViewController == self.navigationController
+            || self.tabBarController?.presentingViewController is UITabBarController {
             return true
         }
         
@@ -252,8 +255,12 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
     
     public func singlePageViewer(collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView) {
         
-        self.formController.showForm(content)
-        self.annotationController.showAnnotations(content)
+        if self.allowsFormFilling {
+            self.formController.showForm(content)
+        }
+        if self.allowsAnnotations {
+            self.annotationController.showAnnotations(content)
+        }
     }
 }
 
