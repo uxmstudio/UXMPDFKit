@@ -70,7 +70,7 @@ public class PDFSinglePageViewer: UICollectionView {
     
     
     public func displayPage(page: Int, animated: Bool) {
-        let indexPath = NSIndexPath(forItem: (page - 1), inSection: 0)
+        let indexPath = NSIndexPath(forItem: (page <= 0 ? 0 : (page - 1)), inSection: 0)
         self.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: animated)
     }
     
