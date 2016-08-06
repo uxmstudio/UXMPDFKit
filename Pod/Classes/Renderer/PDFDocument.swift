@@ -40,13 +40,16 @@ public class PDFDocument: NSObject, NSCoding {
     public var creationDate: NSDate?
     public var version:Float = 0.0
     
-    static func documentFromFile(filePath: String, password: String?) -> PDFDocument? {
+    static func documentFromFile(filePath: String, password: String?) throws -> PDFDocument? {
         
         var document:PDFDocument? = PDFDocument.unarchiveDocumentForFile(filePath, password: password)
         
         if document == nil {
-            
-            document = PDFDocument(filePath: filePath, password: password)
+            do {
+                document = try PDFDocument(filePath: filePath, password: password)
+            } catch let err {
+                throw err
+            }
         }
         
         return document
@@ -67,14 +70,22 @@ public class PDFDocument: NSObject, NSCoding {
         
         super.init()
         
-        self.loadDocumentInformation()
+        do {
+            try self.loadDocumentInformation()
+        } catch let _ {
+
+        }
     }
     
-    public convenience init(filePath: String) {
-        self.init(filePath: filePath, password: nil)
+    public convenience init(filePath: String) throws {
+        do {
+            try self.init(filePath: filePath, password: nil)
+        } catch let err {
+            throw err
+        }
     }
     
-    public init(filePath: String, password: String?) {
+    public init(filePath: String, password: String?) throws {
         
         self.guid = PDFDocument.GUID()
         self.password = password
@@ -83,12 +94,16 @@ public class PDFDocument: NSObject, NSCoding {
         
         super.init()
         
-        self.loadDocumentInformation()
+        do {
+            try self.loadDocumentInformation()
+        } catch let err {
+            throw err
+        }
         
         self.save()
     }
     
-    func loadDocumentInformation() {
+    func loadDocumentInformation() throws {
         
         do {
             
@@ -162,7 +177,7 @@ public class PDFDocument: NSObject, NSCoding {
             
         } catch let err {
             
-            print (err)
+            throw err
         }
     }
     
@@ -230,7 +245,11 @@ public class PDFDocument: NSObject, NSCoding {
     }
     
     public func reloadProperties() {
-        self.loadDocumentInformation()
+        do {
+            try self.loadDocumentInformation()
+        } catch let _ {
+            
+        }
     }
     
     public func boundsForPDFPage(page:Int) -> CGRect {
