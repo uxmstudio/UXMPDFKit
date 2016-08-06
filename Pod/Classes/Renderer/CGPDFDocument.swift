@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum CGPDFDocumentError: ErrorType {
+public enum CGPDFDocumentError: ErrorType {
     case FileDoesNotExist
     case PasswordRequired
     case CouldNotUnlock
