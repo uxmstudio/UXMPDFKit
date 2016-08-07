@@ -72,7 +72,7 @@ public class PDFDocument: NSObject, NSCoding {
         
         do {
             try self.loadDocumentInformation()
-        } catch let _ {
+        } catch _ {
 
         }
     }
@@ -245,11 +245,7 @@ public class PDFDocument: NSObject, NSCoding {
     }
     
     public func reloadProperties() {
-        do {
-            try self.loadDocumentInformation()
-        } catch let _ {
-            
-        }
+        try! self.loadDocumentInformation()
     }
     
     public func boundsForPDFPage(page:Int) -> CGRect {
