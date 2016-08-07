@@ -60,7 +60,14 @@ public class PDFSinglePageViewer: UICollectionView {
         self.delegate = self
         self.dataSource = self
         
-        let currentPage = self.document?.currentPage ?? 0
+        guard let document = self.document else { return }
+        var currentPage = document.currentPage - 1
+        if currentPage <= 0 {
+            currentPage = 0
+        }
+        if currentPage > document.pageCount {
+            currentPage = document.pageCount - 1
+        }
         self.displayPage(currentPage, animated: false)
         
         if let pageContentView = self.getPageContent(currentPage) {
@@ -70,7 +77,7 @@ public class PDFSinglePageViewer: UICollectionView {
     
     
     public func displayPage(page: Int, animated: Bool) {
-        let indexPath = NSIndexPath(forItem: (page <= 0 ? 0 : (page - 1)), inSection: 0)
+        let indexPath = NSIndexPath(forItem: page, inSection: 0)
         self.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: animated)
     }
     

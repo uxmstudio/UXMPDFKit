@@ -26,7 +26,7 @@ pod "UXMPDFKit"
 UXMPDFKit comes with a single page PDF reader with many features implemented right out of the box. Simply create a new PDFViewController, pass it a document and display it like any other view controller. It includes support for forms, a page scrubber and page scrolling.
 ```swift
 let url = NSBundle.mainBundle().pathForResource("sample", ofType: "pdf")!
-let document = PDFDocument(filePath: url, password: "password_if_needed")
+let document = try! PDFDocument(filePath: url, password: "password_if_needed")
 let pdf = PDFViewController(document: document)
 
 self.navigationController?.pushViewController(pdf, animated: true)
