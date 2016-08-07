@@ -70,11 +70,7 @@ public class PDFDocument: NSObject, NSCoding {
         
         super.init()
         
-        do {
-            try self.loadDocumentInformation()
-        } catch _ {
-
-        }
+        try! self.loadDocumentInformation()
     }
     
     public convenience init(filePath: String) throws {
