@@ -2,12 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "annot-1.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "annot.png",
+      "filename" : "garbage.png",
       "scale" : "2x"
     },
     {

@@ -250,7 +250,9 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
     public func singlePageViewer(collectionView: PDFSinglePageViewer, didDisplayPage page: Int) {
         
         self.document.currentPage = page
-        self.pageScrubber.updateScrubber()
+        if self.showsScrubber {
+            self.pageScrubber.updateScrubber()
+        }
     }
     
     public func singlePageViewer(collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView) {

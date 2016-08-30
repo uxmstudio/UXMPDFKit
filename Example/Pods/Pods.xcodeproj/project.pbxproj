@@ -42,6 +42,7 @@
 		5EF5C00C6AECE1FCFFF118577817F5CE /* Equal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3661DD977D936FA0FEA7FDE08D852 /* Equal.swift */; };
 		6109BEBA1CFF30FD0000F303 /* PDFFormButtonField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6109BEB91CFF30FD0000F303 /* PDFFormButtonField.swift */; };
 		6109BEBC1CFF47A10000F303 /* PDFFormSignatureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6109BEBB1CFF47A10000F303 /* PDFFormSignatureField.swift */; };
+		612691301D6F31A40021FEBC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 613455321D1C22B200982C9B /* Images.xcassets */; };
 		613455331D1C22D700982C9B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 613455321D1C22B200982C9B /* Images.xcassets */; };
 		613455381D1D5DA900982C9B /* PDFTextAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613455361D1C8CD400982C9B /* PDFTextAnnotation.swift */; };
 		6134553B1D1D5DCF00982C9B /* PDFPathAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 613455391D1D5DBB00982C9B /* PDFPathAnnotation.swift */; };
@@ -920,6 +921,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				612691301D6F31A40021FEBC /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
