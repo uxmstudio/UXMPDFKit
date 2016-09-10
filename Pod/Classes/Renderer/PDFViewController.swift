@@ -156,6 +156,7 @@ public class PDFViewController: UIViewController {
                 buttons.append(self.annotationController.highlighterButton)
                 buttons.append(self.annotationController.penButton)
                 buttons.append(self.annotationController.textButton)
+                buttons.append(self.annotationController.undoButton)
             }
             
             buttons.append(PDFBarButton(
@@ -239,7 +240,7 @@ public class PDFViewController: UIViewController {
 extension PDFViewController: PDFPageScrubberDelegate {
     
     public func scrubber(scrubber: PDFPageScrubber, selectedPage: Int) {
-        
+
         self.document.currentPage = selectedPage
         self.collectionView.displayPage(selectedPage, animated: false)
     }

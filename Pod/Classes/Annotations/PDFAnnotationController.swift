@@ -48,6 +48,13 @@ public class PDFAnnotationController:UIViewController {
         action: #selector(PDFAnnotationController.selectedText(_:))
     )
     
+    lazy var undoButton:PDFBarButton = PDFBarButton(
+        image: UIImage.bundledImage("undo"),
+        toggled: false,
+        target: self,
+        action: #selector(PDFAnnotationController.selectedUndo(_:))
+    )
+    
     //MARK: - Init
     public init(document: PDFDocument) {
         
@@ -71,7 +78,7 @@ public class PDFAnnotationController:UIViewController {
     
     
     //MARK: - Annotation handling
-    public func showAnnotations(contentView:PDFPageContentView) {
+    public func showAnnotations(contentView: PDFPageContentView) {
         
         self.currentPage = contentView
         let page = contentView.page
@@ -146,12 +153,19 @@ public class PDFAnnotationController:UIViewController {
         self.selectedType(button, type: .Text)
     }
     
+    @IBAction func selectedUndo(button: PDFBarButton) {
+        self.undo()
+    }
+    
     func hide() {
         
     }
     
     func undo() {
         
+        guard let currentPage = self.currentPage else { return }
+        self.annotations.undo(currentPage.page)
+        self.showAnnotations(currentPage)
     }
     
     func clear() {

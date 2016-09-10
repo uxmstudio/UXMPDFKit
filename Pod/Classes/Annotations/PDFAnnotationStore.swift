@@ -31,6 +31,11 @@ public class PDFAnnotationStore {
         return self.pages[page]
     }
     
+    func undo(page: Int) {
+        guard let storePage = pages[page] else { return }
+        storePage.undo()
+    }
+    
     func annotationsForPage(page: Int) -> [PDFAnnotation] {
         guard let storePage = pages[page] else { return [] }
         return storePage.annotations
@@ -51,5 +56,10 @@ public class PDFAnnotationPage {
         for annotation in self.annotations {
             annotation.drawInContext(context)
         }
+    }
+    
+    func undo() {
+        
+        self.annotations.popLast()
     }
 }

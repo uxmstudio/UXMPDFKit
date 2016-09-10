@@ -61,29 +61,37 @@ public class PDFSinglePageViewer: UICollectionView {
         self.dataSource = self
         
         guard let document = self.document else { return }
-        var currentPage = document.currentPage - 1
-        if currentPage <= 0 {
-            currentPage = 0
-        }
-        if currentPage > document.pageCount {
-            currentPage = document.pageCount - 1
-        }
-        self.displayPage(currentPage, animated: false)
         
-        if let pageContentView = self.getPageContent(currentPage) {
+        self.displayPage(document.currentPage, animated: false)
+        
+        if let pageContentView = self.getPageContent(document.currentPage) {
             self.singlePageDelegate?.singlePageViewer(self, loadedContent: pageContentView)
         }
     }
     
+    public func indexForPage(page: Int) -> Int {
+        
+        var currentPage = page - 1
+        if currentPage <= 0 {
+            currentPage = 0
+        }
+        if let document = self.document where currentPage > document.pageCount {
+            currentPage = document.pageCount - 1
+        }
+        return currentPage
+    }
     
     public func displayPage(page: Int, animated: Bool) {
-        let indexPath = NSIndexPath(forItem: page, inSection: 0)
+        
+        let currentPage = self.indexForPage(page)
+        let indexPath = NSIndexPath(forItem: currentPage, inSection: 0)
         self.scrollToItemAtIndexPath(indexPath, atScrollPosition: .CenteredHorizontally, animated: animated)
     }
     
     public func getPageContent(page: Int) -> PDFPageContentView? {
         if self.document == nil { return nil }
-        if let cell = self.collectionView(self, cellForItemAtIndexPath: NSIndexPath(forItem: page, inSection: 0)) as? PDFSinglePageCell,
+        let currentPage = self.indexForPage(page)
+        if let cell = self.collectionView(self, cellForItemAtIndexPath: NSIndexPath(forItem: currentPage, inSection: 0)) as? PDFSinglePageCell,
             let pageContentView = cell.pageContentView {
             return pageContentView
         }
