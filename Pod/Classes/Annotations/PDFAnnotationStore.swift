@@ -31,9 +31,9 @@ public class PDFAnnotationStore {
         return self.pages[page]
     }
     
-    func undo(page: Int) {
-        guard let storePage = pages[page] else { return }
-        storePage.undo()
+    func undo(page: Int) -> PDFAnnotation? {
+        guard let storePage = pages[page] else { return nil }
+        return storePage.undo()
     }
     
     func annotationsForPage(page: Int) -> [PDFAnnotation] {
@@ -58,8 +58,8 @@ public class PDFAnnotationPage {
         }
     }
     
-    func undo() {
+    func undo() -> PDFAnnotation? {
         
-        self.annotations.popLast()
+        return self.annotations.popLast()
     }
 }

@@ -111,7 +111,7 @@ public class PDFAnnotationController:UIViewController {
         
         guard let annotation = self.currentAnnotation else { return }
         guard let currentPage = self.currentPage else { return }
-
+        
         self.annotations.add(annotation, page: currentPage.page)
         
         self.annotationType == .None
@@ -121,7 +121,7 @@ public class PDFAnnotationController:UIViewController {
     
     
     
-    //MARK: - Bar button actions 
+    //MARK: - Bar button actions
     
     func unselectAll() {
         for button in [penButton, highlighterButton, textButton] {
@@ -163,6 +163,7 @@ public class PDFAnnotationController:UIViewController {
     
     func undo() {
         
+        self.clear()
         guard let currentPage = self.currentPage else { return }
         self.annotations.undo(currentPage.page)
         self.showAnnotations(currentPage)
@@ -170,13 +171,17 @@ public class PDFAnnotationController:UIViewController {
     
     func clear() {
         
+        guard let pageView = self.pageView else { return }
+        for subview in pageView.subviews {
+            subview.removeFromSuperview()
+        }
     }
     
     
     
     //MARK: - Touches methods to pass to annotation
     public override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-
+        
         guard let touch = touches.first else { return }
         let point = touch.locationInView(self.pageView)
         
