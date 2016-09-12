@@ -19,7 +19,7 @@ class PDFPageContent: UIView {
     private var pageOffsetX:CGFloat = 0.0
     private var pageOffsetY:CGFloat = 0.0
     private var page:Int = 0
-
+    
     var cropBoxRect:CGRect
     
     override class func layerClass() -> AnyClass {
@@ -116,7 +116,7 @@ class PDFPageContent: UIView {
         
         if links.count > 0 {
             
-            let color = self.tintColor
+            let color = self.tintColor.colorWithAlphaComponent(0.01)
             
             for link in links {
                 
@@ -187,8 +187,8 @@ class PDFPageContent: UIView {
                 upperRightX = 0.0 - upperRightX + self.pageWidth
                 break
             case 0:
-                lowerLeftX = 0.0 - lowerLeftX + self.pageWidth
-                upperRightX = 0.0 - upperRightX + self.pageWidth
+                lowerLeftY = 0.0 - lowerLeftY + self.pageHeight
+                upperRightY = 0.0 - upperRightY + self.pageHeight
                 break
             default:
                 break
@@ -220,10 +220,13 @@ class PDFPageContent: UIView {
                 if CGPDFArrayGetDictionary(pageAnnotations, i, &annotationDictionary) {
                     
                     var annotationSubtype:UnsafePointer<Int8> = nil
-                    if CGPDFDictionaryGetName(annotationDictionary, "Link", &annotationSubtype) {
+                    if CGPDFDictionaryGetName(annotationDictionary, "Subtype", &annotationSubtype) {
                         
-                        if let documentLink = self.linkFromAnnotation(annotationDictionary) {
-                            self.links.append(documentLink)
+                        if strcmp(annotationSubtype, "Link") == 0 {
+                            
+                            if let documentLink = self.linkFromAnnotation(annotationDictionary) {
+                                self.links.append(documentLink)
+                            }
                         }
                     }
                 }
@@ -232,13 +235,22 @@ class PDFPageContent: UIView {
         self.highlightPageLinks()
     }
     
-    
     //MARK: - Gesture Recognizer
-    func processSingleTap(recognizer: UIGestureRecognizer) {
+    func processSingleTap(recognizer: UIGestureRecognizer) -> PDFAction? {
         if recognizer.state == UIGestureRecognizerState.Recognized {
-            let tapPoint = recognizer.locationInView(recognizer.view)
-            print(tapPoint)
+            
+            if self.links.count > 0 {
+                
+                let point = recognizer.locationInView(self)
+
+                for link:PDFDocumentLink in self.links {
+                    if CGRectContainsPoint(link.rect, point) {
+                        return PDFAction.fromPDFDictionary(link.dictionary, documentReference: self.pdfDocRef)
+                    }
+                }
+            }
         }
+        return nil
     }
     
     //MARK: - CATiledLayer Delegate Methods

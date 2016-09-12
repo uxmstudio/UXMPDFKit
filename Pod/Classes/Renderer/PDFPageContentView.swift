@@ -10,7 +10,7 @@ import UIKit
 
 public protocol PDFPageContentViewDelegate {
     
-    func contentView(contentView: PDFPageContentView, touchesBegan touches:Set<UITouch>)
+    func contentView(contentView: PDFPageContentView, didSelectAction action: PDFAction)
 }
 
 public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
@@ -78,6 +78,14 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
             name: UIKeyboardWillHideNotification,
             object: nil
         )
+        
+        let singleTapRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(PDFPageContentView.processSingleTap(_:))
+        )
+        singleTapRecognizer.numberOfTouchesRequired = 1
+        singleTapRecognizer.numberOfTapsRequired = 1
+        self.addGestureRecognizer(singleTapRecognizer)
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -144,7 +152,8 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     
     public func processSingleTap(recognizer: UITapGestureRecognizer) {
         
-        self.contentView.processSingleTap(recognizer)
+        guard let action = self.contentView.processSingleTap(recognizer) else { return }
+        self.contentDelegate?.contentView(self, didSelectAction: action)
     }
     
     
@@ -215,29 +224,6 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         }
 
         self.contentInset = UIEdgeInsetsMake(0, 0, height, 0)
-    }
-    
-    
-    //MARK: - UIResponder methods
-    override public func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesBegan(touches, withEvent: event)
-//        for subview in self.subviews.reverse() {
-//            if subview is PDFPageContent {
-//                subview.touchesBegan(touches, withEvent: event)
-//            }
-//        }
-    }
-    
-    override public func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        super.touchesCancelled(touches, withEvent: event)
-    }
-    
-    override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesEnded(touches, withEvent: event)
-    }
-    
-    override public func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesMoved(touches, withEvent: event)
     }
     
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 public class PDFViewController: UIViewController {
     
@@ -263,6 +264,24 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
         }
         if self.allowsAnnotations {
             self.annotationController.showAnnotations(content)
+        }
+    }
+    
+    public func singlePageViewer(collectionView: PDFSinglePageViewer, selectedAction action: PDFAction) {
+        
+        if let action = action as? PDFActionURL {
+            
+            if #available(iOS 9.0, *) {
+                let svc = SFSafariViewController(URL: action.url)
+                self.presentViewController(svc, animated: true, completion: nil)
+            }
+            else {
+                /// Fallback on earlier versions
+                UIApplication.sharedApplication().openURL(action.url)
+            }
+        }
+        else if let action = action as? PDFActionGoTo {
+            self.collectionView.displayPage(action.pageIndex, animated: true)
         }
     }
 }

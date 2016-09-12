@@ -12,6 +12,7 @@ public protocol PDFSinglePageViewerDelegate {
     
     func singlePageViewer(collectionView: PDFSinglePageViewer, didDisplayPage page:Int)
     func singlePageViewer(collectionView: PDFSinglePageViewer, loadedContent content:PDFPageContentView)
+    func singlePageViewer(collectionView: PDFSinglePageViewer, selectedAction action:PDFAction)
 }
 
 public class PDFSinglePageViewer: UICollectionView {
@@ -123,6 +124,7 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
         
         cell.contentView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
         cell.pageContentView = PDFPageContentView(frame: contentSize, document: self.document!, page: page)
+        cell.pageContentView?.contentDelegate = self
         
         return cell
     }
@@ -163,6 +165,19 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
     func didDisplayPage(scrollView: UIScrollView) {
         let page:Int = Int((scrollView.contentOffset.x + scrollView.frame.size.width) / scrollView.frame.size.width)
         self.singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
+    }
+}
+
+extension PDFSinglePageViewer: PDFPageContentViewDelegate {
+    
+    public func contentView(contentView: PDFPageContentView, didSelectAction action: PDFAction) {
+        
+        if let singlePageDelegate = singlePageDelegate {
+            singlePageDelegate.singlePageViewer(self, selectedAction: action)
+        }
+        else if let action = action as? PDFActionGoTo {
+            self.displayPage(action.pageIndex, animated: true)
+        }
     }
 }
 

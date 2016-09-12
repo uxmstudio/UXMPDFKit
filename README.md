@@ -52,13 +52,11 @@ func singlePageViewer(collectionView: PDFSinglePageViewer, loadedContent content
 User-interactable forms are supported by UXMPDFKit, but only partially. Currently only PDF's versions 1.6 & 1.7 render correctly.
 
 Form features implemented:
-* Signatures
-* Text fields
-* Checkboxes
-
-Form features not yet implemented:
-* Radio buttons
-* Choice boxes
+- [x] Signatures
+- [x] Text Fields
+- [x] Checkboxes
+- [ ] Radio Buttons
+- [ ] Choice Boxes
 
 Form parsing and handling is taken care of by the PDFFormViewController. It takes a document, and then is passed a PDFPageContentView to render form elements onto.
 ```swift
@@ -97,6 +95,21 @@ protocol PDFAnnotation {
 ```
 
 An annotation should be an object that contains its position and value, not a view. Because annotations are written onto temporary objects, they should be created, not passed by reference each time ```mutableView()``` is called. 
+
+### Actions
+
+Partial action support was added in version 0.3.0 and will be increased upon in future versions.
+
+Currently supported actions:
+- [x] External URL
+- [x] Go To (internal jump to page index)
+- [ ] Remote Go To
+- [ ] Named
+- [ ] Launch
+- [ ] Javascript
+- [ ] Rich Media
+
+Tapped actions are passed to your view controller by the PDFSinglePageViewer in its ```contentDelegate```
 
 ### Renderer 
 In order to perform write operations back onto a PDF in an efficient format, a renderer is used. Each type of form, annotation, etc that needs to be rendered back onto the PDF should extend the following protocol:
