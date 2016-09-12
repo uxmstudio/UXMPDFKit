@@ -256,15 +256,21 @@ class PDFPageContent: UIView {
     //MARK: - CATiledLayer Delegate Methods
     override func drawLayer(layer: CALayer, inContext ctx: CGContext) {
         
-        CGContextSetRGBFillColor(ctx, 1.0, 1.0, 1.0, 1.0);
-        CGContextFillRect(ctx, CGContextGetClipBoundingBox(ctx));
+        CGContextSetRGBFillColor(ctx, 1.0, 1.0, 1.0, 1.0)
+        CGContextFillRect(ctx, CGContextGetClipBoundingBox(ctx))
         
         /// Translate for page
-        CGContextTranslateCTM(ctx, 0.0, self.bounds.size.height); CGContextScaleCTM(ctx, 1.0, -1.0);
-        CGContextConcatCTM(ctx, CGPDFPageGetDrawingTransform(self.pdfPageRef, .CropBox, self.bounds, 0, true));
+        CGContextTranslateCTM(ctx, 0.0, self.bounds.size.height); CGContextScaleCTM(ctx, 1.0, -1.0)
+        CGContextConcatCTM(ctx, CGPDFPageGetDrawingTransform(self.pdfPageRef, .CropBox, self.bounds, 0, true))
         
         /// Render the PDF page into the context
-        CGContextDrawPDFPage(ctx, self.pdfPageRef);
+        CGContextDrawPDFPage(ctx, self.pdfPageRef)
+    }
+    
+    deinit {
+        layer.contents = nil
+        layer.delegate = nil
+        layer.removeFromSuperlayer()
     }
 }
 
