@@ -109,8 +109,8 @@ class PDFSnapshotRenderer: Operation {
     
     func renderPDF(_ size: CGSize) -> UIImage? {
         
-        let documentRef = CGPDFDocument(self.snapshot.path)
-        guard let page = documentRef.page(at: self.snapshot.page) else { return nil }
+        guard let documentRef = CGPDFDocument((self.snapshot.path as CFURL)),
+            let page = documentRef.page(at: self.snapshot.page) else { return nil }
         
         var pageRect = page.getBoxRect(.mediaBox)
         let scale = min(size.width / pageRect.size.width, size.height / pageRect.size.height)
@@ -118,19 +118,19 @@ class PDFSnapshotRenderer: Operation {
         
 
         UIGraphicsBeginImageContextWithOptions(pageRect.size, true, 0)
-        let context = UIGraphicsGetCurrentContext()
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
 
-        context?.setFillColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        context.setFillColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         context.fill(pageRect)
         
-        context?.saveGState()
+        context.saveGState()
 
         context.translateBy(x: 0.0, y: pageRect.size.height)
-        context?.scaleBy(x: 1.0, y: -1.0)
+        context.scaleBy(x: 1.0, y: -1.0)
         
         context.scaleBy(x: scale, y: scale)
         context.drawPDFPage(page)
-        context?.restoreGState()
+        context.restoreGState()
         
         let img = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

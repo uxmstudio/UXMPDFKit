@@ -38,8 +38,8 @@ open class PDFAction {
                         var uriString:CGPDFStringRef? = nil
                         if CGPDFDictionaryGetString(actionDictionary!, "URI", &uriString) {
                             
-                            let uri = UnsafePointer<Int8>(CGPDFStringGetBytePtr(uriString!))
-                            if let target = String(validatingUTF8: uri!) {
+                            let uri = UnsafeRawPointer(CGPDFStringGetBytePtr(uriString!)!).assumingMemoryBound(to: Int8.self)
+                            if let target = String(validatingUTF8: uri) {
                                 action = PDFActionURL(stringUrl: target)
                             }
                         }
@@ -66,8 +66,8 @@ open class PDFAction {
                 var destsDictionary:CGPDFDictionaryRef? = nil
                 
                 if CGPDFDictionaryGetDictionary(namesDictionary!, "Dests", &destsDictionary) {
-                    let localDestinationName = UnsafePointer<Int8>(CGPDFStringGetBytePtr(destinationName!))
-                    destinationArray = self.destinationWithName(localDestinationName!, node: destsDictionary!)
+                    let localDestinationName = UnsafeRawPointer(CGPDFStringGetBytePtr(destinationName!)!).assumingMemoryBound(to: Int8.self)
+                    destinationArray = self.destinationWithName(localDestinationName, node: destsDictionary!)
                 }
             }
         }
@@ -125,7 +125,7 @@ open class PDFAction {
     }
     
     
-    fileprivate static func destinationWithName(_ destinationName: UnsafePointer<Int8>, node: CGPDFDictionaryRef) -> CGPDFArrayRef {
+    fileprivate static func destinationWithName(_ destinationName: UnsafePointer<Int8>, node: CGPDFDictionaryRef) -> CGPDFArrayRef? {
         
         var destinationArray:CGPDFArrayRef? = nil
         var limitsArray:CGPDFArrayRef? = nil
@@ -137,8 +137,11 @@ open class PDFAction {
             if CGPDFArrayGetString(limitsArray!, 0, &lowerLimit)
                 && CGPDFArrayGetString(limitsArray!, 1, &upperLimit) {
                 
-                let ll = UnsafePointer<Int8>(CGPDFStringGetBytePtr(lowerLimit!))
-                let ul = UnsafePointer<Int8>(CGPDFStringGetBytePtr(upperLimit!))
+                let llu = CGPDFStringGetBytePtr(lowerLimit!)!
+                let ulu = CGPDFStringGetBytePtr(upperLimit!)!
+                
+                let ll:UnsafePointer<Int8> = UnsafeRawPointer(llu).assumingMemoryBound(to: Int8.self)
+                let ul:UnsafePointer<Int8> = UnsafeRawPointer(ulu).assumingMemoryBound(to: Int8.self)
                 
                 if (strcmp(destinationName, ll) < 0) || (strcmp(destinationName, ul) > 0) {
                     return nil
@@ -155,7 +158,18 @@ open class PDFAction {
                 var destName:CGPDFStringRef? = nil
                 if CGPDFArrayGetString(namesArray!, i, &destName) {
                     
-                    let dn:UnsafePointer<Int8> = UnsafePointer<Int8>(CGPDFStringGetBytePtr(destName!)!)
+                    var x = 23
+                    let count = MemoryLayout.size(ofValue: x)
+                    let data = withUnsafePointer(to: &x) {
+                        // Temporarily rebind `var x` memory as `UInt8` so that
+                        // CFDataCreate can copy it into its own `UInt8` buffer.
+                        $0.withMemoryRebound(to: UInt8.self, capacity: count) {
+                            CFDataCreate(kCFAllocatorDefault, $0, count)
+                        }
+                    }
+                    
+                    let dnu = CGPDFStringGetBytePtr(destName!)!
+                    let dn:UnsafePointer<Int8> = UnsafeRawPointer(dnu).assumingMemoryBound(to: Int8.self)
                     if strcmp(dn, destinationName) == 0 {
                         
                         if !CGPDFArrayGetArray(namesArray!, (i + 1), &destinationArray) {

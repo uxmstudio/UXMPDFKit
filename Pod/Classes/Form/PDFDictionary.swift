@@ -205,7 +205,7 @@ class PDFDictionary:NSObject, PDFObject {
     
     var getDictionaryObjects:CGPDFDictionaryApplierFunction = { (key, object, info) in
         
-        let context = UnsafeMutablePointer<PDFObjectParserContext>(info).pointee
+        let context = info!.assumingMemoryBound(to: PDFObjectParserContext.self).pointee
         context.keys.append(key)
     }
     

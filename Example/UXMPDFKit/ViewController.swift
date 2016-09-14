@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let url = NSBundle.mainBundle().pathForResource("sample", ofType: "pdf")!
+        let url = Bundle.main.path(forResource: "sample", ofType: "pdf")!
         let document = try! PDFDocument(filePath: url, password: "")
         
         self.collectionView.document = document

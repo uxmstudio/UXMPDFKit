@@ -29,6 +29,13 @@ class PDFArray: NSObject, PDFObject {
         return self.array.count
     }
     
+    func pdfMin<T : Comparable> (a: T, b: T) -> T {
+        if a > b {
+            return b
+        }
+        return a
+    }
+    
     func rect() -> CGRect? {
         if self.array.count != 4 {
             return nil
@@ -44,8 +51,14 @@ class PDFArray: NSObject, PDFObject {
         let y0 = self.array[1] as! CGFloat
         let x1 = self.array[2] as! CGFloat
         let y1 = self.array[3] as! CGFloat
+        
+        
 
-        return CGRect(x: min(x0, x1), y: min(y0, y1), width: abs(x1-x0), height: abs(y1-y0))
+        return CGRect(
+            x: pdfMin(a: x0, b: x1),
+            y: pdfMin(a: y0, b: y1),
+            width: abs(x1-x0),
+            height: abs(y1-y0))
     }
     
     func pdfObjectAtIndex(_ index: Int) -> AnyObject? {

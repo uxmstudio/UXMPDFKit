@@ -24,7 +24,7 @@ class ExampleViewController: UIViewController {
     
     @IBAction func loadPDF() {
 
-        let url = NSBundle.mainBundle().pathForResource("sample2", ofType: "pdf")!
+        let url = Bundle.main.path(forResource: "sample2", ofType: "pdf")!
         let document = try! PDFDocument(filePath: url, password: "")
         
         let pdf = PDFViewController(document: document)
