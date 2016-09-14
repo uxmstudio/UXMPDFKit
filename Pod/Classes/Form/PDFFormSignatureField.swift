@@ -8,36 +8,36 @@
 
 import UIKit
 
-public class PDFFormSignatureField: PDFFormField {
+open class PDFFormSignatureField: PDFFormField {
 
-    public var name:String?
+    open var name:String?
     
-    private var signatureView:PDFFormFieldSignatureCaptureView?
-    private let signatureExtraPadding:CGFloat = 22.0
+    fileprivate var signatureView:PDFFormFieldSignatureCaptureView?
+    fileprivate let signatureExtraPadding:CGFloat = 22.0
     
-    lazy private var signButton:UIButton = {
+    lazy fileprivate var signButton:UIButton = {
         
-        var button = UIButton(frame: CGRectMake(0, 0, self.frame.width, self.frame.height))
-        button.setTitle("Tap To Sign", forState: .Normal)
-        button.tintColor = UIColor.blackColor()
-        button.titleLabel?.font = UIFont.systemFontOfSize(14.0)
-        button.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        button.addTarget(self, action: #selector(PDFFormSignatureField.addSignature), forControlEvents: .TouchUpInside)
-        button.userInteractionEnabled = true
-        button.exclusiveTouch = true
+        var button = UIButton(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
+        button.setTitle("Tap To Sign", for: UIControlState())
+        button.tintColor = UIColor.black
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
+        button.setTitleColor(UIColor.black, for: UIControlState())
+        button.addTarget(self, action: #selector(PDFFormSignatureField.addSignature), for: .touchUpInside)
+        button.isUserInteractionEnabled = true
+        button.isExclusiveTouch = true
         return button
     }()
     
-    lazy private var signImage:UIImageView = {
-        var image = UIImageView(frame: CGRectMake(
-            0,
-            -self.signatureExtraPadding,
-            self.frame.width,
-            self.frame.height + self.signatureExtraPadding * 2
+    lazy fileprivate var signImage:UIImageView = {
+        var image = UIImageView(frame: CGRect(
+            x: 0,
+            y: -self.signatureExtraPadding,
+            width: self.frame.width,
+            height: self.frame.height + self.signatureExtraPadding * 2
             )
         )
-        image.contentMode = .ScaleAspectFit
-        image.backgroundColor = UIColor.clearColor()
+        image.contentMode = .scaleAspectFit
+        image.backgroundColor = UIColor.clear
         return image
     }()
     
@@ -49,50 +49,50 @@ public class PDFFormSignatureField: PDFFormField {
         self.addSubview(self.signImage)
         self.addSubview(self.signButton)
         
-        self.bringSubviewToFront(self.signButton)
+        self.bringSubview(toFront: self.signButton)
     }
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func didSetValue(value: AnyObject?) {
+    override func didSetValue(_ value: AnyObject?) {
         if let value = value as? UIImage {
             self.signImage.image = value
         }
     }
     
     func addSignature() {
-        let bounds = UIScreen.mainScreen().bounds
+        let bounds = UIScreen.main.bounds
         let width = bounds.width
         let height = width / self.frame.width * self.frame.height + 44.0 + signatureExtraPadding * 2
         
-        if let window = UIApplication.sharedApplication().keyWindow {
-            let signatureView = PDFFormFieldSignatureCaptureView(frame: CGRectMake(
-                (bounds.width - width) / 2, bounds.height - height, width, height))
+        if let window = UIApplication.shared.keyWindow {
+            let signatureView = PDFFormFieldSignatureCaptureView(frame: CGRect(
+                x: (bounds.width - width) / 2, y: bounds.height - height, width: width, height: height))
             signatureView.delegate = self
-            signatureView.layer.shadowColor = UIColor.blackColor().CGColor
+            signatureView.layer.shadowColor = UIColor.black.cgColor
             signatureView.layer.shadowOpacity = 0.4
             signatureView.layer.shadowRadius = 3.0
-            signatureView.layer.shadowOffset = CGSizeMake(2.0, 2.0)
+            signatureView.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
             window.addSubview(signatureView)
             self.signatureView = signatureView
         }
     }
     
-    override func renderInContext(context: CGContext) {
+    override func renderInContext(_ context: CGContext) {
         
         var frame = self.frame
         frame.origin.y -= signatureExtraPadding
         frame.size.height += signatureExtraPadding * 2
 
-        self.signImage.image?.drawInRect(frame)
+        self.signImage.image?.draw(in: frame)
     }
 }
 
 extension PDFFormSignatureField: PDFFormSignatureViewDelegate {
     
-    func completedSignatureDrawing(field:PDFFormFieldSignatureCaptureView) {
+    func completedSignatureDrawing(_ field:PDFFormFieldSignatureCaptureView) {
         self.signImage.image = field.getSignature()
         self.signatureView?.removeFromSuperview()
         self.signatureView = nil
@@ -104,7 +104,7 @@ extension PDFFormSignatureField: PDFFormSignatureViewDelegate {
 }
 
 protocol PDFFormSignatureViewDelegate {
-    func completedSignatureDrawing(field: PDFFormFieldSignatureCaptureView)
+    func completedSignatureDrawing(_ field: PDFFormFieldSignatureCaptureView)
 }
 
 class PDFFormFieldSignatureCaptureView: UIView {
@@ -118,13 +118,13 @@ class PDFFormFieldSignatureCaptureView: UIView {
         }
     }
     
-    var strokeColor: UIColor = UIColor.blackColor() {
+    var strokeColor: UIColor = UIColor.black {
         didSet {
             self.strokeColor.setStroke()
         }
     }
     
-    var signatureBackgroundColor: UIColor = UIColor.whiteColor() {
+    var signatureBackgroundColor: UIColor = UIColor.white {
         didSet {
             self.backgroundColor = signatureBackgroundColor
         }
@@ -132,7 +132,7 @@ class PDFFormFieldSignatureCaptureView: UIView {
     
     var containsSignature: Bool {
         get {
-            if self.path.empty {
+            if self.path.isEmpty {
                 return false
             }
             else {
@@ -142,21 +142,21 @@ class PDFFormFieldSignatureCaptureView: UIView {
     }
     
     // MARK: - Private properties
-    private var path = UIBezierPath()
-    private var pts = [CGPoint](count: 5, repeatedValue: CGPoint())
-    private var ctr = 0
+    fileprivate var path = UIBezierPath()
+    fileprivate var pts = [CGPoint](repeating: CGPoint(), count: 5)
+    fileprivate var ctr = 0
 
     
-    lazy private var doneButton:UIBarButtonItem = UIBarButtonItem(
+    lazy fileprivate var doneButton:UIBarButtonItem = UIBarButtonItem(
         title: "Done",
-        style: .Plain,
+        style: .plain,
         target: self,
         action: #selector(PDFFormFieldSignatureCaptureView.finishSignature)
     )
 
-    lazy private var clearButton:UIBarButtonItem = UIBarButtonItem(
+    lazy fileprivate var clearButton:UIBarButtonItem = UIBarButtonItem(
         title: "Clear",
-        style: .Plain,
+        style: .plain,
         target: self,
         action: #selector(PDFFormFieldSignatureCaptureView.clearSignature)
     )
@@ -178,44 +178,44 @@ class PDFFormFieldSignatureCaptureView: UIView {
         
         self.backgroundColor = self.signatureBackgroundColor
         self.path.lineWidth = self.strokeWidth
-        self.path.lineJoinStyle = CGLineJoin.Round
+        self.path.lineJoinStyle = CGLineJoin.round
         
-        let spacerStart = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: self, action: nil)
+        let spacerStart = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
         spacerStart.width = 10.0
-        let spacer = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
-        let spacerEnd = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: self, action: nil)
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let spacerEnd = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
         spacerEnd.width = 10.0
         
-        let toolbar = UIToolbar(frame: CGRectMake(0, self.frame.height - 44.0, self.frame.width, 44.0))
-        toolbar.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: self.frame.height - 44.0, width: self.frame.width, height: 44.0))
+        toolbar.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         toolbar.setItems([spacerStart, clearButton, spacer, doneButton, spacerEnd], animated: false)
         self.addSubview(toolbar)
     }
     
     // MARK: - Draw
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         self.strokeColor.setStroke()
         self.path.stroke()
     }
     
     // MARK: - Touch handling functions
-    override func touchesBegan(touches: Set <UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set <UITouch>, with event: UIEvent?) {
         if let firstTouch = touches.first {
-            let touchPoint = firstTouch.locationInView(self)
+            let touchPoint = firstTouch.location(in: self)
             self.ctr = 0
             self.pts[0] = touchPoint
         }
     }
     
-    override func touchesMoved(touches: Set <UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set <UITouch>, with event: UIEvent?) {
         if let firstTouch = touches.first {
-            let touchPoint = firstTouch.locationInView(self)
+            let touchPoint = firstTouch.location(in: self)
             self.ctr += 1
             self.pts[self.ctr] = touchPoint
             if (self.ctr == 4) {
-                self.pts[3] = CGPointMake((self.pts[2].x + self.pts[4].x)/2.0, (self.pts[2].y + self.pts[4].y)/2.0)
-                self.path.moveToPoint(self.pts[0])
-                self.path.addCurveToPoint(self.pts[3], controlPoint1:self.pts[1], controlPoint2:self.pts[2])
+                self.pts[3] = CGPoint(x: (self.pts[2].x + self.pts[4].x)/2.0, y: (self.pts[2].y + self.pts[4].y)/2.0)
+                self.path.move(to: self.pts[0])
+                self.path.addCurve(to: self.pts[3], controlPoint1:self.pts[1], controlPoint2:self.pts[2])
                 
                 self.setNeedsDisplay()
                 self.pts[0] = self.pts[3]
@@ -227,11 +227,11 @@ class PDFFormFieldSignatureCaptureView: UIView {
         }
     }
     
-    override func touchesEnded(touches: Set <UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set <UITouch>, with event: UIEvent?) {
         if self.ctr == 0 {
             let touchPoint = self.pts[0]
-            self.path.moveToPoint(CGPointMake(touchPoint.x-1.0,touchPoint.y))
-            self.path.addLineToPoint(CGPointMake(touchPoint.x+1.0,touchPoint.y))
+            self.path.move(to: CGPoint(x: touchPoint.x-1.0,y: touchPoint.y))
+            self.path.addLine(to: CGPoint(x: touchPoint.x+1.0,y: touchPoint.y))
             self.setNeedsDisplay()
         }
         else {
@@ -252,7 +252,7 @@ class PDFFormFieldSignatureCaptureView: UIView {
     }
     
     // Save the Signature as an UIImage
-    func getSignature(scale scale:CGFloat = 1) -> UIImage? {
+    func getSignature(scale:CGFloat = 1) -> UIImage? {
         if !containsSignature {
             return nil
         }
@@ -265,18 +265,18 @@ class PDFFormFieldSignatureCaptureView: UIView {
         return signature
     }
 
-    func getSignatureCropped(scale scale:CGFloat = 1) -> UIImage? {
+    func getSignatureCropped(scale:CGFloat = 1) -> UIImage? {
         guard let fullRender = getSignature(scale:scale) else {
             return nil
         }
         let bounds = scaleRect(path.bounds.insetBy(dx: -strokeWidth/2, dy: -strokeWidth/2), byFactor: scale)
-        guard let imageRef = CGImageCreateWithImageInRect(fullRender.CGImage, bounds) else {
+        guard let imageRef = fullRender.cgImage?.cropping(to: bounds) else {
             return nil
         }
-        return UIImage(CGImage: imageRef)
+        return UIImage(cgImage: imageRef)
     }
     
-    func scaleRect(rect: CGRect, byFactor factor: CGFloat) -> CGRect {
+    func scaleRect(_ rect: CGRect, byFactor factor: CGFloat) -> CGRect {
         var scaledRect = rect
         scaledRect.origin.x *= factor
         scaledRect.origin.y *= factor

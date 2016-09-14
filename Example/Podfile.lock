@@ -1,11 +1,7 @@
 PODS:
-  - Nimble (3.2.0)
-  - Quick (0.9.2)
-  - UXMPDFKit (0.1.0)
+  - UXMPDFKit (0.3.0)
 
 DEPENDENCIES:
-  - Nimble (~> 3.0)
-  - Quick (~> 0.8)
   - UXMPDFKit (from `../`)
 
 EXTERNAL SOURCES:
@@ -13,8 +9,8 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  Nimble: 703854335d181df169bbca9c97117b5cf8c47c1d
-  Quick: 18d057bc66451eedd5d1c8dc99ba2a5db6e60226
-  UXMPDFKit: 2ee52e46811ccfa20a6740ab3320e42b22ec188e
+  UXMPDFKit: e6abb9265ec875ef659311515ad8ca6a916577c5
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 46572415aec518e632bcccd6baa0dcc394d5ae6e
+
+COCOAPODS: 1.0.1

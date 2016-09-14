@@ -38,7 +38,7 @@ func ==(lhs: PDFFormFlag, rhs: PDFFormFlag) -> Bool {
     return lhs.rawValue == rhs.rawValue
 }
 
-public class PDFFormPage:NSObject {
+open class PDFFormPage:NSObject {
     
     var fields:[PDFFormFieldObject] = []
     var page:Int
@@ -48,7 +48,7 @@ public class PDFFormPage:NSObject {
         self.page = page
     }
     
-    func showForm(contentView: PDFPageContentView) {
+    func showForm(_ contentView: PDFPageContentView) {
         
         let formView = PDFFormPageView(
             frame: contentView.contentView.cropBoxRect,
@@ -64,11 +64,11 @@ public class PDFFormPage:NSObject {
         }
     }
 
-    func createFormField(dict: PDFDictionary) {
+    func createFormField(_ dict: PDFDictionary) {
         self.fields.append(PDFFormFieldObject(dict: dict))
     }
     
-    func renderInContext(context: CGContext, size: CGRect) {
+    func renderInContext(_ context: CGContext, size: CGRect) {
         
         let formView = PDFFormPageView(
             frame: size,
@@ -79,14 +79,14 @@ public class PDFFormPage:NSObject {
     }
 }
 
-public class PDFFormPageView:UIView {
+open class PDFFormPageView:UIView {
     
     var fields:[PDFFormFieldObject]
     var fieldViews:[PDFFormField] = []
     var zoomScale:CGFloat = 1.0
     
-    var cropBox:CGRect = CGRectZero
-    var boundingBox:CGRect = CGRectZero
+    var cropBox:CGRect = CGRect.zero
+    var boundingBox:CGRect = CGRect.zero
     var baseFrame:CGRect
     
     init(frame: CGRect, boundingBox:CGRect, cropBox:CGRect, fields:[PDFFormFieldObject]) {
@@ -109,26 +109,26 @@ public class PDFFormPageView:UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateWithZoom(zoomScale: CGFloat) {
+    func updateWithZoom(_ zoomScale: CGFloat) {
         for field in fieldViews {
             field.updateForZoomScale(zoomScale)
             field.refresh()
         }
     }
     
-    func adjustFrame(field: PDFFormField) {
+    func adjustFrame(_ field: PDFFormField) {
         
         let factor:CGFloat = 1.0
-        let correctedFrame = CGRectMake(
-            (field.baseFrame.origin.x - cropBox.origin.x) * factor,
-            (cropBox.height - field.baseFrame.origin.y - field.baseFrame.height - self.cropBox.origin.y) * factor,
-            field.baseFrame.width * factor,
-            field.baseFrame.height * factor)
+        let correctedFrame = CGRect(
+            x: (field.baseFrame.origin.x - cropBox.origin.x) * factor,
+            y: (cropBox.height - field.baseFrame.origin.y - field.baseFrame.height - self.cropBox.origin.y) * factor,
+            width: field.baseFrame.width * factor,
+            height: field.baseFrame.height * factor)
         
         field.frame = correctedFrame
     }
     
-    func renderInContext(context: CGContext) {
+    func renderInContext(_ context: CGContext) {
         
         for field in fieldViews {
             field.renderInContext(context)

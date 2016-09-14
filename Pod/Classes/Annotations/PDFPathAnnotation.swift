@@ -11,7 +11,7 @@ import UIKit
 class PDFPathAnnotation {
     
     var path:UIBezierPath = UIBezierPath()
-    var color:UIColor = UIColor.blackColor() {
+    var color:UIColor = UIColor.black {
         didSet {
             self.color.setStroke()
             self.path.stroke()
@@ -23,7 +23,7 @@ class PDFPathAnnotation {
             self.path.lineWidth = self.lineWidth
         }
     }
-    var rect:CGRect = CGRectMake(0, 0, 1000, 1000) {
+    var rect:CGRect = CGRect(x: 0, y: 0, width: 1000, height: 1000) {
         didSet {
             self.view.frame = self.rect
         }
@@ -31,12 +31,12 @@ class PDFPathAnnotation {
     lazy var view:PDFPathView = PDFPathView(parent: self, frame: self.rect)
     var incrementalImage:UIImage?
     
-    private var points:[CGPoint] = [CGPointZero,CGPointZero,CGPointZero,CGPointZero,CGPointZero]
-    private var ctr:Int = 0
+    fileprivate var points:[CGPoint] = [CGPoint.zero,CGPoint.zero,CGPoint.zero,CGPoint.zero,CGPoint.zero]
+    fileprivate var ctr:Int = 0
     
-    func drawRect(frame: CGRect) {
+    func drawRect(_ frame: CGRect) {
         
-        self.incrementalImage?.drawInRect(rect)
+        self.incrementalImage?.draw(in: rect)
         self.color.setStroke()
         self.path.stroke()
     }
@@ -52,11 +52,11 @@ class PDFPathView:UIView {
         self.frame = frame
         self.parent = parent
         
-        self.backgroundColor = UIColor.clearColor()
-        self.opaque = false
+        self.backgroundColor = UIColor.clear
+        self.isOpaque = false
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         self.parent?.drawRect(rect)
     }
@@ -69,24 +69,24 @@ extension PDFPathAnnotation:PDFAnnotation {
         return self.view
     }
     
-    func touchStarted(touch: UITouch, point: CGPoint) {
+    func touchStarted(_ touch: UITouch, point: CGPoint) {
         self.ctr = 0
         self.points[0] = point
     }
     
-    func touchMoved(touch: UITouch, point: CGPoint) {
+    func touchMoved(_ touch: UITouch, point: CGPoint) {
         
         self.ctr += 1
         self.points[self.ctr] = point
         if self.ctr == 4 {
             
-            self.points[3] = CGPointMake(
-                (self.points[2].x + self.points[4].x) / 2.0,
-                (self.points[2].y + self.points[4].y) / 2.0
+            self.points[3] = CGPoint(
+                x: (self.points[2].x + self.points[4].x) / 2.0,
+                y: (self.points[2].y + self.points[4].y) / 2.0
             )
             
-            self.path.moveToPoint(self.points[0])
-            self.path.addCurveToPoint(self.points[3], controlPoint1: self.points[1], controlPoint2: self.points[2])
+            self.path.move(to: self.points[0])
+            self.path.addCurve(to: self.points[3], controlPoint1: self.points[1], controlPoint2: self.points[2])
             
             self.view.setNeedsDisplay()
             
@@ -97,7 +97,7 @@ extension PDFPathAnnotation:PDFAnnotation {
         }
     }
     
-    func touchEnded(touch: UITouch, point: CGPoint) {
+    func touchEnded(_ touch: UITouch, point: CGPoint) {
         
         self.drawBitmap()
         self.view.setNeedsDisplay()
@@ -111,11 +111,11 @@ extension PDFPathAnnotation:PDFAnnotation {
         
         if self.incrementalImage == nil {
             let path = UIBezierPath(rect: self.view.bounds)
-            UIColor.clearColor().setFill()
+            UIColor.clear.setFill()
             path.fill()
         }
         
-        self.incrementalImage?.drawAtPoint(CGPointZero)
+        self.incrementalImage?.draw(at: CGPoint.zero)
         self.color.setStroke()
         self.path.stroke()
         self.incrementalImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -123,7 +123,7 @@ extension PDFPathAnnotation:PDFAnnotation {
     }
     
     
-    func drawInContext(context: CGContextRef) {
+    func drawInContext(_ context: CGContext) {
         
         self.drawBitmap()
         self.drawRect(self.rect)
@@ -137,7 +137,7 @@ class PDFHighlighterAnnotation:PDFPathAnnotation {
         
         super.init()
         
-        self.color = UIColor.yellowColor().colorWithAlphaComponent(0.3)
+        self.color = UIColor.yellow.withAlphaComponent(0.3)
         self.lineWidth = 10.0
     }
 }

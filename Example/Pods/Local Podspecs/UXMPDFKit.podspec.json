@@ -1,16 +1,15 @@
 {
   "name": "UXMPDFKit",
-  "version": "0.1.0",
-  "summary": "A short description of UXMPDFKit.",
-  "description": "",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/UXMPDFKit",
+  "version": "0.3.0",
+  "summary": "A fully functioning PDF reader written completely in Swift",
+  "homepage": "https://github.com/uxmstudio/UXMPDFKit",
   "license": "MIT",
   "authors": {
-    "Chris Anderson": "hi@chrisanderson.io"
+    "Chris Anderson": "chris@uxmstudio.com"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/UXMPDFKit.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/uxmstudio/UXMPDFKit.git",
+    "tag": "0.3.0"
   },
   "platforms": {
     "ios": "8.0"
@@ -19,7 +18,7 @@
   "source_files": "Pod/Classes/**/*",
   "resource_bundles": {
     "UXMPDFKit": [
-      "Pod/Assets/*.png"
+      "Pod/Assets/**/*.{xcassets,png,json}"
     ]
   }
 }

@@ -1,13 +1,7 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-target 'UXMPDFKit_Example', :exclusive => true do
+target 'UXMPDFKit_Example' do
   pod 'UXMPDFKit', :path => '../'
 end
 
-target 'UXMPDFKit_Tests', :exclusive => true do
-  pod 'UXMPDFKit', :path => '../'
-
-  pod 'Quick', '~> 0.8'
-  pod 'Nimble', '~> 3.0'
-end

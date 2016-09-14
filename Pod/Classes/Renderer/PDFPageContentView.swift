@@ -10,19 +10,19 @@ import UIKit
 
 public protocol PDFPageContentViewDelegate {
     
-    func contentView(contentView: PDFPageContentView, didSelectAction action: PDFAction)
+    func contentView(_ contentView: PDFPageContentView, didSelectAction action: PDFAction)
 }
 
-public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
+open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
 
     var contentView:PDFPageContent
     var containerView:UIView
     
-    public var page:Int
-    public var contentDelegate: PDFPageContentViewDelegate?
-    public var viewDidZoom:((CGFloat) -> Void)?
-    private var PDFPageContentViewContext = 0
-    private var previousScale:CGFloat = 1.0
+    open var page:Int
+    open var contentDelegate: PDFPageContentViewDelegate?
+    open var viewDidZoom:((CGFloat) -> Void)?
+    fileprivate var PDFPageContentViewContext = 0
+    fileprivate var previousScale:CGFloat = 1.0
     
     let bottomKeyboardPadding:CGFloat = 20.0
     
@@ -32,11 +32,11 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         self.contentView = PDFPageContent(document: document, page: page)
         
         self.containerView = UIView(frame: self.contentView.bounds)
-        self.containerView.userInteractionEnabled = true
-        self.containerView.contentMode = .Redraw
-        self.containerView.backgroundColor = UIColor.whiteColor()
+        self.containerView.isUserInteractionEnabled = true
+        self.containerView.contentMode = .redraw
+        self.containerView.backgroundColor = UIColor.white
         self.containerView.autoresizesSubviews = true
-        self.containerView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
+        self.containerView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
         super.init(frame: frame)
         
@@ -44,16 +44,16 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         self.delaysContentTouches = false
         self.showsVerticalScrollIndicator = false
         self.showsHorizontalScrollIndicator = false
-        self.contentMode = .Redraw
-        self.backgroundColor = UIColor.clearColor()
-        self.userInteractionEnabled = true
+        self.contentMode = .redraw
+        self.backgroundColor = UIColor.clear
+        self.isUserInteractionEnabled = true
         self.autoresizesSubviews = false
-        self.pagingEnabled = false
+        self.isPagingEnabled = false
         self.bouncesZoom = true
         self.delegate = self
-        self.scrollEnabled = true
+        self.isScrollEnabled = true
         self.clipsToBounds = true
-        self.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
+        self.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         self.contentSize = self.contentView.bounds.size
@@ -67,15 +67,15 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         self.tag = page
         
         
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(PDFPageContentView.keyboardWillShowNotification(_:)),
-            name: UIKeyboardWillShowNotification,
+            name: NSNotification.Name.UIKeyboardWillShow,
             object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(PDFPageContentView.keyboardWillHideNotification(_:)),
-            name: UIKeyboardWillHideNotification,
+            name: NSNotification.Name.UIKeyboardWillHide,
             object: nil
         )
         
@@ -93,11 +93,11 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         
         super.layoutSubviews()
         
@@ -123,13 +123,13 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     
-    override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         guard context == &PDFPageContentViewContext else {
             return
         }
         
-        guard let keyPath = keyPath where keyPath == "frame" else {
+        guard let keyPath = keyPath , keyPath == "frame" else {
             return
         }
         
@@ -150,7 +150,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         }
     }
     
-    public func processSingleTap(recognizer: UITapGestureRecognizer) {
+    open func processSingleTap(_ recognizer: UITapGestureRecognizer) {
         
         guard let action = self.contentView.processSingleTap(recognizer) else { return }
         self.contentDelegate?.contentView(self, didSelectAction: action)
@@ -158,7 +158,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     
     
     //MARK: - Zoom methods
-    public func zoomIncrement() {
+    open func zoomIncrement() {
         
         var zoomScale = self.zoomScale
         
@@ -173,7 +173,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         }
     }
     
-    public func zoomDecrement() {
+    open func zoomDecrement() {
         
         var zoomScale = self.zoomScale
         
@@ -188,35 +188,35 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         }
     }
     
-    public func zoomReset() {
+    open func zoomReset() {
         if self.zoomScale > self.minimumZoomScale {
             self.zoomScale = self.minimumZoomScale
         }
     }
     
     //MARK: - UIScrollViewDelegate methods
-    public func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    open func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.containerView
     }
     
-    public func scrollViewDidZoom(scrollView: UIScrollView) {
+    open func scrollViewDidZoom(_ scrollView: UIScrollView) {
         self.viewDidZoom?(scrollView.zoomScale)
     }
     
     
-    func keyboardWillShowNotification(notification: NSNotification) {
+    func keyboardWillShowNotification(_ notification: Notification) {
         updateBottomLayoutConstraintWithNotification(notification, show: true)
     }
     
-    func keyboardWillHideNotification(notification: NSNotification) {
+    func keyboardWillHideNotification(_ notification: Notification) {
         updateBottomLayoutConstraintWithNotification(notification, show: false)
     }
     
-    func updateBottomLayoutConstraintWithNotification(notification: NSNotification, show:Bool) {
-        let userInfo = notification.userInfo!
+    func updateBottomLayoutConstraintWithNotification(_ notification: Notification, show:Bool) {
+        let userInfo = (notification as NSNotification).userInfo!
         
-        let keyboardEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
-        let convertedKeyboardEndFrame = self.convertRect(keyboardEndFrame, fromView: self.window)
+        let keyboardEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let convertedKeyboardEndFrame = self.convert(keyboardEndFrame, from: self.window)
         
         var height:CGFloat = 0.0
         if convertedKeyboardEndFrame.height > 0 && show {
@@ -228,7 +228,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     
     
     //MARK: - Helper methods
-    static func zoomScaleThatFits(target: CGSize, source:CGSize) -> CGFloat {
+    static func zoomScaleThatFits(_ target: CGSize, source:CGSize) -> CGFloat {
         
         let widthScale:CGFloat = target.width / source.width
         let heightScale:CGFloat = target.height / source.height
@@ -237,7 +237,7 @@ public class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     
     func updateMinimumMaximumZoom() {
         self.previousScale = self.zoomScale
-        let targetRect = CGRectInset(self.bounds, 0, 0)
+        let targetRect = self.bounds.insetBy(dx: 0, dy: 0)
         let zoomScale = PDFPageContentView.zoomScaleThatFits(targetRect.size, source: self.contentView.bounds.size)
         
         self.minimumZoomScale = zoomScale

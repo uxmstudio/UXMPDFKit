@@ -16,10 +16,10 @@ class PDFThumbnailView: UIView {
         
         imageView = UIImageView()
         imageView.autoresizesSubviews = false
-        imageView.userInteractionEnabled = false
-        imageView.autoresizingMask = .None
+        imageView.isUserInteractionEnabled = false
+        imageView.autoresizingMask = UIViewAutoresizing()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .ScaleAspectFit
+        imageView.contentMode = .scaleAspectFit
         
         super.init(frame: frame)
 
@@ -27,13 +27,13 @@ class PDFThumbnailView: UIView {
         self.addSubview(imageView)
         
         self.autoresizesSubviews = false
-        self.userInteractionEnabled = false
-        self.contentMode = .Redraw
-        self.autoresizingMask = .None
-        self.backgroundColor = UIColor.clearColor()
+        self.isUserInteractionEnabled = false
+        self.contentMode = .redraw
+        self.autoresizingMask = UIViewAutoresizing()
+        self.backgroundColor = UIColor.clear
         
-        var constraints = NSLayoutConstraint.constraintsWithVisualFormat("H:[image]|", options: .AlignAllBaseline, metrics: nil, views: [ "superview": self, "image": imageView ])
-        constraints.appendContentsOf(NSLayoutConstraint.constraintsWithVisualFormat("V:[image]|", options: .AlignAllBaseline, metrics: nil, views: [ "superview": self, "image": imageView ]))
+        var constraints = NSLayoutConstraint.constraints(withVisualFormat: "H:[image]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": self, "image": imageView ])
+        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:[image]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": self, "image": imageView ]))
         
         self.addConstraints(constraints)
     }
@@ -48,7 +48,7 @@ class PDFThumbnailView: UIView {
         self.showImage(document, page: page)
     }
 
-    func showImage(document: PDFDocument, page: Int) {
+    func showImage(_ document: PDFDocument, page: Int) {
         self.imageView.image = nil
         PDFQueue.sharedQueue.fetchPage(document, page: page, size: self.frame.size) { (thumbnail) in
             self.imageView.image = thumbnail.image

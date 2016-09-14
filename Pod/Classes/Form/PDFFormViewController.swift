@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class PDFFormViewController:NSObject {
+open class PDFFormViewController:NSObject {
     
     var formPages:[Int:PDFFormPage] = [:]
     
@@ -29,7 +29,7 @@ public class PDFFormViewController:NSObject {
     
     func setupUI() {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async {
             
             guard let attributes = self.parser.attributes else {
                 return
@@ -50,14 +50,14 @@ public class PDFFormViewController:NSObject {
             }
 
             if let lastPage = self.lastPage {
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     self.showForm(lastPage)
                 }
             }
         }
     }
     
-    func enumerate(fieldDict:PDFDictionary) {
+    func enumerate(_ fieldDict:PDFDictionary) {
         
         if fieldDict["Subtype"] != nil {
             self.createFormField(fieldDict)
@@ -71,7 +71,7 @@ public class PDFFormViewController:NSObject {
         for dict in array {
             if let innerFieldDict:PDFDictionary = dict as? PDFDictionary {
                 
-                if let type = innerFieldDict["Type"] as? String where type == "Annot" {
+                if let type = innerFieldDict["Type"] as? String , type == "Annot" {
                     self.createFormField(innerFieldDict)
                 }
                 else {
@@ -81,7 +81,7 @@ public class PDFFormViewController:NSObject {
         }
     }
     
-    func getPageNumber(field:PDFDictionary) -> Int? {
+    func getPageNumber(_ field:PDFDictionary) -> Int? {
         
         guard let attributes = self.parser.attributes else {
             return nil
@@ -110,11 +110,11 @@ public class PDFFormViewController:NSObject {
         return page
     }
     
-    func createFormField(dict: PDFDictionary) {
+    func createFormField(_ dict: PDFDictionary) {
 
         if let page = self.getPageNumber(dict) {
 
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
 
                 if let formView = self.formPage(page) {
                     formView.createFormField(dict)
@@ -129,7 +129,7 @@ public class PDFFormViewController:NSObject {
         }
     }
     
-    func showForm(contentView:PDFPageContentView) {
+    func showForm(_ contentView:PDFPageContentView) {
         
         self.lastPage = contentView
         let page = contentView.page
@@ -138,7 +138,7 @@ public class PDFFormViewController:NSObject {
         }
     }
     
-    func formPage(page: Int) -> PDFFormPage? {
+    func formPage(_ page: Int) -> PDFFormPage? {
 
         if page > (self.formPages.count + 1) {
             return nil
@@ -149,7 +149,7 @@ public class PDFFormViewController:NSObject {
 
 extension PDFFormViewController: PDFRenderer {
     
-    public func render(page: Int, context:CGContext, bounds: CGRect) {
+    public func render(_ page: Int, context:CGContext, bounds: CGRect) {
         
         if let form = formPage(page) {
             form.renderInContext(context, size: bounds)

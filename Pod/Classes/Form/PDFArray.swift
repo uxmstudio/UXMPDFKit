@@ -10,7 +10,7 @@ import UIKit
 
 class PDFArray: NSObject, PDFObject {
     
-    private var arr:CGPDFArrayRef
+    fileprivate var arr:CGPDFArrayRef
     
     var array:[AnyObject] = []
     
@@ -22,7 +22,7 @@ class PDFArray: NSObject, PDFObject {
     }
     
     func type() -> CGPDFObjectType {
-        return CGPDFObjectType.Array
+        return CGPDFObjectType.array
     }
     
     func count() -> Int {
@@ -45,24 +45,24 @@ class PDFArray: NSObject, PDFObject {
         let x1 = self.array[2] as! CGFloat
         let y1 = self.array[3] as! CGFloat
 
-        return CGRectMake(min(x0, x1), min(y0, y1), abs(x1-x0), abs(y1-y0))
+        return CGRect(x: min(x0, x1), y: min(y0, y1), width: abs(x1-x0), height: abs(y1-y0))
     }
     
-    func pdfObjectAtIndex(index: Int) -> AnyObject? {
+    func pdfObjectAtIndex(_ index: Int) -> AnyObject? {
         
-        var object:CGPDFObjectRef = nil
+        var object:CGPDFObjectRef? = nil
         if CGPDFArrayGetObject(self.arr, index, &object) {
             
-            let type = CGPDFObjectGetType(object)
+            let type = CGPDFObjectGetType(object!)
             switch type {
-            case CGPDFObjectType.Boolean: return self.booleanAtIndex(index)
-            case CGPDFObjectType.Integer: return self.intAtIndex(index)
-            case CGPDFObjectType.Real: return self.realAtIndex(index)
-            case CGPDFObjectType.Name: return self.nameAtIndex(index)
-            case CGPDFObjectType.String: return self.stringAtIndex(index)
-            case CGPDFObjectType.Array: return self.arrayAtIndex(index)
-            case CGPDFObjectType.Dictionary: return self.dictionaryAtIndex(index)
-            case CGPDFObjectType.Stream: return self.streamAtIndex(index)
+            case CGPDFObjectType.boolean: return self.booleanAtIndex(index) as AnyObject?
+            case CGPDFObjectType.integer: return self.intAtIndex(index) as AnyObject?
+            case CGPDFObjectType.real: return self.realAtIndex(index) as AnyObject?
+            case CGPDFObjectType.name: return self.nameAtIndex(index) as AnyObject?
+            case CGPDFObjectType.string: return self.stringAtIndex(index) as AnyObject?
+            case CGPDFObjectType.array: return self.arrayAtIndex(index)
+            case CGPDFObjectType.dictionary: return self.dictionaryAtIndex(index)
+            case CGPDFObjectType.stream: return self.streamAtIndex(index)
             default:
                 break
             }
@@ -71,43 +71,43 @@ class PDFArray: NSObject, PDFObject {
         return nil
     }
     
-    func dictionaryAtIndex(index: Int) -> PDFDictionary? {
-        var dictionary:CGPDFDictionaryRef = nil
+    func dictionaryAtIndex(_ index: Int) -> PDFDictionary? {
+        var dictionary:CGPDFDictionaryRef? = nil
         if CGPDFArrayGetDictionary(self.arr, index, &dictionary) {
-            return PDFDictionary(dictionaryRef: dictionary)
+            return PDFDictionary(dictionaryRef: dictionary!)
         }
         return nil
     }
     
-    func arrayAtIndex(index: Int) -> PDFArray? {
-        var array:CGPDFArrayRef = nil
+    func arrayAtIndex(_ index: Int) -> PDFArray? {
+        var array:CGPDFArrayRef? = nil
         if CGPDFArrayGetArray(self.arr, index, &array) {
-            return PDFArray(arrayRef: array)
+            return PDFArray(arrayRef: array!)
         }
         return nil
     }
     
-    func stringAtIndex(index: Int) -> String? {
-        var string:CGPDFStringRef = nil
+    func stringAtIndex(_ index: Int) -> String? {
+        var string:CGPDFStringRef? = nil
         if CGPDFArrayGetString(self.arr, index, &string) {
-            if let ref:CFStringRef = CGPDFStringCopyTextString(string) {
+            if let ref:CFString = CGPDFStringCopyTextString(string!) {
                 return ref as String
             }
         }
         return nil
     }
     
-    func nameAtIndex(index: Int) -> String? {
-        var name:UnsafePointer<Int8> = nil
+    func nameAtIndex(_ index: Int) -> String? {
+        var name:UnsafePointer<Int8>? = nil
         if CGPDFArrayGetName(self.arr, index, &name) {
-            if let dictionaryName = String.fromCString(name) {
+            if let dictionaryName = String(validatingUTF8: name!) {
                 return dictionaryName
             }
         }
         return nil
     }
     
-    func intAtIndex(index: Int) -> Int? {
+    func intAtIndex(_ index: Int) -> Int? {
         var intObj:CGPDFInteger = 0
         if CGPDFArrayGetInteger(self.arr, index, &intObj) {
             return Int(intObj)
@@ -115,7 +115,7 @@ class PDFArray: NSObject, PDFObject {
         return nil
     }
     
-    func realAtIndex(index: Int) -> CGFloat? {
+    func realAtIndex(_ index: Int) -> CGFloat? {
         var realObj:CGPDFReal = 0.0
         if CGPDFArrayGetNumber(self.arr, index, &realObj) {
             return CGFloat(realObj)
@@ -123,19 +123,19 @@ class PDFArray: NSObject, PDFObject {
         return nil
     }
     
-    func booleanAtIndex(index: Int) -> Bool? {
+    func booleanAtIndex(_ index: Int) -> Bool? {
         var boolObj:CGPDFBoolean = 0
         if CGPDFArrayGetBoolean(self.arr, index, &boolObj) {
-            return Bool(Int(boolObj))
+            return Int(boolObj) != 0
         }
         return nil
     }
     
-    func streamAtIndex(index: Int) -> PDFDictionary? {
-        var stream:CGPDFStreamRef = nil
+    func streamAtIndex(_ index: Int) -> PDFDictionary? {
+        var stream:CGPDFStreamRef? = nil
         if CGPDFArrayGetStream(self.arr, index, &stream) {
-            let dictionaryRef = CGPDFStreamGetDictionary(stream)
-            return PDFDictionary(dictionaryRef: dictionaryRef)
+            let dictionaryRef = CGPDFStreamGetDictionary(stream!)
+            return PDFDictionary(dictionaryRef: dictionaryRef!)
         }
         return nil
     }
@@ -145,7 +145,7 @@ class PDFArray: NSObject, PDFObject {
         var temp:[AnyObject] = []
         let count = CGPDFArrayGetCount(self.arr)
         
-        for i in 0.stride(to: count, by: 1) {
+        for i in stride(from: 0, to: count, by: 1) {
             if let obj = self.pdfObjectAtIndex(i) {
                 temp.append(obj)
             }
@@ -157,19 +157,19 @@ class PDFArray: NSObject, PDFObject {
 
 extension PDFArray: NSCopying {
     
-    func copyWithZone(zone: NSZone) -> AnyObject {
+    func copy(with zone: NSZone?) -> Any {
         
-        return self.dynamicType.init(arrayRef: self.arr)
+        return type(of: self).init(arrayRef: self.arr)
     }
 }
 
 
-extension PDFArray: SequenceType {
+extension PDFArray: Sequence {
 
-    func generate() -> AnyGenerator<AnyObject> {
+    func makeIterator() -> AnyIterator<AnyObject> {
         var nextIndex = self.array.count - 1
         
-        return AnyGenerator {
+        return AnyIterator {
             if nextIndex < 0 {
                 return nil
             }

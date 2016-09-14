@@ -18,7 +18,7 @@ class PDFPageTileLayer: CATiledLayer {
         self.levelsOfDetail = 16
         self.levelsOfDetailBias = self.levelsOfDetail - 1
         
-        let mainScreen = UIScreen.mainScreen()
+        let mainScreen = UIScreen.main
         let screenScale = mainScreen.scale
         let screenBounds = mainScreen.bounds
         
@@ -28,7 +28,7 @@ class PDFPageTileLayer: CATiledLayer {
         let max = width < height ? height : width
         let sizeOfTiles:CGFloat = max < 512.0 ? 512.0 : 1024.0
         
-        self.tileSize = CGSizeMake(sizeOfTiles, sizeOfTiles)
+        self.tileSize = CGSize(width: sizeOfTiles, height: sizeOfTiles)
     }
 
     required init?(coder aDecoder: NSCoder) {

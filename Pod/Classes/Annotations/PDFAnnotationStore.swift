@@ -8,11 +8,11 @@
 
 import UIKit
 
-public class PDFAnnotationStore {
+open class PDFAnnotationStore {
     
     var pages:[Int:PDFAnnotationPage] = [:]
     
-    func add(annotation: PDFAnnotation, page: Int) {
+    func add(_ annotation: PDFAnnotation, page: Int) {
         
         if let storePage:PDFAnnotationPage = pages[page] {
             
@@ -27,31 +27,31 @@ public class PDFAnnotationStore {
         }
     }
     
-    func get(page: Int) -> PDFAnnotationPage? {
+    func get(_ page: Int) -> PDFAnnotationPage? {
         return self.pages[page]
     }
     
-    func undo(page: Int) -> PDFAnnotation? {
+    func undo(_ page: Int) -> PDFAnnotation? {
         guard let storePage = pages[page] else { return nil }
         return storePage.undo()
     }
     
-    func annotationsForPage(page: Int) -> [PDFAnnotation] {
+    func annotationsForPage(_ page: Int) -> [PDFAnnotation] {
         guard let storePage = pages[page] else { return [] }
         return storePage.annotations
     }
 }
 
-public class PDFAnnotationPage {
+open class PDFAnnotationPage {
     
     var annotations:[PDFAnnotation] = []
     var page:Int = 0
     
-    func addAnnotation(annotation: PDFAnnotation) {
+    func addAnnotation(_ annotation: PDFAnnotation) {
         annotations.append(annotation)
     }
     
-    func renderInContext(context: CGContext, size: CGRect) {
+    func renderInContext(_ context: CGContext, size: CGRect) {
         
         for annotation in self.annotations {
             annotation.drawInContext(context)

@@ -10,10 +10,10 @@ import UIKit
 
 public protocol PDFPageScrubberDelegate {
     
-    func scrubber(scrubber:PDFPageScrubber, selectedPage:Int)
+    func scrubber(_ scrubber:PDFPageScrubber, selectedPage:Int)
 }
 
-public class PDFPageScrubber: UIToolbar {
+open class PDFPageScrubber: UIToolbar {
     
     var document:PDFDocument
     var scrubber:PDFPageScrubberTrackControl = PDFPageScrubberTrackControl()
@@ -35,18 +35,18 @@ public class PDFPageScrubber: UIToolbar {
     
     var pageThumbView:PDFPageScrubberThumb?
     
-    var enableTimer:NSTimer?
-    var trackTimer:NSTimer?
+    var enableTimer:Timer?
+    var trackTimer:Timer?
     
     lazy var containerView:UIView = {
         
-        let containerWidth:CGFloat = UIScreen.mainScreen().bounds.size.width
-        let containerView = UIView(frame: CGRectMake(0, 0, containerWidth - self.pageNumberSpace * 2, 44.0))
+        let containerWidth:CGFloat = UIScreen.main.bounds.size.width
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: containerWidth - self.pageNumberSpace * 2, height: 44.0))
         containerView.autoresizesSubviews = false
-        containerView.userInteractionEnabled = false
-        containerView.contentMode = .Redraw
-        containerView.autoresizingMask = [.FlexibleWidth, .FlexibleTopMargin]
-        containerView.backgroundColor = UIColor.clearColor()
+        containerView.isUserInteractionEnabled = false
+        containerView.contentMode = .redraw
+        containerView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+        containerView.backgroundColor = UIColor.clear
         
         return containerView
     }()
@@ -55,14 +55,14 @@ public class PDFPageScrubber: UIToolbar {
        
         var numberY:CGFloat = 0.0 - (self.pageNumberHeight + self.pageNumberSpace)
         var numberX:CGFloat = (self.containerView.bounds.size.width - self.pageNumberWidth) / 2.0
-        var numberRect:CGRect  = CGRectMake(numberX, numberY, self.pageNumberWidth, self.pageNumberHeight)
+        var numberRect:CGRect  = CGRect(x: numberX, y: numberY, width: self.pageNumberWidth, height: self.pageNumberHeight)
         
         var pageNumberView = UIView(frame: numberRect)
         
         pageNumberView.autoresizesSubviews = false
-        pageNumberView.userInteractionEnabled = false
+        pageNumberView.isUserInteractionEnabled = false
         pageNumberView.clipsToBounds = true
-        pageNumberView.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin]
+        pageNumberView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
         pageNumberView.layer.cornerRadius = 3.0
         
         return pageNumberView
@@ -70,16 +70,16 @@ public class PDFPageScrubber: UIToolbar {
     
     lazy var pageNumberLabel:UILabel = {
        
-        let textRect:CGRect = CGRectInset(self.pageNumberView.bounds, 4.0, 2.0)
+        let textRect:CGRect = self.pageNumberView.bounds.insetBy(dx: 4.0, dy: 2.0)
 
         var pageNumberLabel = UILabel(frame: textRect)
         
         pageNumberLabel.autoresizesSubviews = false
-        pageNumberLabel.autoresizingMask = .None
-        pageNumberLabel.textAlignment = .Center
-        pageNumberLabel.backgroundColor = UIColor.clearColor()
-        pageNumberLabel.textColor = UIColor.darkTextColor()
-        pageNumberLabel.font = UIFont.systemFontOfSize(16.0)
+        pageNumberLabel.autoresizingMask = UIViewAutoresizing()
+        pageNumberLabel.textAlignment = .center
+        pageNumberLabel.backgroundColor = UIColor.clear
+        pageNumberLabel.textColor = UIColor.darkText
+        pageNumberLabel.font = UIFont.systemFont(ofSize: 16.0)
         pageNumberLabel.adjustsFontSizeToFitWidth = false
         pageNumberLabel.minimumScaleFactor = 0.75
         
@@ -99,7 +99,7 @@ public class PDFPageScrubber: UIToolbar {
         let containerItem:UIBarButtonItem = UIBarButtonItem(customView: self.containerView)
         self.setItems([containerItem], animated: false)
         
-        let pageNumberToolbar = UIToolbar(frame: CGRectInset(self.pageNumberView.bounds, -2, -2))
+        let pageNumberToolbar = UIToolbar(frame: self.pageNumberView.bounds.insetBy(dx: -2, dy: -2))
         self.pageNumberView.addSubview(pageNumberToolbar)
         self.pageNumberView.addSubview(pageNumberLabel)
 
@@ -107,10 +107,10 @@ public class PDFPageScrubber: UIToolbar {
         
         self.scrubber = PDFPageScrubberTrackControl(frame: self.containerView.bounds)
         
-        self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberTouchDown(_:)), forControlEvents: .TouchDown)
-        self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberValueChanged(_:)), forControlEvents: .ValueChanged)
-        self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberTouchUp(_:)), forControlEvents: .TouchUpInside)
-        self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberTouchUp(_:)), forControlEvents: .TouchUpOutside)
+        self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberTouchDown(_:)), for: .touchDown)
+        self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberValueChanged(_:)), for: .valueChanged)
+        self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberTouchUp(_:)), for: .touchUpInside)
+        self.scrubber.addTarget(self, action: #selector(PDFPageScrubber.scrubberTouchUp(_:)), for: .touchUpOutside)
         
         self.containerView.addSubview(self.scrubber)
         
@@ -122,14 +122,14 @@ public class PDFPageScrubber: UIToolbar {
     }
     
     
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         
-        let containerWidth:CGFloat = UIScreen.mainScreen().bounds.size.width
-        self.containerView.frame = CGRectMake(0, 0, containerWidth - self.pageNumberSpace * 2, 44.0)
+        let containerWidth:CGFloat = UIScreen.main.bounds.size.width
+        self.containerView.frame = CGRect(x: 0, y: 0, width: containerWidth - self.pageNumberSpace * 2, height: 44.0)
         
         super.layoutSubviews()
         
-        var controlRect:CGRect = CGRectInset(containerView.bounds, 4.0, 0.0)
+        var controlRect:CGRect = containerView.bounds.insetBy(dx: 4.0, dy: 0.0)
         let thumbWidth:CGFloat = thumbSmallWidth + thumbSmallGap
         var thumbs:Int = Int(controlRect.size.width / thumbWidth)
         let pages:Int = document.pageCount
@@ -152,7 +152,7 @@ public class PDFPageScrubber: UIToolbar {
             let thumbY:CGFloat = heightDelta / 2.0
             let thumbX:CGFloat = 0.0
             
-            let thumbRect = CGRectMake(thumbX, thumbY, thumbLargeWidth, thumbLargeHeight)
+            let thumbRect = CGRect(x: thumbX, y: thumbY, width: thumbLargeWidth, height: thumbLargeHeight)
             
             self.pageThumbView = PDFPageScrubberThumb(frame: thumbRect, small: false, color: self.thumbBackgroundColor)
             self.pageThumbView?.layer.zPosition = 1.0
@@ -171,7 +171,7 @@ public class PDFPageScrubber: UIToolbar {
         let heightDelta = controlRect.size.height - thumbSmallHeight
         let thumbY:CGFloat = heightDelta / 2.0
         let thumbX:CGFloat = 0.0
-        var thumbRect = CGRectMake(thumbX, thumbY, thumbSmallWidth, thumbSmallHeight)
+        var thumbRect = CGRect(x: thumbX, y: thumbY, width: thumbSmallWidth, height: thumbSmallHeight)
         
         var thumbsToHide = self.thumbViews
         
@@ -184,10 +184,10 @@ public class PDFPageScrubber: UIToolbar {
             
             if let smallThumbView = self.thumbViews[page] {
                 
-                smallThumbView.hidden = false
-                thumbsToHide.removeValueForKey(page)
+                smallThumbView.isHidden = false
+                thumbsToHide.removeValue(forKey: page)
                 
-                if !CGRectEqualToRect(smallThumbView.frame, thumbRect) {
+                if !smallThumbView.frame.equalTo(thumbRect) {
                     smallThumbView.frame = thumbRect
                 }
             }
@@ -205,16 +205,16 @@ public class PDFPageScrubber: UIToolbar {
         }
         
         for thumb in thumbsToHide.values {
-            thumb.hidden = true
+            thumb.isHidden = true
         }
     }
     
     
-    public func updateScrubber() {
+    open func updateScrubber() {
         self.updatePagebarViews()
     }
     
-    public func updatePagebarViews() {
+    open func updatePagebarViews() {
         
         let page = self.document.currentPage
         
@@ -222,7 +222,7 @@ public class PDFPageScrubber: UIToolbar {
         self.updatePageThumbView(page)
     }
     
-    func updatePageNumberText(page: Int) {
+    func updatePageNumberText(_ page: Int) {
         
         if page != self.pageNumberLabel.tag {
             
@@ -233,7 +233,7 @@ public class PDFPageScrubber: UIToolbar {
         }
     }
     
-    func updatePageThumbView(page: Int) {
+    func updatePageThumbView(_ page: Int) {
         
         let pages = document.pageCount
         
@@ -265,7 +265,7 @@ public class PDFPageScrubber: UIToolbar {
     
     
     
-    func trackTimerFired(timer: NSTimer) {
+    func trackTimerFired(_ timer: Timer) {
         self.trackTimer?.invalidate()
         self.trackTimer = nil
         if self.scrubber.tag != document.currentPage {
@@ -273,10 +273,10 @@ public class PDFPageScrubber: UIToolbar {
         }
     }
     
-    func enableTimerFired(timer: NSTimer) {
+    func enableTimerFired(_ timer: Timer) {
         self.enableTimer?.invalidate()
         self.enableTimer = nil
-        self.scrubber.userInteractionEnabled = true
+        self.scrubber.isUserInteractionEnabled = true
     }
     
     func restartTrackTimer() {
@@ -285,7 +285,7 @@ public class PDFPageScrubber: UIToolbar {
             trackTimer?.invalidate()
             trackTimer = nil
         }
-        trackTimer = NSTimer.scheduledTimerWithTimeInterval(0.25,
+        trackTimer = Timer.scheduledTimer(timeInterval: 0.25,
                                                             target: self,
                                                             selector: #selector(PDFPageScrubber.trackTimerFired(_:)),
                                                             userInfo: nil,
@@ -299,7 +299,7 @@ public class PDFPageScrubber: UIToolbar {
             enableTimer = nil
         }
 
-        enableTimer = NSTimer.scheduledTimerWithTimeInterval(0.25,
+        enableTimer = Timer.scheduledTimer(timeInterval: 0.25,
                                                              target: self,
                                                              selector: #selector(PDFPageScrubber.enableTimerFired(_:)),
                                                              userInfo: nil,
@@ -308,7 +308,7 @@ public class PDFPageScrubber: UIToolbar {
     
     
     
-    func scrubberPageNumber(scrubber: PDFPageScrubberTrackControl) -> Int {
+    func scrubberPageNumber(_ scrubber: PDFPageScrubberTrackControl) -> Int {
         
         let controlWidth:CGFloat = scrubber.bounds.size.width
         let stride:CGFloat = controlWidth / CGFloat(document.pageCount)
@@ -317,7 +317,7 @@ public class PDFPageScrubber: UIToolbar {
         return page + 1
     }
     
-    func scrubberTouchDown(scrubber: PDFPageScrubberTrackControl) {
+    func scrubberTouchDown(_ scrubber: PDFPageScrubberTrackControl) {
         let page = self.scrubberPageNumber(scrubber)
         
         if page != document.currentPage {
@@ -330,7 +330,7 @@ public class PDFPageScrubber: UIToolbar {
         scrubber.tag = page
     }
     
-    func scrubberTouchUp(scrubber: PDFPageScrubberTrackControl) {
+    func scrubberTouchUp(_ scrubber: PDFPageScrubberTrackControl) {
         
         if self.trackTimer != nil {
             self.trackTimer?.invalidate()
@@ -338,7 +338,7 @@ public class PDFPageScrubber: UIToolbar {
         }
 
         if scrubber.tag != document.currentPage {
-            scrubber.userInteractionEnabled = false
+            scrubber.isUserInteractionEnabled = false
             self.scrubberDelegate?.scrubber(self, selectedPage: scrubber.tag)
             self.startEnableTimer()
         }
@@ -346,7 +346,7 @@ public class PDFPageScrubber: UIToolbar {
         scrubber.tag = 0
     }
     
-    func scrubberValueChanged(scrubber: PDFPageScrubberTrackControl) {
+    func scrubberValueChanged(_ scrubber: PDFPageScrubberTrackControl) {
         
         let page = self.scrubberPageNumber(scrubber)
         if page != scrubber.tag {
@@ -369,18 +369,18 @@ class PDFPageScrubberTrackControl: UIControl {
         super.init(frame: frame)
         
         self.autoresizesSubviews = false
-        self.userInteractionEnabled = true
-        self.contentMode = .Redraw
-        self.autoresizingMask = .None
-        self.backgroundColor = UIColor.clearColor()
-        self.exclusiveTouch = true
+        self.isUserInteractionEnabled = true
+        self.contentMode = .redraw
+        self.autoresizingMask = UIViewAutoresizing()
+        self.backgroundColor = UIColor.clear
+        self.isExclusiveTouch = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func limitValue(x: CGFloat) -> CGFloat {
+    func limitValue(_ x: CGFloat) -> CGFloat {
         
         var valueX = x
         let minX:CGFloat = self.bounds.origin.x
@@ -397,30 +397,30 @@ class PDFPageScrubberTrackControl: UIControl {
         return valueX
     }
     
-    override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
+    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         
-        let point = touch.locationInView(self)
+        let point = touch.location(in: self)
         self.value = self.limitValue(point.x)
         return true
     }
     
-    override func continueTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
+    override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         
-        if self.touchInside {
+        if self.isTouchInside {
             
-            let point = touch.locationInView(touch.view)
+            let point = touch.location(in: touch.view)
             let x:CGFloat = self.limitValue(point.x)
             if x != self.value {
                 self.value = x
-                self.sendActionsForControlEvents(.ValueChanged)
+                self.sendActions(for: .valueChanged)
             }
         }
         return true
     }
     
-    override func endTrackingWithTouch(touch: UITouch?, withEvent event: UIEvent?) {
+    override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         
-        if let point = touch?.locationInView(self) {
+        if let point = touch?.location(in: self) {
             self.value = self.limitValue(point.x)
         }
     }
@@ -429,7 +429,7 @@ class PDFPageScrubberTrackControl: UIControl {
 class PDFPageScrubberThumb:PDFThumbnailView {
     
     var small:Bool = false
-    var color:UIColor = UIColor.whiteColor()
+    var color:UIColor = UIColor.white
     
     init(frame: CGRect, small: Bool, color: UIColor) {
         
@@ -448,11 +448,11 @@ class PDFPageScrubberThumb:PDFThumbnailView {
     func setupUI() {
         
         let alpha:CGFloat = small ? 0.6 : 0.7
-        let background = color.colorWithAlphaComponent(alpha)
+        let background = color.withAlphaComponent(alpha)
         
         self.backgroundColor = background
         self.imageView.backgroundColor = background
-        self.imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
+        self.imageView.layer.borderColor = UIColor.lightGray.cgColor
         self.imageView.layer.borderWidth = 0.5
     }
 }

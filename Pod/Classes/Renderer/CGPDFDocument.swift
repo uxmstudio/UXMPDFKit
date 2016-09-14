@@ -8,36 +8,35 @@
 
 import Foundation
 
-public enum CGPDFDocumentError: ErrorType {
-    case FileDoesNotExist
-    case PasswordRequired
-    case CouldNotUnlock
+public enum CGPDFDocumentError: Error {
+    case fileDoesNotExist
+    case passwordRequired
+    case couldNotUnlock
 }
 
 extension CGPDFDocument {
     
-    public static func create(url: NSURL, password: String?) throws -> CGPDFDocumentRef {
+    public static func create(_ url: URL, password: String?) throws -> CGPDFDocument {
 
-        guard let docRef = CGPDFDocumentCreateWithURL(url) else {
-            
-            throw CGPDFDocumentError.FileDoesNotExist
+        guard let docRef = CGPDFDocument(url) else {
+            throw CGPDFDocumentError.fileDoesNotExist
         }
         
-        if CGPDFDocumentIsEncrypted(docRef) {
+        if docRef.isEncrypted {
             
             guard let password = password else {
                 
-                throw CGPDFDocumentError.PasswordRequired
+                throw CGPDFDocumentError.passwordRequired
             }
             
-            if CGPDFDocumentUnlockWithPassword(docRef, "") == false {
+            if docRef.unlockWithPassword("") == false {
                 
-                CGPDFDocumentUnlockWithPassword(docRef, (password as NSString).UTF8String)
+                docRef.unlockWithPassword((password as NSString).utf8String)
             }
             
-            if CGPDFDocumentIsUnlocked(docRef) == false {
+            if docRef.isUnlocked == false {
                 
-                throw CGPDFDocumentError.CouldNotUnlock
+                throw CGPDFDocumentError.couldNotUnlock
             }
         }
         

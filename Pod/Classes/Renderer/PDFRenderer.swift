@@ -9,10 +9,10 @@
 import Foundation
 
 public protocol PDFRenderer {
-    func render(page: Int, context:CGContext, bounds: CGRect)
+    func render(_ page: Int, context:CGContext, bounds: CGRect)
 }
 
-public class PDFRenderController {
+open class PDFRenderController {
     
     var document:PDFDocument
     var renderControllers:[PDFRenderer] = []
@@ -22,25 +22,25 @@ public class PDFRenderController {
         self.renderControllers = controllers
     }
     
-    public func renderOntoPDF() -> NSURL {
+    open func renderOntoPDF() -> URL {
         let documentRef = document.documentRef
         let pages = document.pageCount
         let title = document.fileUrl.lastPathComponent ?? "annotated.pdf"
-        let tempPath = NSTemporaryDirectory().stringByAppendingString(title)
+        let tempPath = NSTemporaryDirectory() + title
         
-        UIGraphicsBeginPDFContextToFile(tempPath, CGRectZero, nil)
+        UIGraphicsBeginPDFContextToFile(tempPath, CGRect.zero, nil)
         for i in 1...pages {
-            let page = CGPDFDocumentGetPage(documentRef, i)
+            let page = documentRef?.page(at: i)
             let bounds = self.document.boundsForPDFPage(i)
             
             if let context = UIGraphicsGetCurrentContext() {
                 UIGraphicsBeginPDFPageWithInfo(bounds, nil)
-                CGContextTranslateCTM(context, 0, bounds.size.height)
-                CGContextScaleCTM(context, 1.0, -1.0)
-                CGContextDrawPDFPage (context, page)
+                context.translateBy(x: 0, y: bounds.size.height)
+                context.scaleBy(x: 1.0, y: -1.0)
+                context.drawPDFPage (page!)
                 
-                CGContextScaleCTM(context, 1.0, -1.0)
-                CGContextTranslateCTM(context, 0, -bounds.size.height)
+                context.scaleBy(x: 1.0, y: -1.0)
+                context.translateBy(x: 0, y: -bounds.size.height)
                 
                 for controller in renderControllers {
                     controller.render(i, context:context, bounds:bounds)
@@ -49,15 +49,15 @@ public class PDFRenderController {
         }
         UIGraphicsEndPDFContext()
         
-        return NSURL.fileURLWithPath(tempPath)
+        return URL(fileURLWithPath: tempPath)
     }
     
-    public func save(url: NSURL) -> Bool {
+    open func save(_ url: URL) -> Bool {
         
         let tempUrl = self.renderOntoPDF()
-        let fileManger = NSFileManager.defaultManager()
+        let fileManger = FileManager.default
         do {
-            try fileManger.copyItemAtURL(tempUrl, toURL: url)
+            try fileManger.copyItem(at: tempUrl, to: url)
         }
         catch _ { return false }
         return true

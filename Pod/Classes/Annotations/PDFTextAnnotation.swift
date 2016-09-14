@@ -16,13 +16,13 @@ class PDFTextAnnotation:NSObject {
         }
     }
     
-    var rect:CGRect = CGRectZero {
+    var rect:CGRect = CGRect.zero {
         didSet {
             self.textView.frame = self.rect
         }
     }
     
-    var font:UIFont = UIFont.systemFontOfSize(14.0) {
+    var font:UIFont = UIFont.systemFont(ofSize: 14.0) {
         didSet {
             self.textView.font = self.font
         }
@@ -30,9 +30,9 @@ class PDFTextAnnotation:NSObject {
     
     lazy var textView:UITextView = self.createTextView()
     
-    private var startTouch:CGPoint = CGPointZero
-    private var startInternalPosition:CGPoint = CGPointZero
-    private var isDragging:Bool = false
+    fileprivate var startTouch:CGPoint = CGPoint.zero
+    fileprivate var startInternalPosition:CGPoint = CGPoint.zero
+    fileprivate var isDragging:Bool = false
     
     func createTextView() -> UITextView {
         let textView = UITextView(frame: self.rect)
@@ -41,7 +41,7 @@ class PDFTextAnnotation:NSObject {
         textView.text = self.text
         
         textView.layer.borderWidth = 2.0
-        textView.layer.borderColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.9).CGColor
+        textView.layer.borderColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.9).cgColor
         textView.backgroundColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.2)
         
         return textView
@@ -55,62 +55,62 @@ extension PDFTextAnnotation:PDFAnnotation {
         return self.textView
     }
     
-    func touchStarted(touch: UITouch, point: CGPoint) {
+    func touchStarted(_ touch: UITouch, point: CGPoint) {
         
         self.startTouch = point
-        self.startInternalPosition = touch.locationInView(self.textView)
+        self.startInternalPosition = touch.location(in: self.textView)
         
-        if (CGRectContainsPoint(self.textView.frame, point)) {
+        if (self.textView.frame.contains(point)) {
             self.isDragging = true
         }
         else {
             self.textView.resignFirstResponder()
         }
         
-        if self.rect == CGRectZero {
-            self.rect = CGRectMake(point.x, point.y, 300.0, 32.0)
+        if self.rect == CGRect.zero {
+            self.rect = CGRect(x: point.x, y: point.y, width: 300.0, height: 32.0)
         }
     }
     
-    func touchMoved(touch: UITouch, point: CGPoint) {
+    func touchMoved(_ touch: UITouch, point: CGPoint) {
         
         if self.isDragging {
             
-            self.rect = CGRectMake(
-                point.x - self.startInternalPosition.x,
-                point.y - self.startInternalPosition.y,
-                self.rect.width,
-                self.rect.height
+            self.rect = CGRect(
+                x: point.x - self.startInternalPosition.x,
+                y: point.y - self.startInternalPosition.y,
+                width: self.rect.width,
+                height: self.rect.height
             )
         }
     }
     
-    func touchEnded(touch: UITouch, point: CGPoint) {
+    func touchEnded(_ touch: UITouch, point: CGPoint) {
         if self.startTouch == point {
             self.textView.becomeFirstResponder()
         }
         self.isDragging = false
     }
     
-    func drawInContext(context: CGContextRef) {
+    func drawInContext(_ context: CGContext) {
         
         UIGraphicsPushContext(context)
-        CGContextSetAlpha(context, 1.0)
+        context.setAlpha(1.0)
         
         let nsText = self.text as NSString
-        let paragraphStyle:NSMutableParagraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        paragraphStyle.alignment = NSTextAlignment.Left
+        let paragraphStyle:NSMutableParagraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        paragraphStyle.alignment = NSTextAlignment.left
         
         let attributes:[String:AnyObject] = [
             NSFontAttributeName: font,
-            NSForegroundColorAttributeName: UIColor.blackColor(),
+            NSForegroundColorAttributeName: UIColor.black,
             NSParagraphStyleAttributeName: paragraphStyle
         ]
         
-        let size:CGSize = nsText.sizeWithAttributes(attributes)
-        let textRect = CGRectMake(self.rect.origin.x, self.rect.origin.y, size.width, size.height)
+        let size:CGSize = nsText.size(attributes: attributes)
+        let textRect = CGRect(x: self.rect.origin.x, y: self.rect.origin.y, width: size.width, height: size.height)
         
-        nsText.drawInRect(textRect, withAttributes: attributes)
+        nsText.draw(in: textRect, withAttributes: attributes)
         
         UIGraphicsPopContext()
     }
@@ -118,7 +118,7 @@ extension PDFTextAnnotation:PDFAnnotation {
 
 extension PDFTextAnnotation:UITextViewDelegate {
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         self.textView.sizeToFit()
         
         var width:CGFloat = 300.0
@@ -126,10 +126,10 @@ extension PDFTextAnnotation:UITextViewDelegate {
             width = self.textView.frame.width
         }
         
-        self.rect = CGRectMake(self.textView.frame.origin.x,
-                               self.textView.frame.origin.y,
-                               width,
-                               self.textView.frame.height)
+        self.rect = CGRect(x: self.textView.frame.origin.x,
+                               y: self.textView.frame.origin.y,
+                               width: width,
+                               height: self.textView.frame.height)
         
         if self.text != self.textView.text {
             self.text = self.textView.text
