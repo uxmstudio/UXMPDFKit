@@ -114,7 +114,7 @@ open class PDFAnnotationController:UIViewController {
         
         self.annotations.add(annotation, page: currentPage.page)
         
-        self.annotationType == .none
+        self.annotationType = .none
         self.currentAnnotation = nil
         self.view.isUserInteractionEnabled = false
     }

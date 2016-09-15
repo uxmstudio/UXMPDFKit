@@ -241,7 +241,7 @@ open class PDFViewController: UIViewController {
 extension PDFViewController: PDFPageScrubberDelegate {
     
     public func scrubber(_ scrubber: PDFPageScrubber, selectedPage: Int) {
-
+        
         self.document.currentPage = selectedPage
         self.collectionView.displayPage(selectedPage, animated: false)
     }
@@ -271,14 +271,8 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
         
         if let action = action as? PDFActionURL {
             
-            if #available(iOS 9.0, *) {
-                let svc = SFSafariViewController(url: action.url as URL)
-                self.present(svc, animated: true, completion: nil)
-            }
-            else {
-                /// Fallback on earlier versions
-                UIApplication.shared.openURL(action.url as URL)
-            }
+            let svc = SFSafariViewController(url: action.url as URL)
+            self.present(svc, animated: true, completion: nil)
         }
         else if let action = action as? PDFActionGoTo {
             self.collectionView.displayPage(action.pageIndex, animated: true)

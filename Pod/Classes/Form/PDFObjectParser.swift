@@ -27,7 +27,7 @@ open class PDFObjectParser: NSObject {
         self.document = document
         super.init()
         
-        self.getFormFields()
+        let _ = self.getFormFields()
     }
     
     func getFormFields() -> AnyObject? {

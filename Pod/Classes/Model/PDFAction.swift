@@ -158,16 +158,6 @@ open class PDFAction {
                 var destName:CGPDFStringRef? = nil
                 if CGPDFArrayGetString(namesArray!, i, &destName) {
                     
-                    var x = 23
-                    let count = MemoryLayout.size(ofValue: x)
-                    let data = withUnsafePointer(to: &x) {
-                        // Temporarily rebind `var x` memory as `UInt8` so that
-                        // CFDataCreate can copy it into its own `UInt8` buffer.
-                        $0.withMemoryRebound(to: UInt8.self, capacity: count) {
-                            CFDataCreate(kCFAllocatorDefault, $0, count)
-                        }
-                    }
-                    
                     let dnu = CGPDFStringGetBytePtr(destName!)!
                     let dn:UnsafePointer<Int8> = UnsafeRawPointer(dnu).assumingMemoryBound(to: Int8.self)
                     if strcmp(dn, destinationName) == 0 {
