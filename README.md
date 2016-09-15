@@ -5,9 +5,9 @@
 [![Platform](https://img.shields.io/cocoapods/p/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 
 ## Requirements
-- iOS 8 or above
-- Xcode 7 or above
-- Swift 2.1
+- iOS 9 or above
+- Xcode 8 or above
+- Swift 3.0
 
 ## Note
 
