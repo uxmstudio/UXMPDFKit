@@ -21,6 +21,12 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod "UXMPDFKit"
 ```
+
+If you wish to use the Swift 2.3 version, use the following instead:
+```ruby
+pod "UXMPDFKit", "~>= 3.0"
+```
+
 ## Usage
 ### Simple Usage
 UXMPDFKit comes with a single page PDF reader with many features implemented right out of the box. Simply create a new PDFViewController, pass it a document and display it like any other view controller. It includes support for forms, a page scrubber and page scrolling.
