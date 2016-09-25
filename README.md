@@ -24,7 +24,7 @@ pod "UXMPDFKit"
 
 If you wish to use the Swift 2.3 version, use the following instead:
 ```ruby
-pod "UXMPDFKit", "~>= 3.0"
+pod "UXMPDFKit", "~>= 0.3.0"
 ```
 
 ## Usage
