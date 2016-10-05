@@ -20,7 +20,7 @@ open class PDFViewController: UIViewController {
     open var allowsFormFilling:Bool = true
     open var allowsAnnotations:Bool = true
     open var allowsSharing:Bool = true
-    
+    open var isPresentingInModal:Bool = false
     
     var document:PDFDocument!
     
@@ -119,7 +119,7 @@ open class PDFViewController: UIViewController {
     fileprivate func reloadBarButtons() {
         self.navigationItem.rightBarButtonItems = self.rightBarButtons()
         
-        if self.isModal() {
+        if self.isPresentingInModal {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done",
                                                                     style: .plain,
                                                                     target: self,
@@ -222,18 +222,6 @@ open class PDFViewController: UIViewController {
     
     func dismissModal() {
         self.dismiss(animated: true, completion: nil)
-    }
-    
-    func isModal() -> Bool {
-        
-        if self.presentingViewController != nil
-            || self.presentingViewController?.presentedViewController == self
-            || self.navigationController?.presentingViewController?.presentedViewController == self.navigationController
-            || self.tabBarController?.presentingViewController is UITabBarController {
-            return true
-        }
-        
-        return false
     }
 }
 

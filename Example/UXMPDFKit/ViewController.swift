@@ -15,7 +15,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         let url = Bundle.main.path(forResource: "sample", ofType: "pdf")!
         let document = try! PDFDocument(filePath: url, password: "")
