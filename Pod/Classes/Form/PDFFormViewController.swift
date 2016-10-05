@@ -28,8 +28,8 @@ open class PDFFormViewController:NSObject {
     }
     
     func setupUI() {
-        
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async {
+
+        DispatchQueue.global().async {
             
             guard let attributes = self.parser.attributes else {
                 return

@@ -165,7 +165,7 @@ open class PDFAnnotationController:UIViewController {
         
         self.clear()
         guard let currentPage = self.currentPage else { return }
-        self.annotations.undo(currentPage.page)
+        let _ = self.annotations.undo(currentPage.page)
         self.showAnnotations(currentPage)
     }
     

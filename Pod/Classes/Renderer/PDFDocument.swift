@@ -237,7 +237,7 @@ open class PDFDocument: NSObject, NSCoding {
     
     open func save() {
         
-        self.archiveWithFileAtPath(self.fileUrl.path)
+        let _ = self.archiveWithFileAtPath(self.fileUrl.path)
     }
     
     open func reloadProperties() {

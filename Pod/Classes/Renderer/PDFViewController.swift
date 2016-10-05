@@ -313,6 +313,6 @@ open class PDFBarButton:UIBarButtonItem {
     }
     
     func tapped() {
-        self.target?.perform(self.action, with: self)
+        let _ = self.target?.perform(self.action, with: self)
     }
 }
