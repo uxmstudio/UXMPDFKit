@@ -260,7 +260,8 @@ class PDFPageContent: UIView {
         ctx.fill(ctx.boundingBoxOfClipPath)
         
         /// Translate for page
-        ctx.translateBy(x: 0.0, y: self.bounds.size.height); ctx.scaleBy(x: 1.0, y: -1.0)
+        ctx.translateBy(x: 0.0, y: self.bounds.size.height)
+        ctx.scaleBy(x: 1.0, y: -1.0)
         ctx.concatenate((self.pdfPageRef?.getDrawingTransform(.cropBox, rect: self.bounds, rotate: 0, preserveAspectRatio: true))!)
         
         /// Render the PDF page into the context
@@ -294,6 +295,4 @@ class PDFDocumentLink: NSObject {
         super.init()
         
     }
-    
-    
 }

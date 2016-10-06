@@ -14,10 +14,12 @@ open class PDFDocument: NSObject, NSCoding {
         do {
             if let fileUrl = self.fileUrl {
                 return try CGPDFDocument.create(fileUrl, password: self.password)
-            } else if let fileData = self.fileData,
-                      let dataProvider = CGDataProvider(data: fileData) {
+            }
+            else if let fileData = self.fileData,
+                let dataProvider = CGDataProvider(data: fileData) {
                 return CGPDFDocument(dataProvider)
-            } else {
+            }
+            else {
                 return nil
             }
         } catch {
@@ -52,11 +54,7 @@ open class PDFDocument: NSObject, NSCoding {
         var document:PDFDocument? = PDFDocument.unarchiveDocumentForFile(filePath, password: password)
         
         if document == nil {
-            do {
-                document = try PDFDocument(filePath: filePath, password: password)
-            } catch let err {
-                throw err
-            }
+            document = try PDFDocument(filePath: filePath, password: password)
         }
         
         return document
@@ -81,11 +79,8 @@ open class PDFDocument: NSObject, NSCoding {
     }
     
     public convenience init(filePath: String) throws {
-        do {
-            try self.init(filePath: filePath, password: nil)
-        } catch let err {
-            throw err
-        }
+        
+        try self.init(filePath: filePath, password: nil)
     }
     
     public init(filePath: String, password: String?) throws {
@@ -97,110 +92,95 @@ open class PDFDocument: NSObject, NSCoding {
         
         super.init()
         
-        do {
-            try self.loadDocumentInformation()
-        } catch let err {
-            throw err
-        }
+        try self.loadDocumentInformation()
         
         self.save()
     }
     
     public init(fileData: NSData, password: String?) throws {
-
+        
         self.guid = PDFDocument.GUID()
         self.password = password
         self.fileData = fileData
         self.lastOpen = NSDate() as Date
-
+        
         super.init()
-
-        do {
-            try self.loadDocumentInformation()
-        } catch let err {
-            throw err
-        }
-
+        
+        try self.loadDocumentInformation()
+        
         self.save()
     }
-
+    
     func loadDocumentInformation() throws {
         guard let pdfDocRef = documentRef else {
             return
         }
         
-        do {
-
-            let infoDic:CGPDFDictionaryRef = pdfDocRef.info!
-            var string:CGPDFStringRef? = nil
+        let infoDic:CGPDFDictionaryRef = pdfDocRef.info!
+        var string:CGPDFStringRef? = nil
+        
+        if CGPDFDictionaryGetString(infoDic, "Title", &string) {
             
-            if CGPDFDictionaryGetString(infoDic, "Title", &string) {
-                
-                if let ref:CFString = CGPDFStringCopyTextString(string!) {
-                    self.title = ref as String
-                }
+            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+                self.title = ref as String
             }
-            
-            if CGPDFDictionaryGetString(infoDic, "Author", &string) {
-                
-                if let ref:CFString = CGPDFStringCopyTextString(string!) {
-                    self.author = ref as String
-                }
-            }
-            
-            if CGPDFDictionaryGetString(infoDic, "Subject", &string) {
-                
-                if let ref:CFString = CGPDFStringCopyTextString(string!) {
-                    self.subject = ref as String
-                }
-            }
-            
-            if CGPDFDictionaryGetString(infoDic, "Keywords", &string) {
-                
-                if let ref:CFString = CGPDFStringCopyTextString(string!) {
-                    self.keywords = ref as String
-                }
-            }
-            
-            if CGPDFDictionaryGetString(infoDic, "Creator", &string) {
-                
-                if let ref:CFString = CGPDFStringCopyTextString(string!) {
-                    self.creator = ref as String
-                }
-            }
-            
-            if CGPDFDictionaryGetString(infoDic, "Producer", &string) {
-                
-                if let ref:CFString = CGPDFStringCopyTextString(string!) {
-                    self.producer = ref as String
-                }
-            }
-            
-            if CGPDFDictionaryGetString(infoDic, "CreationDate", &string) {
-                
-                if let ref:CFDate = CGPDFStringCopyDate(string!) {
-                    self.creationDate = ref as Date
-                }
-            }
-            
-            if CGPDFDictionaryGetString(infoDic, "ModDate", &string) {
-                
-                if let ref:CFDate = CGPDFStringCopyDate(string!) {
-                    self.modificationDate = ref as Date
-                }
-            }
-            
-            //            let majorVersion = UnsafeMutablePointer<Int32>()
-            //            let minorVersion = UnsafeMutablePointer<Int32>()
-            //            CGPDFDocumentGetVersion(pdfDocRef, majorVersion, minorVersion)
-            //            self.version = Float("\(majorVersion).\(minorVersion)")!
-            
-            self.pageCount = pdfDocRef.numberOfPages ?? 0
-            
-        } catch let err {
-            
-            throw err
         }
+        
+        if CGPDFDictionaryGetString(infoDic, "Author", &string) {
+            
+            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+                self.author = ref as String
+            }
+        }
+        
+        if CGPDFDictionaryGetString(infoDic, "Subject", &string) {
+            
+            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+                self.subject = ref as String
+            }
+        }
+        
+        if CGPDFDictionaryGetString(infoDic, "Keywords", &string) {
+            
+            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+                self.keywords = ref as String
+            }
+        }
+        
+        if CGPDFDictionaryGetString(infoDic, "Creator", &string) {
+            
+            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+                self.creator = ref as String
+            }
+        }
+        
+        if CGPDFDictionaryGetString(infoDic, "Producer", &string) {
+            
+            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+                self.producer = ref as String
+            }
+        }
+        
+        if CGPDFDictionaryGetString(infoDic, "CreationDate", &string) {
+            
+            if let ref:CFDate = CGPDFStringCopyDate(string!) {
+                self.creationDate = ref as Date
+            }
+        }
+        
+        if CGPDFDictionaryGetString(infoDic, "ModDate", &string) {
+            
+            if let ref:CFDate = CGPDFStringCopyDate(string!) {
+                self.modificationDate = ref as Date
+            }
+        }
+        
+        //            let majorVersion = UnsafeMutablePointer<Int32>()
+        //            let minorVersion = UnsafeMutablePointer<Int32>()
+        //            CGPDFDocumentGetVersion(pdfDocRef, majorVersion, minorVersion)
+        //            self.version = Float("\(majorVersion).\(minorVersion)")!
+        
+        self.pageCount = pdfDocRef.numberOfPages
     }
     
     
@@ -264,7 +244,7 @@ open class PDFDocument: NSObject, NSCoding {
     open func save() {
         
         if let filePath = fileUrl?.path {
-            self.archiveWithFileAtPath(filePath)
+            let _ = self.archiveWithFileAtPath(filePath)
         }
     }
     
