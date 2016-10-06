@@ -27,12 +27,12 @@ class PDFPageContent: UIView {
     }
     
     //MARK: - Init
-    init(url: URL, page:Int, password:String?) {
         
         var viewRect:CGRect = CGRect.zero
         
-        self.pdfDocRef = try! CGPDFDocument.create(url, password: password)
         
+    init(pdfDocument: PDFDocument, page: Int, password: String?) {
+        self.pdfDocRef = pdfDocument.documentRef!
         /// Limit the page
         let pages = self.pdfDocRef.numberOfPages
         var page = page
@@ -96,7 +96,7 @@ class PDFPageContent: UIView {
     
     convenience init(document: PDFDocument, page:Int) {
         
-        self.init(url: document.fileUrl as URL, page:page, password:document.password)
+        self.init(pdfDocument: document, page:page, password:document.password)
     }
     
     required init?(coder aDecoder: NSCoder) {

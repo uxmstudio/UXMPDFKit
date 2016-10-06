@@ -25,7 +25,7 @@ open class PDFRenderController {
     open func renderOntoPDF() -> URL {
         let documentRef = document.documentRef
         let pages = document.pageCount
-        let title = document.fileUrl.lastPathComponent
+        let title = document.fileUrl?.lastPathComponent ?? "annotated.pdf"
         let tempPath = NSTemporaryDirectory() + title
         
         UIGraphicsBeginPDFContextToFile(tempPath, CGRect.zero, nil)
