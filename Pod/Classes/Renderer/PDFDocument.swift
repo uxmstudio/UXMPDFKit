@@ -12,9 +12,15 @@ open class PDFDocument: NSObject, NSCoding {
     
     lazy open var documentRef:CGPDFDocument? = {
         do {
-            return try CGPDFDocument.create(self.fileUrl, password: self.password)
-        }
-        catch {
+            if let fileUrl = self.fileUrl {
+                return try CGPDFDocument.create(fileUrl, password: self.password)
+            } else if let fileData = self.fileData,
+                      let dataProvider = CGDataProvider(data: fileData) {
+                return CGPDFDocument(dataProvider)
+            } else {
+                return nil
+            }
+        } catch {
             return nil
         }
     }()
@@ -25,7 +31,8 @@ open class PDFDocument: NSObject, NSCoding {
     open var pageCount: Int = 0
     open var currentPage: Int = 1
     open var bookmarks: NSMutableIndexSet = NSMutableIndexSet()
-    open var fileUrl: URL
+    open var fileUrl: URL?
+    open var fileData: NSData?
     open var fileSize: Int = 0
     open var guid: String
     
@@ -99,12 +106,31 @@ open class PDFDocument: NSObject, NSCoding {
         self.save()
     }
     
+    public init(fileData: NSData, password: String?) throws {
+
+        self.guid = PDFDocument.GUID()
+        self.password = password
+        self.fileData = fileData
+        self.lastOpen = NSDate() as Date
+
+        super.init()
+
+        do {
+            try self.loadDocumentInformation()
+        } catch let err {
+            throw err
+        }
+
+        self.save()
+    }
+
     func loadDocumentInformation() throws {
+        guard let pdfDocRef = documentRef else {
+            return
+        }
         
         do {
-            
-            let pdfDocRef:CGPDFDocument = try CGPDFDocument.create(self.fileUrl, password: self.password)
-            
+
             let infoDic:CGPDFDictionaryRef = pdfDocRef.info!
             var string:CGPDFStringRef? = nil
             
@@ -169,7 +195,7 @@ open class PDFDocument: NSObject, NSCoding {
             //            CGPDFDocumentGetVersion(pdfDocRef, majorVersion, minorVersion)
             //            self.version = Float("\(majorVersion).\(minorVersion)")!
             
-            self.pageCount = pdfDocRef.numberOfPages
+            self.pageCount = pdfDocRef.numberOfPages ?? 0
             
         } catch let err {
             
@@ -237,7 +263,9 @@ open class PDFDocument: NSObject, NSCoding {
     
     open func save() {
         
-        let _ = self.archiveWithFileAtPath(self.fileUrl.path)
+        if let filePath = fileUrl?.path {
+            self.archiveWithFileAtPath(filePath)
+        }
     }
     
     open func reloadProperties() {
@@ -300,6 +328,6 @@ open class PDFDocument: NSObject, NSCoding {
         aCoder.encode(self.currentPage, forKey: "currentPage")
         aCoder.encode(self.bookmarks, forKey: "bookmarks")
         aCoder.encode(self.lastOpen, forKey: "lastOpen")
-        aCoder.encode(self.fileUrl.path, forKey: "fileURL")
+        aCoder.encode(self.fileUrl?.path, forKey: "fileURL")
     }
 }
