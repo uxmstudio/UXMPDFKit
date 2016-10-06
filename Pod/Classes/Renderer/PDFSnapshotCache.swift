@@ -16,14 +16,14 @@ open class PDFSnapshot {
     
     var state = SnapshotState.new
     var image:UIImage?
-    var path:URL
+    var document: PDFDocument
     var page:Int
     var guid:String
     var size:CGSize
     
-    init(path:URL, page: Int, guid: String, size: CGSize) {
+    init(document: PDFDocument, page: Int, guid: String, size: CGSize) {
+        self.document = document
         self.page = page
-        self.path = path
         self.guid = guid
         self.size = size
     }
@@ -47,8 +47,8 @@ open class PDFQueue {
     func fetchPage(_ document: PDFDocument, page: Int, size: CGSize, completion:((PDFSnapshot) -> Void)?) {
         
         let guid = "\(document.guid)_\(page)"
-        let thumbnail = PDFSnapshot(path: document.fileUrl as URL, page: page, guid: guid, size: size)
         
+        let thumbnail = PDFSnapshot(document: document, page: page, guid: guid, size: size)
         if let image = PDFSnapshotCache.sharedCache.objectForKey(guid) {
             thumbnail.image = image
             DispatchQueue.main.async{
@@ -109,8 +109,8 @@ class PDFSnapshotRenderer: Operation {
     
     func renderPDF(_ size: CGSize) -> UIImage? {
         
-        guard let documentRef = CGPDFDocument((self.snapshot.path as CFURL)),
-            let page = documentRef.page(at: self.snapshot.page) else { return nil }
+        let documentRef = self.snapshot.document.documentRef
+        guard let page = documentRef?.page(at: self.snapshot.page) else { return nil }
         
         var pageRect = page.getBoxRect(.mediaBox)
         let scale = min(size.width / pageRect.size.width, size.height / pageRect.size.height)
