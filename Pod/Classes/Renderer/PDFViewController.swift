@@ -260,7 +260,7 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
         }
     }
     
-    public func singlePageTapped(_ collectionView: PDFSinglePageViewer, tapped recognizer: UITapGestureRecognizer) {
+    public func singlePageViewer(_ collectionView: PDFSinglePageViewer, tapped recognizer: UITapGestureRecognizer) {
         if hidesBarsOnTap {
             handleTap(recognizer)
         }
