@@ -77,13 +77,6 @@ open class PDFViewController: UIViewController {
         
         
         self.reloadBarButtons()
-        
-        
-        if self.hidesBarsOnTap {
-            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(PDFViewController.handleTap(_:)))
-            gestureRecognizer.cancelsTouchesInView = false
-            self.view.addGestureRecognizer(gestureRecognizer)
-        }
     }
     
     func loadDocument(_ document: PDFDocument) {
@@ -264,6 +257,12 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
         }
         else if let action = action as? PDFActionGoTo {
             self.collectionView.displayPage(action.pageIndex, animated: true)
+        }
+    }
+    
+    public func singlePageViewer(_ collectionView: PDFSinglePageViewer, tapped recognizer: UITapGestureRecognizer) {
+        if hidesBarsOnTap {
+            handleTap(recognizer)
         }
     }
 }

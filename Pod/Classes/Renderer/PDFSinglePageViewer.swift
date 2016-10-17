@@ -13,6 +13,7 @@ public protocol PDFSinglePageViewerDelegate {
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, didDisplayPage page:Int)
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, loadedContent content:PDFPageContentView)
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, selectedAction action:PDFAction)
+    func singlePageViewer(_ collectionView: PDFSinglePageViewer, tapped recognizer: UITapGestureRecognizer)
 }
 
 open class PDFSinglePageViewer: UICollectionView {
@@ -178,6 +179,10 @@ extension PDFSinglePageViewer: PDFPageContentViewDelegate {
         else if let action = action as? PDFActionGoTo {
             self.displayPage(action.pageIndex, animated: true)
         }
+    }
+    
+    public func contentView(_ contentView: PDFPageContentView, tapped recognizer: UITapGestureRecognizer) {
+        singlePageDelegate?.singlePageViewer(self, tapped: recognizer)
     }
 }
 
