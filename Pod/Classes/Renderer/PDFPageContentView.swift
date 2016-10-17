@@ -11,6 +11,7 @@ import UIKit
 public protocol PDFPageContentViewDelegate {
     
     func contentView(_ contentView: PDFPageContentView, didSelectAction action: PDFAction)
+    func contentView(_ contentView: PDFPageContentView, tapped recognizer: UITapGestureRecognizer)
 }
 
 open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
@@ -152,7 +153,10 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     
     open func processSingleTap(_ recognizer: UITapGestureRecognizer) {
         
-        guard let action = self.contentView.processSingleTap(recognizer) else { return }
+        guard let action = self.contentView.processSingleTap(recognizer) else {
+            contentDelegate?.contentView(self, tapped: recognizer)
+            return
+        }
         self.contentDelegate?.contentView(self, didSelectAction: action)
     }
     
