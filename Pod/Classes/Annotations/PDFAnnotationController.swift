@@ -17,38 +17,38 @@ public enum PDFAnnotationType {
 
 open class PDFAnnotationController:UIViewController {
     
-    var document:PDFDocument!
-    var annotations:PDFAnnotationStore = PDFAnnotationStore()
-    var currentPage:PDFPageContentView?
-    var pageView:PDFPageContent?
-    var lastPoint:CGPoint?
-    var annotationType:PDFAnnotationType = .none
+    var document: PDFDocument!
+    var annotations: PDFAnnotationStore = PDFAnnotationStore()
+    var currentPage: PDFPageContentView?
+    var pageView: PDFPageContent?
+    var lastPoint: CGPoint?
+    var annotationType: PDFAnnotationType = .none
     
     var currentAnnotation:PDFAnnotation?
     
     //MARK: - Bar button items
-    lazy var penButton:PDFBarButton = PDFBarButton(
+    lazy var penButton: PDFBarButton = PDFBarButton(
         image: UIImage.bundledImage("pen"),
         toggled: false,
         target: self,
         action: #selector(PDFAnnotationController.selectedPen(_:))
     )
     
-    lazy var highlighterButton:PDFBarButton = PDFBarButton(
+    lazy var highlighterButton: PDFBarButton = PDFBarButton(
         image: UIImage.bundledImage("highlighter"),
         toggled: false,
         target: self,
         action: #selector(PDFAnnotationController.selectedHighlighter(_:))
     )
     
-    lazy var textButton:PDFBarButton = PDFBarButton(
+    lazy var textButton: PDFBarButton = PDFBarButton(
         image: UIImage.bundledImage("text-symbol"),
         toggled: false,
         target: self,
         action: #selector(PDFAnnotationController.selectedText(_:))
     )
     
-    lazy var undoButton:PDFBarButton = PDFBarButton(
+    lazy var undoButton: PDFBarButton = PDFBarButton(
         image: UIImage.bundledImage("undo"),
         toggled: false,
         target: self,
@@ -129,7 +129,7 @@ open class PDFAnnotationController:UIViewController {
         }
     }
     
-    func selectedType(_ button:PDFBarButton, type: PDFAnnotationType) {
+    func selectedType(_ button: PDFBarButton, type: PDFAnnotationType) {
         self.unselectAll()
         if self.annotationType == type {
             self.finishAnnotation()
@@ -219,7 +219,7 @@ open class PDFAnnotationController:UIViewController {
 
 extension PDFAnnotationController: PDFRenderer {
     
-    public func render(_ page: Int, context:CGContext, bounds: CGRect) {
+    public func render(_ page: Int, context: CGContext, bounds: CGRect) {
         
         if let page = annotations.get(page) {
             page.renderInContext(context, size: bounds)

@@ -16,16 +16,17 @@ public protocol PDFPageContentViewDelegate {
 
 open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
 
-    var contentView:PDFPageContent
-    var containerView:UIView
+    var contentView: PDFPageContent
+    var containerView: UIView
+//    var placeholderView: UIImage
     
-    open var page:Int
+    open var page: Int
     open var contentDelegate: PDFPageContentViewDelegate?
-    open var viewDidZoom:((CGFloat) -> Void)?
+    open var viewDidZoom: ((CGFloat) -> Void)?
     fileprivate var PDFPageContentViewContext = 0
-    fileprivate var previousScale:CGFloat = 1.0
+    fileprivate var previousScale: CGFloat = 1.0
     
-    let bottomKeyboardPadding:CGFloat = 20.0
+    let bottomKeyboardPadding: CGFloat = 20.0
     
     init(frame:CGRect, document: PDFDocument, page:Int) {
         

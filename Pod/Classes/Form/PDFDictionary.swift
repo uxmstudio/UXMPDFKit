@@ -15,9 +15,9 @@ protocol PDFObject {
 
 class PDFDictionary:NSObject, PDFObject {
     
-    var dict:CGPDFDictionaryRef
+    var dict: CGPDFDictionaryRef
     
-    lazy var attributes:[String:AnyObject] = {
+    lazy var attributes: [String:AnyObject] = {
         
         var context = PDFObjectParserContext(
             keys: []
@@ -31,7 +31,7 @@ class PDFDictionary:NSObject, PDFObject {
             }
         }
 
-        var attributes:[String:AnyObject] = [:]
+        var attributes: [String:AnyObject] = [:]
         for key in self.keys {
             if let stringKey = String(validatingUTF8: key) {
                 if let obj = self.pdfObjectForKey(key) {
@@ -42,10 +42,10 @@ class PDFDictionary:NSObject, PDFObject {
         return attributes
     }()
     
-    var keys:[UnsafePointer<Int8>] = []
-    var stringKeys:[String] = []
+    var keys: [UnsafePointer<Int8>] = []
+    var stringKeys: [String] = []
     
-    var isParent:Bool = false
+    var isParent: Bool = false
     
     init(dictionaryRef: CGPDFDictionaryRef) {
         
@@ -94,7 +94,7 @@ class PDFDictionary:NSObject, PDFObject {
     
     
     fileprivate func booleanFromKey(_ key: UnsafePointer<Int8>) -> Bool? {
-        var boolObj:CGPDFBoolean = 0
+        var boolObj: CGPDFBoolean = 0
         if CGPDFDictionaryGetBoolean(self.dict, key, &boolObj) {
             return Int(boolObj) != 0
         }
@@ -102,7 +102,7 @@ class PDFDictionary:NSObject, PDFObject {
     }
     
     fileprivate func integerFromKey(_ key: UnsafePointer<Int8>) -> Int? {
-        var intObj:CGPDFInteger = 0
+        var intObj: CGPDFInteger = 0
         if CGPDFDictionaryGetInteger(self.dict, key, &intObj) {
             return Int(intObj)
         }
@@ -110,7 +110,7 @@ class PDFDictionary:NSObject, PDFObject {
     }
     
     fileprivate func realFromKey(_ key: UnsafePointer<Int8>) -> CGFloat? {
-        var floatObj:CGPDFReal = 0
+        var floatObj: CGPDFReal = 0
         if CGPDFDictionaryGetNumber(self.dict, key, &floatObj) {
             return CGFloat(floatObj)
         }
@@ -118,7 +118,7 @@ class PDFDictionary:NSObject, PDFObject {
     }
     
     fileprivate func nameFromKey(_ key: UnsafePointer<Int8>) -> String? {
-        var nameObj:UnsafePointer<Int8>? = nil
+        var nameObj: UnsafePointer<Int8>? = nil
         if CGPDFDictionaryGetName(self.dict, key, &nameObj) {
             if let dictionaryName = String(validatingUTF8: nameObj!) {
                 return dictionaryName
@@ -128,9 +128,9 @@ class PDFDictionary:NSObject, PDFObject {
     }
     
     fileprivate func stringFromKey(_ key: UnsafePointer<Int8>) -> String? {
-        var stringObj:CGPDFStringRef? = nil
+        var stringObj: CGPDFStringRef? = nil
         if CGPDFDictionaryGetString(self.dict, key, &stringObj) {
-            if let ref:CFString = CGPDFStringCopyTextString(stringObj!) {
+            if let ref: CFString = CGPDFStringCopyTextString(stringObj!) {
                 return ref as String
             }
         }
@@ -138,7 +138,7 @@ class PDFDictionary:NSObject, PDFObject {
     }
     
     fileprivate func arrayFromKey(_ key: UnsafePointer<Int8>) -> PDFArray? {
-        var arrayObj:CGPDFArrayRef? = nil
+        var arrayObj: CGPDFArrayRef? = nil
         if CGPDFDictionaryGetArray(self.dict, key, &arrayObj) {
             return PDFArray(arrayRef: arrayObj!)
         }
@@ -155,7 +155,7 @@ class PDFDictionary:NSObject, PDFObject {
             return nil
         }
         
-        var dictObj:CGPDFArrayRef? = nil
+        var dictObj: CGPDFArrayRef? = nil
         if CGPDFDictionaryGetDictionary(self.dict, key, &dictObj) {
             return PDFDictionary(dictionaryRef: dictObj!)
         }
@@ -172,7 +172,7 @@ class PDFDictionary:NSObject, PDFObject {
             return nil
         }
         
-        var streamObj:CGPDFArrayRef? = nil
+        var streamObj: CGPDFArrayRef? = nil
         if CGPDFDictionaryGetStream(self.dict, key, &streamObj) {
             let dictObj = CGPDFStreamGetDictionary(streamObj!)
             return PDFDictionary(dictionaryRef: dictObj!)
@@ -182,7 +182,7 @@ class PDFDictionary:NSObject, PDFObject {
     
     func pdfObjectForKey(_ key: UnsafePointer<Int8>) -> AnyObject? {
         
-        var object:CGPDFObjectRef? = nil
+        var object: CGPDFObjectRef? = nil
         if CGPDFDictionaryGetObject(self.dict, key, &object) {
             
             let type = CGPDFObjectGetType(object!)

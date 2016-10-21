@@ -15,30 +15,30 @@ public protocol PDFPageScrubberDelegate {
 
 open class PDFPageScrubber: UIToolbar {
     
-    var document:PDFDocument
-    var scrubber:PDFPageScrubberTrackControl = PDFPageScrubberTrackControl()
+    var document: PDFDocument
+    var scrubber: PDFPageScrubberTrackControl = PDFPageScrubberTrackControl()
     
-    var scrubberDelegate:PDFPageScrubberDelegate?
-    var thumbBackgroundColor:UIColor = UIColor(white: 255, alpha: 0.7)
+    var scrubberDelegate: PDFPageScrubberDelegate?
+    var thumbBackgroundColor: UIColor = UIColor(white: 255, alpha: 0.7)
     
-    var thumbSmallGap:CGFloat = 2.0
-    var thumbSmallWidth:CGFloat = 22.0
-    var thumbSmallHeight:CGFloat = 28.0
-    var thumbLargeWidth:CGFloat = 32.0
-    var thumbLargeHeight:CGFloat = 42.0
+    var thumbSmallGap: CGFloat = 2.0
+    var thumbSmallWidth: CGFloat = 22.0
+    var thumbSmallHeight: CGFloat = 28.0
+    var thumbLargeWidth: CGFloat = 32.0
+    var thumbLargeHeight: CGFloat = 42.0
     
-    var pageNumberWidth:CGFloat = 96.0
-    var pageNumberHeight:CGFloat = 30.0
-    var pageNumberSpace:CGFloat = 20.0
+    var pageNumberWidth: CGFloat = 96.0
+    var pageNumberHeight: CGFloat = 30.0
+    var pageNumberSpace: CGFloat = 20.0
     
-    var thumbViews:[Int:PDFThumbnailView] = [:]
+    var thumbViews: [Int:PDFThumbnailView] = [:]
     
-    var pageThumbView:PDFPageScrubberThumb?
+    var pageThumbView: PDFPageScrubberThumb?
     
-    var enableTimer:Timer?
-    var trackTimer:Timer?
+    var enableTimer: Timer?
+    var trackTimer: Timer?
     
-    lazy var containerView:UIView = {
+    lazy var containerView: UIView = {
         
         let containerWidth:CGFloat = UIScreen.main.bounds.size.width
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: containerWidth - self.pageNumberSpace * 2, height: 44.0))
@@ -51,7 +51,7 @@ open class PDFPageScrubber: UIToolbar {
         return containerView
     }()
     
-    lazy var pageNumberView:UIView = {
+    lazy var pageNumberView: UIView = {
        
         var numberY:CGFloat = 0.0 - (self.pageNumberHeight + self.pageNumberSpace)
         var numberX:CGFloat = (self.containerView.bounds.size.width - self.pageNumberWidth) / 2.0
@@ -68,7 +68,7 @@ open class PDFPageScrubber: UIToolbar {
         return pageNumberView
     }()
     
-    lazy var pageNumberLabel:UILabel = {
+    lazy var pageNumberLabel: UILabel = {
        
         let textRect:CGRect = self.pageNumberView.bounds.insetBy(dx: 4.0, dy: 2.0)
 

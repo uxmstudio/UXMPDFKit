@@ -10,27 +10,24 @@ import UIKit
 
 class PDFPageContent: UIView {
     
-    fileprivate var links:[PDFDocumentLink] = []
-    fileprivate var pdfDocRef:CGPDFDocument
-    fileprivate var pdfPageRef:CGPDFPage?
-    fileprivate var pageAngle:Int /// 0, 90, 180, 270
-    fileprivate var pageWidth:CGFloat = 0.0
-    fileprivate var pageHeight:CGFloat = 0.0
-    fileprivate var pageOffsetX:CGFloat = 0.0
-    fileprivate var pageOffsetY:CGFloat = 0.0
-    fileprivate var page:Int = 0
+    fileprivate var links: [PDFDocumentLink] = []
+    fileprivate var pdfDocRef: CGPDFDocument
+    fileprivate var pdfPageRef: CGPDFPage?
+    fileprivate var pageAngle: Int /// 0, 90, 180, 270
+    fileprivate var pageWidth: CGFloat = 0.0
+    fileprivate var pageHeight: CGFloat = 0.0
+    fileprivate var pageOffsetX: CGFloat = 0.0
+    fileprivate var pageOffsetY: CGFloat = 0.0
+    fileprivate var page: Int = 0
     
-    var cropBoxRect:CGRect
+    var cropBoxRect: CGRect
+    var viewRect: CGRect = CGRect.zero
     
     override class var layerClass : AnyClass {
         return PDFPageTileLayer.self
     }
     
     //MARK: - Init
-        
-        var viewRect:CGRect = CGRect.zero
-        
-        
     init(pdfDocument: PDFDocument, page: Int, password: String?) {
         self.pdfDocRef = pdfDocument.documentRef!
         /// Limit the page
@@ -134,15 +131,15 @@ class PDFPageContent: UIView {
     
     func linkFromAnnotation(_ annotation: CGPDFDictionaryRef) -> PDFDocumentLink? {
         
-        var annotationRectArray:CGPDFArrayRef? = nil
+        var annotationRectArray: CGPDFArrayRef? = nil
         
         if CGPDFDictionaryGetArray(annotation, "Rect", &annotationRectArray) {
             
-            var lowerLeftX:CGPDFReal = 0.0
-            var lowerLeftY:CGPDFReal = 0.0
+            var lowerLeftX: CGPDFReal = 0.0
+            var lowerLeftY: CGPDFReal = 0.0
             
-            var upperRightX:CGPDFReal = 0.0
-            var upperRightY:CGPDFReal = 0.0
+            var upperRightX: CGPDFReal = 0.0
+            var upperRightY: CGPDFReal = 0.0
             
             CGPDFArrayGetNumber(annotationRectArray!, 0, &lowerLeftX)
             CGPDFArrayGetNumber(annotationRectArray!, 1, &lowerLeftY)
@@ -209,17 +206,17 @@ class PDFPageContent: UIView {
     func buildAnnotationLinksList() {
         
         self.links = []
-        var pageAnnotations:CGPDFArrayRef? = nil
-        let pageDictionary:CGPDFDictionaryRef = self.pdfPageRef!.dictionary!
+        var pageAnnotations: CGPDFArrayRef? = nil
+        let pageDictionary: CGPDFDictionaryRef = self.pdfPageRef!.dictionary!
         
         if CGPDFDictionaryGetArray(pageDictionary, "Annots", &pageAnnotations) {
             
             for i in 0...CGPDFArrayGetCount(pageAnnotations!) {
                 
-                var annotationDictionary:CGPDFDictionaryRef? = nil
+                var annotationDictionary: CGPDFDictionaryRef? = nil
                 if CGPDFArrayGetDictionary(pageAnnotations!, i, &annotationDictionary) {
                     
-                    var annotationSubtype:UnsafePointer<Int8>? = nil
+                    var annotationSubtype: UnsafePointer<Int8>? = nil
                     if CGPDFDictionaryGetName(annotationDictionary!, "Subtype", &annotationSubtype) {
                         
                         if strcmp(annotationSubtype, "Link") == 0 {
@@ -242,8 +239,8 @@ class PDFPageContent: UIView {
             if self.links.count > 0 {
                 
                 let point = recognizer.location(in: self)
-
-                for link:PDFDocumentLink in self.links {
+                
+                for link: PDFDocumentLink in self.links {
                     if link.rect.contains(point) {
                         return PDFAction.fromPDFDictionary(link.dictionary, documentReference: self.pdfDocRef)
                     }
@@ -278,8 +275,8 @@ class PDFPageContent: UIView {
 
 class PDFDocumentLink: NSObject {
     
-    var rect:CGRect
-    var dictionary:CGPDFDictionaryRef
+    var rect: CGRect
+    var dictionary: CGPDFDictionaryRef
     
     static func new(_ rect:CGRect, dictionary:CGPDFDictionaryRef) -> PDFDocumentLink {
         
@@ -293,6 +290,5 @@ class PDFDocumentLink: NSObject {
         self.dictionary = dictionary
         
         super.init()
-        
     }
 }

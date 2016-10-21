@@ -9,29 +9,29 @@
 import UIKit
 
 struct PDFFormViewOptions {
-    var type:String
-    var rect:CGRect
-    var flags:[PDFFormFlag]?
-    var name:String = ""
-    var exportValue:String = ""
-    var options:[String]?
+    var type: String
+    var rect: CGRect
+    var flags: [PDFFormFlag]?
+    var name: String = ""
+    var exportValue: String = ""
+    var options: [String]?
 }
 
 struct PDFFormFlag: Equatable {
     
     let rawValue: UInt
     
-    static let  ReadOnly             = PDFFormFlag(rawValue:1 << 0)
-    static let  Required             = PDFFormFlag(rawValue:1 << 1)
-    static let  NoExport             = PDFFormFlag(rawValue:1 << 2)
-    static let  TextFieldMultiline   = PDFFormFlag(rawValue:1 << 12)
-    static let  TextFieldPassword    = PDFFormFlag(rawValue:1 << 13)
-    static let  ButtonNoToggleToOff  = PDFFormFlag(rawValue:1 << 14)
-    static let  ButtonRadio          = PDFFormFlag(rawValue:1 << 15)
-    static let  ButtonPushButton     = PDFFormFlag(rawValue:1 << 16)
-    static let  ChoiceFieldIsCombo   = PDFFormFlag(rawValue:1 << 17)
-    static let  ChoiceFieldEditable  = PDFFormFlag(rawValue:1 << 18)
-    static let  ChoiceFieldSorted    = PDFFormFlag(rawValue:1 << 19)
+    static let ReadOnly             = PDFFormFlag(rawValue:1 << 0)
+    static let Required             = PDFFormFlag(rawValue:1 << 1)
+    static let NoExport             = PDFFormFlag(rawValue:1 << 2)
+    static let TextFieldMultiline   = PDFFormFlag(rawValue:1 << 12)
+    static let TextFieldPassword    = PDFFormFlag(rawValue:1 << 13)
+    static let ButtonNoToggleToOff  = PDFFormFlag(rawValue:1 << 14)
+    static let ButtonRadio          = PDFFormFlag(rawValue:1 << 15)
+    static let ButtonPushButton     = PDFFormFlag(rawValue:1 << 16)
+    static let ChoiceFieldIsCombo   = PDFFormFlag(rawValue:1 << 17)
+    static let ChoiceFieldEditable  = PDFFormFlag(rawValue:1 << 18)
+    static let ChoiceFieldSorted    = PDFFormFlag(rawValue:1 << 19)
 }
 
 func ==(lhs: PDFFormFlag, rhs: PDFFormFlag) -> Bool {
@@ -63,7 +63,7 @@ open class PDFFormPage:NSObject {
             formView.updateWithZoom(scale)
         }
     }
-
+    
     func createFormField(_ dict: PDFDictionary) {
         self.fields.append(PDFFormFieldObject(dict: dict))
     }
@@ -79,17 +79,17 @@ open class PDFFormPage:NSObject {
     }
 }
 
-open class PDFFormPageView:UIView {
+open class PDFFormPageView: UIView {
     
-    var fields:[PDFFormFieldObject]
-    var fieldViews:[PDFFormField] = []
-    var zoomScale:CGFloat = 1.0
+    var fields: [PDFFormFieldObject]
+    var fieldViews: [PDFFormField] = []
+    var zoomScale: CGFloat = 1.0
     
-    var cropBox:CGRect = CGRect.zero
-    var boundingBox:CGRect = CGRect.zero
-    var baseFrame:CGRect
+    var cropBox: CGRect = CGRect.zero
+    var boundingBox: CGRect = CGRect.zero
+    var baseFrame: CGRect
     
-    init(frame: CGRect, boundingBox:CGRect, cropBox:CGRect, fields:[PDFFormFieldObject]) {
+    init(frame: CGRect, boundingBox: CGRect, cropBox: CGRect, fields: [PDFFormFieldObject]) {
         self.baseFrame = frame
         self.cropBox = cropBox
         self.boundingBox = boundingBox
@@ -118,7 +118,7 @@ open class PDFFormPageView:UIView {
     
     func adjustFrame(_ field: PDFFormField) {
         
-        let factor:CGFloat = 1.0
+        let factor: CGFloat = 1.0
         let correctedFrame = CGRect(
             x: (field.baseFrame.origin.x - cropBox.origin.x) * factor,
             y: (cropBox.height - field.baseFrame.origin.y - field.baseFrame.height - self.cropBox.origin.y) * factor,

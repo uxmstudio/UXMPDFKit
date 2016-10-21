@@ -10,7 +10,7 @@ import UIKit
 
 open class PDFAnnotationStore {
     
-    var pages:[Int:PDFAnnotationPage] = [:]
+    var pages: [Int:PDFAnnotationPage] = [:]
     
     func add(_ annotation: PDFAnnotation, page: Int) {
         
@@ -44,8 +44,8 @@ open class PDFAnnotationStore {
 
 open class PDFAnnotationPage {
     
-    var annotations:[PDFAnnotation] = []
-    var page:Int = 0
+    var annotations: [PDFAnnotation] = []
+    var page: Int = 0
     
     func addAnnotation(_ annotation: PDFAnnotation) {
         annotations.append(annotation)

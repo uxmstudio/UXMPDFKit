@@ -19,8 +19,8 @@ class PDFObjectParserContext {
 
 open class PDFObjectParser: NSObject {
     
-    var document:PDFDocument
-    var attributes:PDFDictionary?
+    var document: PDFDocument
+    var attributes: PDFDictionary?
     
     public init(document: PDFDocument) {
         

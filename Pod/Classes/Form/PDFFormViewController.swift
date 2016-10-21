@@ -10,11 +10,11 @@ import Foundation
 
 open class PDFFormViewController:NSObject {
     
-    var formPages:[Int:PDFFormPage] = [:]
+    var formPages: [Int:PDFFormPage] = [:]
     
-    var document:PDFDocument
-    var parser:PDFObjectParser
-    var lastPage:PDFPageContentView?
+    var document: PDFDocument
+    var parser: PDFObjectParser
+    var lastPage: PDFPageContentView?
     
     public init(document: PDFDocument) {
         
@@ -69,7 +69,7 @@ open class PDFFormViewController:NSObject {
         }
         
         for dict in array {
-            if let innerFieldDict:PDFDictionary = dict as? PDFDictionary {
+            if let innerFieldDict: PDFDictionary = dict as? PDFDictionary {
                 
                 if let type = innerFieldDict["Type"] as? String , type == "Annot" {
                     self.createFormField(innerFieldDict)

@@ -10,10 +10,10 @@ import UIKit
 
 open class PDFFormSignatureField: PDFFormField {
 
-    open var name:String?
+    open var name: String?
     
-    fileprivate var signatureView:PDFFormFieldSignatureCaptureView?
-    fileprivate let signatureExtraPadding:CGFloat = 22.0
+    fileprivate var signatureView: PDFFormFieldSignatureCaptureView?
+    fileprivate let signatureExtraPadding: CGFloat = 22.0
     
     lazy fileprivate var signButton:UIButton = {
         

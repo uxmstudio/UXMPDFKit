@@ -116,61 +116,61 @@ open class PDFDocument: NSObject, NSCoding {
             return
         }
         
-        let infoDic:CGPDFDictionaryRef = pdfDocRef.info!
-        var string:CGPDFStringRef? = nil
+        let infoDic: CGPDFDictionaryRef = pdfDocRef.info!
+        var string: CGPDFStringRef? = nil
         
         if CGPDFDictionaryGetString(infoDic, "Title", &string) {
             
-            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+            if let ref: CFString = CGPDFStringCopyTextString(string!) {
                 self.title = ref as String
             }
         }
         
         if CGPDFDictionaryGetString(infoDic, "Author", &string) {
             
-            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+            if let ref: CFString = CGPDFStringCopyTextString(string!) {
                 self.author = ref as String
             }
         }
         
         if CGPDFDictionaryGetString(infoDic, "Subject", &string) {
             
-            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+            if let ref: CFString = CGPDFStringCopyTextString(string!) {
                 self.subject = ref as String
             }
         }
         
         if CGPDFDictionaryGetString(infoDic, "Keywords", &string) {
             
-            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+            if let ref: CFString = CGPDFStringCopyTextString(string!) {
                 self.keywords = ref as String
             }
         }
         
         if CGPDFDictionaryGetString(infoDic, "Creator", &string) {
             
-            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+            if let ref: CFString = CGPDFStringCopyTextString(string!) {
                 self.creator = ref as String
             }
         }
         
         if CGPDFDictionaryGetString(infoDic, "Producer", &string) {
             
-            if let ref:CFString = CGPDFStringCopyTextString(string!) {
+            if let ref: CFString = CGPDFStringCopyTextString(string!) {
                 self.producer = ref as String
             }
         }
         
         if CGPDFDictionaryGetString(infoDic, "CreationDate", &string) {
             
-            if let ref:CFDate = CGPDFStringCopyDate(string!) {
+            if let ref: CFDate = CGPDFStringCopyDate(string!) {
                 self.creationDate = ref as Date
             }
         }
         
         if CGPDFDictionaryGetString(infoDic, "ModDate", &string) {
             
-            if let ref:CFDate = CGPDFStringCopyDate(string!) {
+            if let ref: CFDate = CGPDFStringCopyDate(string!) {
                 self.modificationDate = ref as Date
             }
         }
@@ -252,14 +252,14 @@ open class PDFDocument: NSObject, NSCoding {
         try! self.loadDocumentInformation()
     }
     
-    open func boundsForPDFPage(_ page:Int) -> CGRect {
+    open func boundsForPDFPage(_ page: Int) -> CGRect {
         let pageRef = documentRef?.page(at: page)
         
-        let cropBoxRect:CGRect = pageRef!.getBoxRect(.cropBox)
-        let mediaBoxRect:CGRect = pageRef!.getBoxRect(.mediaBox)
-        let effectiveRect:CGRect = cropBoxRect.intersection(mediaBoxRect)
+        let cropBoxRect: CGRect = pageRef!.getBoxRect(.cropBox)
+        let mediaBoxRect: CGRect = pageRef!.getBoxRect(.mediaBox)
+        let effectiveRect: CGRect = cropBoxRect.intersection(mediaBoxRect)
         
-        let pageAngle:Int = Int(pageRef?.rotationAngle ?? 0)
+        let pageAngle: Int = Int(pageRef?.rotationAngle ?? 0)
         
         switch (pageAngle) {
         case 0, 180: // 0 and 180 degrees

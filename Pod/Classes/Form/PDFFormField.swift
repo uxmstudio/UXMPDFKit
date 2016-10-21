@@ -17,12 +17,12 @@ protocol PDFFormViewDelegate {
 
 open class PDFFormFieldObject: NSObject {
     
-    var value:AnyObject?
-    var options:PDFFormViewOptions?
+    var value: AnyObject?
+    var options: PDFFormViewOptions?
     
-    var dict:PDFDictionary
+    var dict: PDFDictionary
     
-    init(dict:PDFDictionary) {
+    init(dict: PDFDictionary) {
         self.dict = dict
         
         super.init()
@@ -34,7 +34,7 @@ open class PDFFormFieldObject: NSObject {
             return
         }
         
-        var flags:[PDFFormFlag] = []
+        var flags: [PDFFormFlag] = []
         if let flagsObj = dict["Ff"] as? UInt {
             flags = self.determineFlags(flagsObj)
         }
@@ -161,16 +161,16 @@ extension PDFFormFieldObject: PDFFormViewDelegate {
 
 open class PDFFormField: UIView {
     
-    var zoomScale:CGFloat = 1.0
-    var options:[AnyObject] = []
-    var baseFrame:CGRect
-    var value:AnyObject? {
+    var zoomScale: CGFloat = 1.0
+    var options: [AnyObject] = []
+    var baseFrame: CGRect
+    var value: AnyObject? {
         didSet {
             self.didSetValue(value)
         }
     }
     
-    var delegate:PDFFormViewDelegate?
+    var delegate: PDFFormViewDelegate?
     
     override init(frame: CGRect) {
         self.baseFrame = frame

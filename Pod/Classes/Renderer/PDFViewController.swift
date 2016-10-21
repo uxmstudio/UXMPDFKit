@@ -11,27 +11,27 @@ import SafariServices
 
 open class PDFViewController: UIViewController {
     
-    open var hidesBarsOnTap:Bool = false
-    open var showsScrubber:Bool = true {
+    open var hidesBarsOnTap: Bool = false
+    open var showsScrubber: Bool = true {
         didSet {
             self.pageScrubber.isHidden = !self.showsScrubber
         }
     }
-    open var allowsFormFilling:Bool = true
-    open var allowsAnnotations:Bool = true
-    open var allowsSharing:Bool = true
-    open var isPresentingInModal:Bool = false
+    open var allowsFormFilling: Bool = true
+    open var allowsAnnotations: Bool = true
+    open var allowsSharing: Bool = true
+    open var isPresentingInModal: Bool = false
     
-    var document:PDFDocument!
+    var document: PDFDocument!
     
-    lazy var collectionView:PDFSinglePageViewer = {
+    lazy var collectionView: PDFSinglePageViewer = {
         var collectionView = PDFSinglePageViewer(frame: self.view.bounds, document: self.document)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.singlePageDelegate = self
         return collectionView
     }()
     
-    lazy var pageScrubber:PDFPageScrubber = {
+    lazy var pageScrubber: PDFPageScrubber = {
         
         var pageScrubber = PDFPageScrubber(frame: CGRect(x: 0, y: self.view.frame.size.height - self.bottomLayoutGuide.length, width: self.view.frame.size.width, height: 44.0), document: self.document)
         pageScrubber.scrubberDelegate = self
@@ -40,11 +40,11 @@ open class PDFViewController: UIViewController {
         return pageScrubber
     }()
     
-    lazy var formController:PDFFormViewController = PDFFormViewController(document: self.document)
-    lazy var annotationController:PDFAnnotationController = PDFAnnotationController(document: self.document)
+    lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
+    lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document)
     
-    fileprivate var showingAnnotations:Bool = false
-    fileprivate var showingFormFilling:Bool = true
+    fileprivate var showingAnnotations: Bool = false
+    fileprivate var showingFormFilling: Bool = true
     
     public init(document: PDFDocument) {
         super.init(nibName: nil, bundle: nil)

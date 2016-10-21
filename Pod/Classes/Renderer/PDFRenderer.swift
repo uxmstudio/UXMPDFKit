@@ -14,8 +14,8 @@ public protocol PDFRenderer {
 
 open class PDFRenderController {
     
-    var document:PDFDocument
-    var renderControllers:[PDFRenderer] = []
+    var document: PDFDocument
+    var renderControllers: [PDFRenderer] = []
     
     init(document: PDFDocument, controllers:[PDFRenderer]) {
         self.document = document

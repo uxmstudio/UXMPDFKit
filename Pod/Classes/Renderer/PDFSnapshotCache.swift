@@ -15,11 +15,11 @@ enum SnapshotState {
 open class PDFSnapshot {
     
     var state = SnapshotState.new
-    var image:UIImage?
+    var image: UIImage?
     var document: PDFDocument
-    var page:Int
-    var guid:String
-    var size:CGSize
+    var page: Int
+    var guid: String
+    var size: CGSize
     
     init(document: PDFDocument, page: Int, guid: String, size: CGSize) {
         self.document = document
@@ -32,7 +32,7 @@ open class PDFSnapshot {
 open class PDFQueue {
     
     lazy var rendersInProgress = [String:Operation]()
-    lazy var renderQueue:OperationQueue = {
+    lazy var renderQueue: OperationQueue = {
         
         var queue = OperationQueue()
         queue.name = "PDFQueue"
@@ -40,7 +40,7 @@ open class PDFQueue {
         return queue
     }()
     
-    var progressBlock:((PDFSnapshot) -> Void)?
+    var progressBlock: ((PDFSnapshot) -> Void)?
     
     static let sharedQueue = PDFQueue()
     
@@ -51,7 +51,7 @@ open class PDFQueue {
         let thumbnail = PDFSnapshot(document: document, page: page, guid: guid, size: size)
         if let image = PDFSnapshotCache.sharedCache.objectForKey(guid) {
             thumbnail.image = image
-            DispatchQueue.main.async{
+            DispatchQueue.main.async {
                 completion?(thumbnail)
             }
         }
@@ -59,7 +59,7 @@ open class PDFQueue {
         let thumbRender = PDFSnapshotRenderer(snapshot: thumbnail)
         thumbRender.completionBlock = {
             self.rendersInProgress.removeValue(forKey: guid)
-            DispatchQueue.main.async{
+            DispatchQueue.main.async {
                 self.progressBlock?(thumbRender.snapshot)
                 completion?(thumbRender.snapshot)
             }
@@ -76,7 +76,7 @@ open class PDFQueue {
 
 class PDFSnapshotRenderer: Operation {
     
-    let snapshot:PDFSnapshot
+    let snapshot: PDFSnapshot
     
     init(snapshot: PDFSnapshot) {
         
@@ -141,8 +141,8 @@ class PDFSnapshotRenderer: Operation {
 
 class PDFSnapshotCache {
     
-    lazy var cache:NSCache<NSString, UIImage> = {
-        let cache:NSCache<NSString, UIImage> = NSCache<NSString, UIImage>()
+    lazy var cache: NSCache<NSString, UIImage> = {
+        let cache: NSCache<NSString, UIImage> = NSCache<NSString, UIImage>()
         cache.name = "PDFSnapshotCache"
         cache.countLimit = 150
         cache.totalCostLimit = 10*1024*1024

@@ -8,33 +8,34 @@
 
 import UIKit
 
-class PDFTextAnnotation:NSObject {
+class PDFTextAnnotation: NSObject {
     
-    var text:String = "" {
+    var text: String = "" {
         didSet {
             self.textView.text = text
         }
     }
     
-    var rect:CGRect = CGRect.zero {
+    var rect: CGRect = CGRect.zero {
         didSet {
             self.textView.frame = self.rect
         }
     }
     
-    var font:UIFont = UIFont.systemFont(ofSize: 14.0) {
+    var font: UIFont = UIFont.systemFont(ofSize: 14.0) {
         didSet {
             self.textView.font = self.font
         }
     }
     
-    lazy var textView:UITextView = self.createTextView()
+    lazy var textView: UITextView = self.createTextView()
     
-    fileprivate var startTouch:CGPoint = CGPoint.zero
-    fileprivate var startInternalPosition:CGPoint = CGPoint.zero
-    fileprivate var isDragging:Bool = false
+    fileprivate var startTouch: CGPoint = CGPoint.zero
+    fileprivate var startInternalPosition: CGPoint = CGPoint.zero
+    fileprivate var isDragging: Bool = false
     
     func createTextView() -> UITextView {
+        
         let textView = UITextView(frame: self.rect)
         textView.delegate = self
         textView.font = self.font
@@ -48,7 +49,7 @@ class PDFTextAnnotation:NSObject {
     }
 }
 
-extension PDFTextAnnotation:PDFAnnotation {
+extension PDFTextAnnotation: PDFAnnotation {
     
     func mutableView() -> UIView {
         self.textView = self.createTextView()
@@ -98,16 +99,16 @@ extension PDFTextAnnotation:PDFAnnotation {
         context.setAlpha(1.0)
         
         let nsText = self.text as NSString
-        let paragraphStyle:NSMutableParagraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        let paragraphStyle: NSMutableParagraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paragraphStyle.alignment = NSTextAlignment.left
         
-        let attributes:[String:AnyObject] = [
+        let attributes: [String:AnyObject] = [
             NSFontAttributeName: font,
             NSForegroundColorAttributeName: UIColor.black,
             NSParagraphStyleAttributeName: paragraphStyle
         ]
         
-        let size:CGSize = nsText.size(attributes: attributes)
+        let size: CGSize = nsText.size(attributes: attributes)
         let textRect = CGRect(x: self.rect.origin.x, y: self.rect.origin.y, width: size.width, height: size.height)
         
         nsText.draw(in: textRect, withAttributes: attributes)
@@ -116,20 +117,20 @@ extension PDFTextAnnotation:PDFAnnotation {
     }
 }
 
-extension PDFTextAnnotation:UITextViewDelegate {
+extension PDFTextAnnotation: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         self.textView.sizeToFit()
         
-        var width:CGFloat = 300.0
+        var width: CGFloat = 300.0
         if self.textView.frame.width > width {
             width = self.textView.frame.width
         }
         
         self.rect = CGRect(x: self.textView.frame.origin.x,
-                               y: self.textView.frame.origin.y,
-                               width: width,
-                               height: self.textView.frame.height)
+                           y: self.textView.frame.origin.y,
+                           width: width,
+                           height: self.textView.frame.height)
         
         if self.text != self.textView.text {
             self.text = self.textView.text

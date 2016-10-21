@@ -10,29 +10,29 @@ import UIKit
 
 class PDFPathAnnotation {
     
-    var path:UIBezierPath = UIBezierPath()
-    var color:UIColor = UIColor.black {
+    var path: UIBezierPath = UIBezierPath()
+    var color: UIColor = UIColor.black {
         didSet {
             self.color.setStroke()
             self.path.stroke()
         }
     }
-    var fill:Bool = false
-    var lineWidth:CGFloat = 3.0 {
+    var fill: Bool = false
+    var lineWidth: CGFloat = 3.0 {
         didSet {
             self.path.lineWidth = self.lineWidth
         }
     }
-    var rect:CGRect = CGRect(x: 0, y: 0, width: 1000, height: 1000) {
+    var rect: CGRect = CGRect(x: 0, y: 0, width: 1000, height: 1000) {
         didSet {
             self.view.frame = self.rect
         }
     }
-    lazy var view:PDFPathView = PDFPathView(parent: self, frame: self.rect)
-    var incrementalImage:UIImage?
+    lazy var view: PDFPathView = PDFPathView(parent: self, frame: self.rect)
+    var incrementalImage: UIImage?
     
-    fileprivate var points:[CGPoint] = [CGPoint.zero,CGPoint.zero,CGPoint.zero,CGPoint.zero,CGPoint.zero]
-    fileprivate var ctr:Int = 0
+    fileprivate var points: [CGPoint] = [CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero]
+    fileprivate var ctr: Int = 0
     
     func drawRect(_ frame: CGRect) {
         
@@ -42,9 +42,9 @@ class PDFPathAnnotation {
     }
 }
 
-class PDFPathView:UIView {
+class PDFPathView: UIView {
     
-    var parent:PDFPathAnnotation?
+    var parent: PDFPathAnnotation?
     
     convenience init(parent: PDFPathAnnotation, frame: CGRect) {
         self.init()
@@ -62,7 +62,7 @@ class PDFPathView:UIView {
     }
 }
 
-extension PDFPathAnnotation:PDFAnnotation {
+extension PDFPathAnnotation: PDFAnnotation {
     
     func mutableView() -> UIView {
         self.view = PDFPathView(parent: self, frame: self.rect)
@@ -131,7 +131,7 @@ extension PDFPathAnnotation:PDFAnnotation {
 }
 
 
-class PDFHighlighterAnnotation:PDFPathAnnotation {
+class PDFHighlighterAnnotation: PDFPathAnnotation {
     
     override init() {
         

@@ -18,10 +18,10 @@ public protocol PDFSinglePageViewerDelegate {
 
 open class PDFSinglePageViewer: UICollectionView {
     
-    open var singlePageDelegate:PDFSinglePageViewerDelegate?
+    open var singlePageDelegate: PDFSinglePageViewerDelegate?
     
-    open var document:PDFDocument?
-    fileprivate var bookmarkedPages:[String]?
+    open var document: PDFDocument?
+    fileprivate var bookmarkedPages: [String]?
     
     public init(frame: CGRect, document: PDFDocument) {
         
@@ -164,7 +164,7 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
     }
     
     func didDisplayPage(_ scrollView: UIScrollView) {
-        let page:Int = Int((scrollView.contentOffset.x + scrollView.frame.size.width) / scrollView.frame.size.width)
+        let page: Int = Int((scrollView.contentOffset.x + scrollView.frame.size.width) / scrollView.frame.size.width)
         self.singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
     }
 }
@@ -191,8 +191,8 @@ extension PDFSinglePageViewer: PDFPageContentViewDelegate {
 
 open class PDFSinglePageCell:UICollectionViewCell {
     
-    fileprivate var _pageContentView:PDFPageContentView?
-    open var pageContentView:PDFPageContentView? {
+    fileprivate var _pageContentView: PDFPageContentView?
+    open var pageContentView: PDFPageContentView? {
         get {
             return self._pageContentView
         }

@@ -26,7 +26,7 @@ class PDFPageTileLayer: CATiledLayer {
         let height = screenBounds.size.height * screenScale
         
         let max = width < height ? height : width
-        let sizeOfTiles:CGFloat = max < 512.0 ? 512.0 : 1024.0
+        let sizeOfTiles: CGFloat = max < 512.0 ? 512.0 : 1024.0
         
         self.tileSize = CGSize(width: sizeOfTiles, height: sizeOfTiles)
     }

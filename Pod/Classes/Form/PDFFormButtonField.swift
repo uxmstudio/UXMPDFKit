@@ -10,14 +10,14 @@ import UIKit
 
 open class PDFFormButtonField: PDFFormField {
     
-    open var radio:Bool = false
-    open var noOff:Bool = false
-    open var pushButton:Bool = false
-    open var name:String = ""
-    open var exportValue:String = ""
+    open var radio: Bool = false
+    open var noOff: Bool = false
+    open var pushButton: Bool = false
+    open var name: String = ""
+    open var exportValue: String = ""
     
-    fileprivate var button:UIButton = UIButton(type: .custom)
-    fileprivate let inset:CGFloat = 0.8
+    fileprivate var button: UIButton = UIButton(type: .custom)
+    fileprivate let inset: CGFloat = 0.8
     
     init(frame: CGRect, radio: Bool) {
         self.radio = radio
@@ -35,7 +35,7 @@ open class PDFFormButtonField: PDFFormField {
         self.backgroundColor = UIColor.clear
         
         if self.radio {
-            self.button.layer.cornerRadius = self.button.frame.width/2
+            self.button.layer.cornerRadius = self.button.frame.width / 2
         }
         self.button.frame = CGRect(
             x: (frame.width - frame.width * inset) / 2,
