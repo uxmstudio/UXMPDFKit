@@ -9,10 +9,11 @@
 import UIKit
 
 open class PDFFormSignatureField: PDFFormField {
-
+    
     open var name: String?
     
     fileprivate var signatureView: PDFFormFieldSignatureCaptureView?
+    fileprivate var signatureOverlay: UIView?
     fileprivate let signatureExtraPadding: CGFloat = 22.0
     
     lazy fileprivate var signButton:UIButton = {
@@ -52,6 +53,11 @@ open class PDFFormSignatureField: PDFFormField {
         self.bringSubview(toFront: self.signButton)
     }
     
+    override open func removeFromSuperview() {
+        self.removeSignatureBox()
+        super.removeFromSuperview()
+    }
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -63,13 +69,28 @@ open class PDFFormSignatureField: PDFFormField {
     }
     
     func addSignature() {
+        
         let bounds = UIScreen.main.bounds
+        
+        /// Overlay
+        let view = UIView()
+        view.frame = bounds
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
+        window?.addSubview(view)
+        self.signatureOverlay = view
+        
         let width = bounds.width
         let height = width / self.frame.width * self.frame.height + 44.0 + signatureExtraPadding * 2
         
         if let window = UIApplication.shared.keyWindow {
-            let signatureView = PDFFormFieldSignatureCaptureView(frame: CGRect(
-                x: (bounds.width - width) / 2, y: bounds.height - height, width: width, height: height))
+            let signatureView = PDFFormFieldSignatureCaptureView(frame:
+                CGRect(
+                    x: (bounds.width - width) / 2,
+                    y: bounds.height - height,
+                    width: width,
+                    height: height
+                )
+            )
             signatureView.delegate = self
             signatureView.layer.shadowColor = UIColor.black.cgColor
             signatureView.layer.shadowOpacity = 0.4
@@ -80,26 +101,34 @@ open class PDFFormSignatureField: PDFFormField {
         }
     }
     
+    func removeSignatureBox() {
+        if let signatureView = self.signatureView {
+            self.signImage.image = signatureView.getSignature()
+            self.value = signatureView.getSignature()
+            self.delegate?.formFieldValueChanged(self)
+            
+            self.signatureOverlay?.removeFromSuperview()
+            self.signatureView?.removeFromSuperview()
+            self.signatureView = nil
+            self.signButton.alpha = 0.0
+        }
+        
+    }
+    
     override func renderInContext(_ context: CGContext) {
         
         var frame = self.frame
         frame.origin.y -= signatureExtraPadding
         frame.size.height += signatureExtraPadding * 2
-
+        
         self.signImage.image?.draw(in: frame)
     }
 }
 
 extension PDFFormSignatureField: PDFFormSignatureViewDelegate {
     
-    func completedSignatureDrawing(_ field:PDFFormFieldSignatureCaptureView) {
-        self.signImage.image = field.getSignature()
-        self.signatureView?.removeFromSuperview()
-        self.signatureView = nil
-        self.signButton.alpha = 0.0
-
-        self.value = field.getSignature()
-        self.delegate?.formFieldValueChanged(self)
+    func completedSignatureDrawing(_ field: PDFFormFieldSignatureCaptureView) {
+        self.removeSignatureBox()
     }
 }
 
@@ -145,15 +174,15 @@ class PDFFormFieldSignatureCaptureView: UIView {
     fileprivate var path = UIBezierPath()
     fileprivate var pts = [CGPoint](repeating: CGPoint(), count: 5)
     fileprivate var ctr = 0
-
     
-    lazy fileprivate var doneButton:UIBarButtonItem = UIBarButtonItem(
+    
+    lazy fileprivate var doneButton: UIBarButtonItem = UIBarButtonItem(
         title: "Done",
         style: .plain,
         target: self,
         action: #selector(PDFFormFieldSignatureCaptureView.finishSignature)
     )
-
+    
     lazy fileprivate var clearButton:UIBarButtonItem = UIBarButtonItem(
         title: "Clear",
         style: .plain,
@@ -264,7 +293,7 @@ class PDFFormFieldSignatureCaptureView: UIView {
         UIGraphicsEndImageContext()
         return signature
     }
-
+    
     func getSignatureCropped(scale:CGFloat = 1) -> UIImage? {
         guard let fullRender = getSignature(scale:scale) else {
             return nil

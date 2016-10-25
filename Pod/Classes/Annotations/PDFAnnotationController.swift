@@ -15,7 +15,7 @@ public enum PDFAnnotationType {
     case highlighter
 }
 
-open class PDFAnnotationController:UIViewController {
+open class PDFAnnotationController: UIViewController {
     
     var document: PDFDocument!
     var annotations: PDFAnnotationStore = PDFAnnotationStore()
@@ -24,7 +24,7 @@ open class PDFAnnotationController:UIViewController {
     var lastPoint: CGPoint?
     var annotationType: PDFAnnotationType = .none
     
-    var currentAnnotation:PDFAnnotation?
+    var currentAnnotation: PDFAnnotation?
     
     //MARK: - Bar button items
     lazy var penButton: PDFBarButton = PDFBarButton(

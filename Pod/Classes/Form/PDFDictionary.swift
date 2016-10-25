@@ -13,7 +13,7 @@ protocol PDFObject {
     func type() -> CGPDFObjectType
 }
 
-class PDFDictionary:NSObject, PDFObject {
+class PDFDictionary: NSObject, PDFObject {
     
     var dict: CGPDFDictionaryRef
     

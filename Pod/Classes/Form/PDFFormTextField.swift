@@ -8,23 +8,23 @@
 
 import UIKit
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l < r
+    case (nil, _?):
+        return true
+    default:
+        return false
+    }
 }
 
 fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l <= r
-  default:
-    return !(rhs < lhs)
-  }
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l <= r
+    default:
+        return !(rhs < lhs)
+    }
 }
 
 
@@ -131,7 +131,7 @@ open class PDFFormTextField: PDFFormField {
     override func renderInContext(_ context: CGContext) {
         
         var text = ""
-        var font:UIFont? = nil
+        var font: UIFont? = nil
         if let textField = self.textEntryBox as? UITextField {
             text = textField.text ?? ""
             font = textField.font
@@ -144,17 +144,15 @@ open class PDFFormTextField: PDFFormField {
         /// UGLY
         (text as NSString!).draw(in: self.frame, withAttributes: [
             NSFontAttributeName: font!
-        ])
+            ])
     }
 }
 
 extension PDFFormTextField: UITextFieldDelegate {
-    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string)
-        if newString.characters.count <= textField.text?.characters.count {
-            return true
-        }
-        return true
+
+    func textChanged() {
+        self.value = self.getText() as AnyObject?
+        self.delegate?.formFieldValueChanged(self)
     }
     
     public func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -163,6 +161,7 @@ extension PDFFormTextField: UITextFieldDelegate {
 }
 
 extension PDFFormTextField: UITextViewDelegate {
+    
     public func textViewDidBeginEditing(_ textView: UITextView) {
         self.delegate?.formFieldEntered(self)
     }
@@ -171,8 +170,11 @@ extension PDFFormTextField: UITextViewDelegate {
         self.delegate?.formFieldValueChanged(self)
     }
     
-    func textChanged() {
-        self.value = self.getText() as AnyObject?
+    public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newString = (textView.text! as NSString).replacingCharacters(in: range, with: text)
+        self.value = newString as AnyObject?
+
         self.delegate?.formFieldValueChanged(self)
+        return false
     }
 }

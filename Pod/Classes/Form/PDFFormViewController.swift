@@ -8,9 +8,9 @@
 
 import Foundation
 
-open class PDFFormViewController:NSObject {
+open class PDFFormViewController: NSObject {
     
-    var formPages: [Int:PDFFormPage] = [:]
+    var formPages: [Int: PDFFormPage] = [:]
     
     var document: PDFDocument
     var parser: PDFObjectParser
@@ -44,7 +44,7 @@ open class PDFFormViewController:NSObject {
             }
 
             for field in fields {
-                if let dictField:PDFDictionary = field as? PDFDictionary {
+                if let dictField: PDFDictionary = field as? PDFDictionary {
                     self.enumerate(dictField)
                 }
             }
@@ -57,7 +57,7 @@ open class PDFFormViewController:NSObject {
         }
     }
     
-    func enumerate(_ fieldDict:PDFDictionary) {
+    func enumerate(_ fieldDict: PDFDictionary) {
         
         if fieldDict["Subtype"] != nil {
             self.createFormField(fieldDict)
@@ -81,7 +81,7 @@ open class PDFFormViewController:NSObject {
         }
     }
     
-    func getPageNumber(_ field:PDFDictionary) -> Int? {
+    func getPageNumber(_ field: PDFDictionary) -> Int? {
         
         guard let attributes = self.parser.attributes else {
             return nil
@@ -129,7 +129,7 @@ open class PDFFormViewController:NSObject {
         }
     }
     
-    func showForm(_ contentView:PDFPageContentView) {
+    func showForm(_ contentView: PDFPageContentView) {
         
         self.lastPage = contentView
         let page = contentView.page
@@ -149,7 +149,7 @@ open class PDFFormViewController:NSObject {
 
 extension PDFFormViewController: PDFRenderer {
     
-    public func render(_ page: Int, context:CGContext, bounds: CGRect) {
+    public func render(_ page: Int, context: CGContext, bounds: CGRect) {
         
         if let form = formPage(page) {
             form.renderInContext(context, size: bounds)
