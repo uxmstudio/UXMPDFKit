@@ -1,6 +1,7 @@
 ![UXM Token Field](https://uxmstudio.com/public/images/uxmpdfkit.png)
 
 [![Version](https://img.shields.io/cocoapods/v/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
+![Swift](https://img.shields.io/badge/%20in-swift%203.0-orange.svg)
 [![License](https://img.shields.io/cocoapods/l/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 [![Platform](https://img.shields.io/cocoapods/p/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 
