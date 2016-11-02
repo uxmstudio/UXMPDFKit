@@ -18,8 +18,9 @@ This project is still in early stages. Right now the PDF reader works both progr
 
 ## Installation
 
-UXMPDFKit is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+### CocoaPods
+
+To install it, simply add the following line to your Podfile:
 
 ```ruby
 pod "UXMPDFKit"
@@ -29,6 +30,16 @@ If you wish to use the Swift 2.3 version, use the following instead:
 ```ruby
 pod "UXMPDFKit", "~> 0.3.0"
 ```
+
+### Carthage
+
+To install it, simply add the following line to your Cartfile:
+
+```ogdl
+github "uxmstudio/UXMPDFKit"
+```
+
+Run `carthage update` to build the framework and drag the built `UXMPDFKit.framework` into your Xcode project.
 
 ## Usage
 ### Simple Usage
