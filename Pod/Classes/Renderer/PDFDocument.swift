@@ -227,12 +227,12 @@ open class PDFDocument: NSObject, NSCoding {
         //
         //            var len = read(fd, sig, sizeOfValue(sig))
         //
-        //                state = (strnstr(sig, "%PDF", len) != NULL);
+        //                state = (strnstr(sig, "%PDF", len) != NULL)
         //
-        //                close(fd); // Close the file
+        //                close(fd) // Close the file
         //            }
         
-        return state;
+        return state
     }
     
     func archiveWithFileAtPath(_ filePath: String) -> Bool {
