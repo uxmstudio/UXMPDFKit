@@ -215,24 +215,6 @@ open class PDFDocument: NSObject, NSCoding {
         return (archivePath as NSString).appendingPathComponent(archiveName)
     }
     
-    static func isPDF(_ filePath: String) -> Bool {
-        
-        let state = false
-        //        let path = (filePath as NSString).fileSystemRepresentation
-        //        var fd = open(path, O_RDONLY)
-        //        if fd > 0 {
-        //            let sig = UnsafeMutablePointer<Character>.alloc(1024)
-        //
-        //            var len = read(fd, sig, sizeOfValue(sig))
-        //
-        //                state = (strnstr(sig, "%PDF", len) != NULL)
-        //
-        //                close(fd) // Close the file
-        //            }
-        
-        return state
-    }
-    
     func archiveWithFileAtPath(_ filePath: String) -> Bool {
         
         let archiveFilePath = PDFDocument.archiveFilePathForFileAtPath(filePath)
