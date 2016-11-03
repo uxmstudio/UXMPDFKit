@@ -50,14 +50,11 @@ open class PDFDocument: NSObject, NSCoding {
     open var version:Float = 0.0
     
     static func documentFromFile(_ filePath: String, password: String?) throws -> PDFDocument? {
-        
-        var document:PDFDocument? = PDFDocument.unarchiveDocumentForFile(filePath, password: password)
-        
-        if document == nil {
-            document = try PDFDocument(filePath: filePath, password: password)
+        if let document = PDFDocument.unarchiveDocumentForFile(filePath, password: password) {
+            return document
+        } else {
+            return try PDFDocument(filePath: filePath, password: password)
         }
-        
-        return document
     }
     
     static func unarchiveDocumentForFile(_ filePath: String, password: String?) -> PDFDocument? {
