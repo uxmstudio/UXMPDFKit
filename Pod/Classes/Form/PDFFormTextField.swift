@@ -128,16 +128,16 @@ open class PDFFormTextField: PDFFormField {
     }
     
     override func renderInContext(_ context: CGContext) {
-        
-        var text = ""
-        var font: UIFont? = nil
+        let text: String
+        let font: UIFont
         if let textField = self.textEntryBox as? UITextField {
             text = textField.text ?? ""
-            font = textField.font
-        }
-        if let textView = self.textEntryBox as? UITextView {
+            font = textField.font!
+        } else if let textView = self.textEntryBox as? UITextView {
             text = textView.text
-            font = textView.font
+            font = textView.font!
+        } else {
+            fatalError()
         }
         
         /// UGLY
