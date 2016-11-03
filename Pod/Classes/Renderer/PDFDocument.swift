@@ -261,13 +261,7 @@ open class PDFDocument: NSObject, NSCoding {
         
         switch (pageAngle) {
         case 0, 180: // 0 and 180 degrees
-            
-            return CGRect(
-                x: effectiveRect.origin.x,
-                y: effectiveRect.origin.y,
-                width: effectiveRect.size.width,
-                height: effectiveRect.size.height
-            )
+            return effectiveRect
         case 90, 270: // 90 and 270 degrees
             return CGRect(
                 x: effectiveRect.origin.y,
@@ -276,12 +270,7 @@ open class PDFDocument: NSObject, NSCoding {
                 height: effectiveRect.size.width
             )
         default:
-            return CGRect(
-                x: effectiveRect.origin.x,
-                y: effectiveRect.origin.y,
-                width: effectiveRect.size.width,
-                height: effectiveRect.size.height
-            )
+            return effectiveRect
         }
     }
     

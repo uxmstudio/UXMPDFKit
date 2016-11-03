@@ -69,7 +69,7 @@ extension PDFTextAnnotation: PDFAnnotation {
         }
         
         if self.rect == CGRect.zero {
-            self.rect = CGRect(x: point.x, y: point.y, width: 300.0, height: 32.0)
+            self.rect = CGRect(origin: point, size: CGSize(width: 300, height: 32))
         }
     }
     
@@ -109,7 +109,7 @@ extension PDFTextAnnotation: PDFAnnotation {
         ]
         
         let size: CGSize = nsText.size(attributes: attributes)
-        let textRect = CGRect(x: self.rect.origin.x, y: self.rect.origin.y, width: size.width, height: size.height)
+        let textRect = CGRect(origin: rect.origin, size: size)
         
         nsText.draw(in: textRect, withAttributes: attributes)
         
