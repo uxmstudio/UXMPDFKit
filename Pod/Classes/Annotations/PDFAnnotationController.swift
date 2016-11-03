@@ -96,9 +96,16 @@ open class PDFAnnotationController: UIViewController {
         self.finishAnnotation()
         self.annotationType = type
         
-        if type == .pen { self.currentAnnotation = PDFPathAnnotation() }
-        else if type == .highlighter { self.currentAnnotation = PDFHighlighterAnnotation() }
-        else if type == .text { self.currentAnnotation = PDFTextAnnotation() }
+        switch type {
+        case .pen:
+            self.currentAnnotation = PDFPathAnnotation()
+        case .highlighter:
+            self.currentAnnotation = PDFHighlighterAnnotation()
+        case .text:
+            self.currentAnnotation = PDFTextAnnotation()
+        case .none:
+            break
+        }
         
         self.view.isUserInteractionEnabled = self.annotationType != .none
         
