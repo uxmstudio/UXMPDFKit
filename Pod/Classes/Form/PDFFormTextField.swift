@@ -36,6 +36,26 @@ open class PDFFormTextField: PDFFormField {
     var currentFontSize: CGFloat
     var alignment: NSTextAlignment
     
+    var text: String {
+        get {
+            if let textField = self.textEntryBox as? UITextField {
+                return textField.text ?? ""
+            }
+            if let textView = self.textEntryBox as? UITextView {
+                return textView.text ?? ""
+            }
+            return ""
+        }
+        set(updatedText) {
+            if let textField = self.textEntryBox as? UITextField {
+                textField.text = updatedText
+            }
+            if let textView = self.textEntryBox as? UITextView {
+                textView.text = updatedText
+            }
+        }
+    }
+    
     init(frame: CGRect, multiline: Bool, alignment: NSTextAlignment) {
         
         let rect = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
@@ -98,34 +118,13 @@ open class PDFFormTextField: PDFFormField {
     
     override func didSetValue(_ value: AnyObject?) {
         if let value = value as? String {
-            self.setText(value)
+            self.text = value
         }
     }
     
     func fontSizeForRect(_ rect: CGRect) -> CGFloat {
         
         return rect.size.height * 0.7
-    }
-    
-    func setText(_ text: String) {
-        
-        if let textField = self.textEntryBox as? UITextField {
-            textField.text = text
-        }
-        if let textView = self.textEntryBox as? UITextView {
-            textView.text = text
-        }
-    }
-    
-    func getText() -> String {
-        
-        if let textField = self.textEntryBox as? UITextField {
-            return textField.text ?? ""
-        }
-        if let textView = self.textEntryBox as? UITextView {
-            return textView.text ?? ""
-        }
-        return ""
     }
     
     override func renderInContext(_ context: CGContext) {
@@ -151,7 +150,7 @@ open class PDFFormTextField: PDFFormField {
 extension PDFFormTextField: UITextFieldDelegate {
 
     func textChanged() {
-        self.value = self.getText() as AnyObject?
+        self.value = self.text as AnyObject?
         self.delegate?.formFieldValueChanged(self)
     }
     
