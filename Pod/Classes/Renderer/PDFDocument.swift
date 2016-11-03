@@ -184,9 +184,7 @@ open class PDFDocument: NSObject, NSCoding {
     }
     
     
-    /////
-    /// Helper methods
-    /////
+    //MARK: - Helper methods
     
     static func GUID() -> String {
         
@@ -296,11 +294,6 @@ open class PDFDocument: NSObject, NSCoding {
     //            self.currentPage = self.pageCount
     //        }
     //    }
-    
-    
-    /////
-    /// Helper methods
-    /////
     
     open func encode(with aCoder: NSCoder) {
         
