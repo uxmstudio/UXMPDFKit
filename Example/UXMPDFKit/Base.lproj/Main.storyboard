@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uvK-v8-bCe">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uvK-v8-bCe">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,6 +22,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="RQY-pS-dQA" customClass="PDFSinglePageViewer" customModule="UXMPDFKit">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zJH-Zp-75z">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -56,41 +60,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0IF-mC-Uht">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="i7a-Zn-c6l"/>
-                                </constraints>
-                                <state key="normal" title="Show Full PDF Viewer"/>
-                                <connections>
-                                    <action selector="loadPDF" destination="YMO-8V-zsq" eventType="touchUpInside" id="tHc-eD-Jc7"/>
-                                </connections>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="43y-sh-Ug0">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="90" id="7C5-gA-uJ4"/>
-                                </constraints>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yJY-V6-3bH">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="kOw-t9-vSz"/>
-                                </constraints>
-                                <state key="normal" title="Show Storyboard PDF"/>
-                                <connections>
-                                    <segue destination="vXZ-lx-hvc" kind="presentation" id="UN2-UW-JIQ"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="OLW-lB-Po9">
+                                <rect key="frame" x="20" y="72" width="335" height="200"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="43y-sh-Ug0">
+                                        <rect key="frame" x="0.0" y="0.0" width="335" height="90"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="90" id="7C5-gA-uJ4"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yJY-V6-3bH">
+                                        <rect key="frame" x="0.0" y="115" width="335" height="30"/>
+                                        <state key="normal" title="Show Storyboard PDF"/>
+                                        <connections>
+                                            <segue destination="vXZ-lx-hvc" kind="presentation" id="UN2-UW-JIQ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0IF-mC-Uht">
+                                        <rect key="frame" x="0.0" y="170" width="335" height="30"/>
+                                        <state key="normal" title="Show Full PDF Viewer"/>
+                                        <connections>
+                                            <action selector="loadPDF" destination="YMO-8V-zsq" eventType="touchUpInside" id="tHc-eD-Jc7"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="0IF-mC-Uht" secondAttribute="trailing" constant="20" id="6VE-Ae-fXY"/>
-                            <constraint firstItem="43y-sh-Ug0" firstAttribute="top" secondItem="Qol-gp-qy5" secondAttribute="bottom" constant="8" id="PvD-tu-WK5"/>
-                            <constraint firstAttribute="trailing" secondItem="43y-sh-Ug0" secondAttribute="trailing" constant="20" id="QV7-Wc-LD6"/>
-                            <constraint firstItem="yJY-V6-3bH" firstAttribute="top" secondItem="43y-sh-Ug0" secondAttribute="bottom" constant="25" id="eve-i3-1u5"/>
-                            <constraint firstItem="0IF-mC-Uht" firstAttribute="top" secondItem="yJY-V6-3bH" secondAttribute="bottom" constant="25" id="fMK-P5-aJM"/>
-                            <constraint firstItem="0IF-mC-Uht" firstAttribute="leading" secondItem="2p7-Jv-JUY" secondAttribute="leading" constant="20" id="gML-5L-CFK"/>
-                            <constraint firstItem="43y-sh-Ug0" firstAttribute="leading" secondItem="2p7-Jv-JUY" secondAttribute="leading" constant="20" id="gxN-TX-dYh"/>
-                            <constraint firstItem="yJY-V6-3bH" firstAttribute="leading" secondItem="2p7-Jv-JUY" secondAttribute="leading" constant="20" id="waL-l8-1y6"/>
-                            <constraint firstAttribute="trailing" secondItem="yJY-V6-3bH" secondAttribute="trailing" constant="20" id="yr2-39-bHF"/>
+                            <constraint firstItem="OLW-lB-Po9" firstAttribute="leading" secondItem="2p7-Jv-JUY" secondAttribute="leading" constant="20" id="2ML-aI-yRh"/>
+                            <constraint firstItem="OLW-lB-Po9" firstAttribute="top" secondItem="Qol-gp-qy5" secondAttribute="bottom" constant="8" id="4oV-2y-vby"/>
+                            <constraint firstAttribute="trailing" secondItem="OLW-lB-Po9" secondAttribute="trailing" constant="20" id="o5m-yz-k7L"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Jit-tG-QHX"/>
