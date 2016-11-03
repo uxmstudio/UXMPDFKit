@@ -50,14 +50,11 @@ open class PDFDocument: NSObject, NSCoding {
     open var version:Float = 0.0
     
     static func documentFromFile(_ filePath: String, password: String?) throws -> PDFDocument? {
-        
-        var document:PDFDocument? = PDFDocument.unarchiveDocumentForFile(filePath, password: password)
-        
-        if document == nil {
-            document = try PDFDocument(filePath: filePath, password: password)
+        if let document = PDFDocument.unarchiveDocumentForFile(filePath, password: password) {
+            return document
+        } else {
+            return try PDFDocument(filePath: filePath, password: password)
         }
-        
-        return document
     }
     
     static func unarchiveDocumentForFile(_ filePath: String, password: String?) -> PDFDocument? {
@@ -184,9 +181,7 @@ open class PDFDocument: NSObject, NSCoding {
     }
     
     
-    /////
-    /// Helper methods
-    /////
+    //MARK: - Helper methods
     
     static func GUID() -> String {
         
@@ -217,24 +212,6 @@ open class PDFDocument: NSObject, NSCoding {
         return (archivePath as NSString).appendingPathComponent(archiveName)
     }
     
-    static func isPDF(_ filePath: String) -> Bool {
-        
-        let state = false
-        //        let path = (filePath as NSString).fileSystemRepresentation
-        //        var fd = open(path, O_RDONLY)
-        //        if fd > 0 {
-        //            let sig = UnsafeMutablePointer<Character>.alloc(1024)
-        //
-        //            var len = read(fd, sig, sizeOfValue(sig))
-        //
-        //                state = (strnstr(sig, "%PDF", len) != NULL)
-        //
-        //                close(fd) // Close the file
-        //            }
-        
-        return state
-    }
-    
     func archiveWithFileAtPath(_ filePath: String) -> Bool {
         
         let archiveFilePath = PDFDocument.archiveFilePathForFileAtPath(filePath)
@@ -255,21 +232,15 @@ open class PDFDocument: NSObject, NSCoding {
     open func boundsForPDFPage(_ page: Int) -> CGRect {
         let pageRef = documentRef?.page(at: page)
         
-        let cropBoxRect: CGRect = pageRef!.getBoxRect(.cropBox)
-        let mediaBoxRect: CGRect = pageRef!.getBoxRect(.mediaBox)
-        let effectiveRect: CGRect = cropBoxRect.intersection(mediaBoxRect)
+        let cropBoxRect = pageRef!.getBoxRect(.cropBox)
+        let mediaBoxRect = pageRef!.getBoxRect(.mediaBox)
+        let effectiveRect = cropBoxRect.intersection(mediaBoxRect)
         
-        let pageAngle: Int = Int(pageRef?.rotationAngle ?? 0)
+        let pageAngle = Int(pageRef?.rotationAngle ?? 0)
         
         switch (pageAngle) {
         case 0, 180: // 0 and 180 degrees
-            
-            return CGRect(
-                x: effectiveRect.origin.x,
-                y: effectiveRect.origin.y,
-                width: effectiveRect.size.width,
-                height: effectiveRect.size.height
-            )
+            return effectiveRect
         case 90, 270: // 90 and 270 degrees
             return CGRect(
                 x: effectiveRect.origin.y,
@@ -278,12 +249,7 @@ open class PDFDocument: NSObject, NSCoding {
                 height: effectiveRect.size.width
             )
         default:
-            return CGRect(
-                x: effectiveRect.origin.x,
-                y: effectiveRect.origin.y,
-                width: effectiveRect.size.width,
-                height: effectiveRect.size.height
-            )
+            return effectiveRect
         }
     }
     
@@ -296,11 +262,6 @@ open class PDFDocument: NSObject, NSCoding {
     //            self.currentPage = self.pageCount
     //        }
     //    }
-    
-    
-    /////
-    /// Helper methods
-    /////
     
     open func encode(with aCoder: NSCoder) {
         

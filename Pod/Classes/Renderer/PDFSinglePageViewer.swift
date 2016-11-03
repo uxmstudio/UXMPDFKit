@@ -27,7 +27,7 @@ open class PDFSinglePageViewer: UICollectionView {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.sectionInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        layout.sectionInset = UIEdgeInsets.zero
         layout.minimumLineSpacing = 0.0
         layout.minimumInteritemSpacing = 0.0
         
@@ -42,7 +42,7 @@ open class PDFSinglePageViewer: UICollectionView {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.sectionInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        layout.sectionInset = UIEdgeInsets.zero
         layout.minimumLineSpacing = 0.0
         layout.minimumInteritemSpacing = 0.0
         

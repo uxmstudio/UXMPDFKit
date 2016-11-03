@@ -16,6 +16,13 @@ open class PDFFormButtonField: PDFFormField {
     open var name: String = ""
     open var exportValue: String = ""
     
+    var isSelected: Bool {
+        if let value = self.value as? String {
+            return value == exportValue
+        }
+        return false
+    }
+    
     fileprivate var button: UIButton = UIButton(type: .custom)
     fileprivate let inset: CGFloat = 0.8
     
@@ -65,16 +72,9 @@ open class PDFFormButtonField: PDFFormField {
         }
     }
     
-    func isSelected() -> Bool {
-        if let value = self.value as? String {
-            return value == exportValue
-        }
-        return false
-    }
-    
     func buttonPressed() {
         
-        self.value = (isSelected() ? "" : exportValue) as AnyObject?
+        self.value = (isSelected ? "" : exportValue) as AnyObject?
         self.delegate?.formFieldValueChanged(self)
     }
     
@@ -84,7 +84,7 @@ open class PDFFormButtonField: PDFFormField {
         frame.origin.x += self.frame.origin.x
         frame.origin.y += self.frame.origin.y
         
-        if isSelected() {
+        if isSelected {
             context.setFillColor(UIColor.black.cgColor)
         }
         else {
