@@ -13,7 +13,6 @@ enum SnapshotState {
 }
 
 open class PDFSnapshot {
-    
     var state = SnapshotState.new
     var image: UIImage?
     var document: PDFDocument
@@ -30,10 +29,8 @@ open class PDFSnapshot {
 }
 
 open class PDFQueue {
-    
     lazy var rendersInProgress = [String:Operation]()
     lazy var renderQueue: OperationQueue = {
-        
         var queue = OperationQueue()
         queue.name = "PDFQueue"
         queue.maxConcurrentOperationCount = 4
@@ -45,7 +42,6 @@ open class PDFQueue {
     static let sharedQueue = PDFQueue()
     
     func fetchPage(_ document: PDFDocument, page: Int, size: CGSize, completion:((PDFSnapshot) -> Void)?) {
-        
         let guid = "\(document.guid)_\(page)"
         
         let thumbnail = PDFSnapshot(document: document, page: page, guid: guid, size: size)
@@ -64,8 +60,9 @@ open class PDFQueue {
                 completion?(thumbRender.snapshot)
             }
         }
-        self.rendersInProgress[guid] = thumbRender
-        self.renderQueue.addOperation(thumbRender)
+        
+        rendersInProgress[guid] = thumbRender
+        renderQueue.addOperation(thumbRender)
     }
     
     open static func fetchPage(_ document: PDFDocument, page: Int, size: CGSize, completion:((PDFSnapshot) -> Void)?) {
@@ -73,42 +70,37 @@ open class PDFQueue {
     }
 }
 
-
 class PDFSnapshotRenderer: Operation {
-    
     let snapshot: PDFSnapshot
     
     init(snapshot: PDFSnapshot) {
-        
         self.snapshot = snapshot
     }
     
     override func main() {
+        snapshot.state = .started
         
-        self.snapshot.state = .started
-        
-        if self.isCancelled {
+        if isCancelled {
             return
         }
         
         guard let image = renderPDF(snapshot.size) else {
             PDFSnapshotCache.sharedCache.removeObjectForKey(self.snapshot.guid)
-            self.snapshot.state = .failed
+            snapshot.state = .failed
             return
         }
         
-        self.snapshot.state = .finished
+        snapshot.state = .finished
         
-        if self.isCancelled {
+        if isCancelled {
             return
         }
         
-        self.snapshot.image = image
+        snapshot.image = image
         PDFSnapshotCache.sharedCache.setObject(image, key: self.snapshot.guid)
     }
     
     func renderPDF(_ size: CGSize) -> UIImage? {
-        
         let documentRef = self.snapshot.document.documentRef
         guard let page = documentRef?.page(at: self.snapshot.page) else { return nil }
         
@@ -140,7 +132,6 @@ class PDFSnapshotRenderer: Operation {
 }
 
 class PDFSnapshotCache {
-    
     lazy var cache: NSCache<NSString, UIImage> = {
         let cache: NSCache<NSString, UIImage> = NSCache<NSString, UIImage>()
         cache.name = "PDFSnapshotCache"
@@ -152,19 +143,19 @@ class PDFSnapshotCache {
     static let sharedCache = PDFSnapshotCache()
     
     func objectForKey(_ key: String) -> UIImage? {
-        return self.cache.object(forKey: (key as NSString))
+        return cache.object(forKey: (key as NSString))
     }
     
     func setObject(_ image: UIImage, key: String) {
         let bytes:Int = Int(image.size.width * image.size.height * 4.0)
-        self.cache.setObject(image, forKey: (key as NSString), cost: bytes)
+        cache.setObject(image, forKey: (key as NSString), cost: bytes)
     }
     
     func removeObjectForKey(_ key: String) {
-        self.cache.removeObject(forKey: (key as NSString))
+        cache.removeObject(forKey: (key as NSString))
     }
     
     func removeAllObjects() {
-        self.cache.removeAllObjects()
+        cache.removeAllObjects()
     }
 }

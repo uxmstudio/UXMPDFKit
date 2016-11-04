@@ -9,7 +9,6 @@
 import UIKit
 
 class PDFPageContent: UIView {
-    
     fileprivate var links: [PDFDocumentLink] = []
     fileprivate var pdfDocRef: CGPDFDocument
     fileprivate var pdfPageRef: CGPDFPage?
@@ -29,9 +28,9 @@ class PDFPageContent: UIView {
     
     //MARK: - Init
     init(pdfDocument: PDFDocument, page: Int, password: String?) {
-        self.pdfDocRef = pdfDocument.documentRef!
+        pdfDocRef = pdfDocument.documentRef!
         /// Limit the page
-        let pages = self.pdfDocRef.numberOfPages
+        let pages = pdfDocRef.numberOfPages
         var page = page
         if page < 1 {
             page = 1
@@ -40,29 +39,30 @@ class PDFPageContent: UIView {
             page = pages
         }
         
-        self.pdfPageRef = self.pdfDocRef.page(at: page)!
+        pdfPageRef = pdfDocRef.page(at: page)!
         
         cropBoxRect = (pdfPageRef?.getBoxRect(.cropBox))!
         let mediaBoxRect = pdfPageRef?.getBoxRect(.mediaBox)
         let effectiveRect = cropBoxRect.intersection(mediaBoxRect!)
         
         /// Determine the page angle
-        self.pageAngle = Int((pdfPageRef?.rotationAngle)!)
+        pageAngle = Int((pdfPageRef?.rotationAngle)!)
         
         switch self.pageAngle {
         case 90, 270:
             self.pageWidth = effectiveRect.size.height
             self.pageHeight = effectiveRect.size.width
-            self.pageOffsetX = effectiveRect.origin.y
-            self.pageOffsetY = effectiveRect.origin.x
+            pageOffsetX = effectiveRect.origin.y
+            pageOffsetY = effectiveRect.origin.x
             break
         case 0, 180:
             self.pageWidth = effectiveRect.size.width
             self.pageHeight = effectiveRect.size.height
-            self.pageOffsetX = effectiveRect.origin.x
-            self.pageOffsetY = effectiveRect.origin.y
+            pageOffsetX = effectiveRect.origin.x
+            pageOffsetY = effectiveRect.origin.y
             fallthrough
-        default: break
+        default:
+            break
         }
         
         /// Round the size if needed
@@ -82,18 +82,17 @@ class PDFPageContent: UIView {
         /// Finish the init with sizes
         super.init(frame: viewRect)
         
-        self.autoresizesSubviews = false
-        self.isUserInteractionEnabled = true
-        self.contentMode = .redraw
-        self.autoresizingMask = UIViewAutoresizing()
-        self.backgroundColor = UIColor.clear
+        autoresizesSubviews = false
+        isUserInteractionEnabled = true
+        contentMode = .redraw
+        autoresizingMask = UIViewAutoresizing()
+        backgroundColor = UIColor.clear
         
-        self.buildAnnotationLinksList()
+        buildAnnotationLinksList()
     }
     
     convenience init(document: PDFDocument, page:Int) {
-        
-        self.init(pdfDocument: document, page:page, password:document.password)
+        self.init(pdfDocument: document, page: page, password: document.password)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -101,22 +100,17 @@ class PDFPageContent: UIView {
     }
     
     override func removeFromSuperview() {
-        
-        self.layer.delegate = nil
+        layer.delegate = nil
         super.removeFromSuperview()
     }
-    
     
     //MARK: - Page Links Discovery
     
     func highlightPageLinks() {
-        
         if links.count > 0 {
-            
-            let color = self.tintColor.withAlphaComponent(0.01)
+            let color = tintColor.withAlphaComponent(0.01)
             
             for link in links {
-                
                 let highlight = UIView(frame: link.rect)
                 highlight.autoresizesSubviews = false
                 highlight.isUserInteractionEnabled = false
@@ -124,17 +118,15 @@ class PDFPageContent: UIView {
                 highlight.autoresizingMask = UIViewAutoresizing()
                 highlight.backgroundColor = color
                 
-                self.addSubview(highlight)
+                addSubview(highlight)
             }
         }
     }
     
     func linkFromAnnotation(_ annotation: CGPDFDictionaryRef) -> PDFDocumentLink? {
-        
         var annotationRectArray: CGPDFArrayRef? = nil
         
         if CGPDFDictionaryGetArray(annotation, "Rect", &annotationRectArray) {
-            
             var lowerLeftX: CGPDFReal = 0.0
             var lowerLeftY: CGPDFReal = 0.0
             
@@ -158,12 +150,12 @@ class PDFPageContent: UIView {
                 upperRightY = t
             }
             
-            lowerLeftX -= self.pageOffsetX
-            lowerLeftY -= self.pageOffsetY
-            upperRightX -= self.pageOffsetX
-            upperRightY -= self.pageOffsetY
+            lowerLeftX -= pageOffsetX
+            lowerLeftY -= pageOffsetY
+            upperRightX -= pageOffsetX
+            upperRightY -= pageOffsetY
             
-            switch self.pageAngle {
+            switch pageAngle {
             case 90:
                 var swap = lowerLeftY
                 lowerLeftY = lowerLeftX
@@ -180,12 +172,12 @@ class PDFPageContent: UIView {
                 upperRightY = upperRightX
                 upperRightX = swap
                 
-                lowerLeftX = 0.0 - lowerLeftX + self.pageWidth
-                upperRightX = 0.0 - upperRightX + self.pageWidth
+                lowerLeftX = 0.0 - lowerLeftX + pageWidth
+                upperRightX = 0.0 - upperRightX + pageWidth
                 break
             case 0:
-                lowerLeftY = 0.0 - lowerLeftY + self.pageHeight
-                upperRightY = 0.0 - upperRightY + self.pageHeight
+                lowerLeftY = 0.0 - lowerLeftY + pageHeight
+                upperRightY = 0.0 - upperRightY + pageHeight
                 break
             default:
                 break
@@ -204,10 +196,9 @@ class PDFPageContent: UIView {
     }
     
     func buildAnnotationLinksList() {
-        
-        self.links = []
+        links = []
         var pageAnnotations: CGPDFArrayRef? = nil
-        let pageDictionary: CGPDFDictionaryRef = self.pdfPageRef!.dictionary!
+        let pageDictionary: CGPDFDictionaryRef = pdfPageRef!.dictionary!
         
         if CGPDFDictionaryGetArray(pageDictionary, "Annots", &pageAnnotations) {
             
@@ -221,8 +212,8 @@ class PDFPageContent: UIView {
                         
                         if strcmp(annotationSubtype, "Link") == 0 {
                             
-                            if let documentLink = self.linkFromAnnotation(annotationDictionary!) {
-                                self.links.append(documentLink)
+                            if let documentLink = linkFromAnnotation(annotationDictionary!) {
+                                links.append(documentLink)
                             }
                         }
                     }
@@ -236,13 +227,12 @@ class PDFPageContent: UIView {
     func processSingleTap(_ recognizer: UIGestureRecognizer) -> PDFAction? {
         if recognizer.state == UIGestureRecognizerState.recognized {
             
-            if self.links.count > 0 {
-                
+            if links.count > 0 {
                 let point = recognizer.location(in: self)
                 
-                for link: PDFDocumentLink in self.links {
+                for link in links {
                     if link.rect.contains(point) {
-                        return PDFAction.fromPDFDictionary(link.dictionary, documentReference: self.pdfDocRef)
+                        return PDFAction.fromPDFDictionary(link.dictionary, documentReference: pdfDocRef)
                     }
                 }
             }
@@ -252,17 +242,16 @@ class PDFPageContent: UIView {
     
     //MARK: - CATiledLayer Delegate Methods
     override func draw(_ layer: CALayer, in ctx: CGContext) {
-        
         ctx.setFillColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         ctx.fill(ctx.boundingBoxOfClipPath)
         
         /// Translate for page
-        ctx.translateBy(x: 0.0, y: self.bounds.size.height)
+        ctx.translateBy(x: 0.0, y: bounds.size.height)
         ctx.scaleBy(x: 1.0, y: -1.0)
-        ctx.concatenate((self.pdfPageRef?.getDrawingTransform(.cropBox, rect: self.bounds, rotate: 0, preserveAspectRatio: true))!)
+        ctx.concatenate((pdfPageRef?.getDrawingTransform(.cropBox, rect: bounds, rotate: 0, preserveAspectRatio: true))!)
         
         /// Render the PDF page into the context
-        ctx.drawPDFPage(self.pdfPageRef!)
+        ctx.drawPDFPage(pdfPageRef!)
     }
     
     deinit {
@@ -274,18 +263,14 @@ class PDFPageContent: UIView {
 
 
 class PDFDocumentLink: NSObject {
-    
     var rect: CGRect
     var dictionary: CGPDFDictionaryRef
     
     static func new(_ rect:CGRect, dictionary:CGPDFDictionaryRef) -> PDFDocumentLink {
-        
         return PDFDocumentLink(rect: rect, dictionary: dictionary)
     }
     
-    
-    init(rect:CGRect, dictionary:CGPDFDictionaryRef) {
-        
+    init(rect: CGRect, dictionary: CGPDFDictionaryRef) {
         self.rect = rect
         self.dictionary = dictionary
         

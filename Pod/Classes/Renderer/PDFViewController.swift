@@ -14,7 +14,7 @@ open class PDFViewController: UIViewController {
     open var hidesBarsOnTap: Bool = false
     open var showsScrubber: Bool = true {
         didSet {
-            self.pageScrubber.isHidden = !self.showsScrubber
+            pageScrubber.isHidden = !showsScrubber
         }
     }
     open var allowsFormFilling: Bool = true
@@ -32,7 +32,6 @@ open class PDFViewController: UIViewController {
     }()
     
     lazy var pageScrubber: PDFPageScrubber = {
-        
         var pageScrubber = PDFPageScrubber(frame: CGRect(x: 0, y: self.view.frame.size.height - self.bottomLayoutGuide.length, width: self.view.frame.size.width, height: 44.0), document: self.document)
         pageScrubber.scrubberDelegate = self
         pageScrubber.translatesAutoresizingMaskIntoConstraints = false
@@ -43,8 +42,8 @@ open class PDFViewController: UIViewController {
     lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
     lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document)
     
-    fileprivate var showingAnnotations: Bool = false
-    fileprivate var showingFormFilling: Bool = true
+    fileprivate var showingAnnotations = false
+    fileprivate var showingFormFilling = true
     
     public init(document: PDFDocument) {
         super.init(nibName: nil, bundle: nil)
@@ -61,49 +60,44 @@ open class PDFViewController: UIViewController {
     }
     
     func setupUI() {
+        view.addSubview(collectionView)
+        view.addSubview(pageScrubber)
+        view.addSubview(annotationController.view)
         
-        self.view.addSubview(collectionView)
-        self.view.addSubview(pageScrubber)
-        self.view.addSubview(annotationController.view)
+        var constraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[collectionView]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": view, "collectionView": collectionView])
+        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:|[collectionView]|", options: .alignAllLeft, metrics: nil, views: [ "superview": view, "collectionView": collectionView]))
+        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "H:|[scrubber]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": view, "scrubber": pageScrubber]))
+        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:[scrubber(44)]-0-[bottomLayout]", options: .alignAllLeft, metrics: nil, views: [ "scrubber": pageScrubber, "bottomLayout": bottomLayoutGuide ]))
         
-        var constraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[collectionView]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": self.view, "collectionView": self.collectionView])
-        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:|[collectionView]|", options: .alignAllLeft, metrics: nil, views: [ "superview": self.view, "collectionView": self.collectionView]))
-        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "H:|[scrubber]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": self.view, "scrubber": self.pageScrubber]))
-        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:[scrubber(44)]-0-[bottomLayout]", options: .alignAllLeft, metrics: nil, views: [ "scrubber": self.pageScrubber, "bottomLayout": self.bottomLayoutGuide ]))
+        view.addConstraints(constraints)
         
-        self.view.addConstraints(constraints)
+        pageScrubber.sizeToFit()
         
-        self.pageScrubber.sizeToFit()
-        
-        
-        self.reloadBarButtons()
+        reloadBarButtons()
     }
     
     func loadDocument(_ document: PDFDocument) {
-        self.collectionView = PDFSinglePageViewer(frame: self.view.bounds, document: self.document)
-        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView = PDFSinglePageViewer(frame: view.bounds, document: document)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0)
-        self.collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.contentInset = UIEdgeInsetsMake(topLayoutGuide.length, 0, bottomLayoutGuide.length, 0)
+        collectionView.collectionViewLayout.invalidateLayout()
         
-        self.view.layoutSubviews()
+        view.layoutSubviews()
         collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
     }
     
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        
         super.viewWillTransition(to: size, with: coordinator)
         
         coordinator.animate(alongsideTransition: { (context) in
-            
             self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0)
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.pageScrubber.sizeToFit()
-            
             }, completion: { (context) in
                 self.collectionView.displayPage(self.document.currentPage, animated: false)
         })
@@ -111,21 +105,20 @@ open class PDFViewController: UIViewController {
     
     //MARK: - Private helpers
     fileprivate func reloadBarButtons() {
-        self.navigationItem.rightBarButtonItems = self.rightBarButtons()
+        navigationItem.rightBarButtonItems = rightBarButtons()
         
-        if self.isPresentingInModal {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done",
-                                                                    style: .plain,
-                                                                    target: self,
-                                                                    action: #selector(PDFViewController.dismissModal))
+        if isPresentingInModal {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done",
+                                                               style: .plain,
+                                                               target: self,
+                                                               action: #selector(PDFViewController.dismissModal))
         }
     }
     
     fileprivate func rightBarButtons() -> [UIBarButtonItem] {
+        var buttons: [UIBarButtonItem] = []
         
-        var buttons:[UIBarButtonItem] = []
-        
-        if self.allowsSharing {
+        if allowsSharing {
             buttons.append(UIBarButtonItem(
                 barButtonSystemItem: .action,
                 target: self,
@@ -134,8 +127,7 @@ open class PDFViewController: UIViewController {
             )
         }
         
-        if self.allowsFormFilling {
-            
+        if allowsFormFilling {
             buttons.append(UIBarButtonItem(
                 image: UIImage.bundledImage("form"),
                 style: .plain,
@@ -145,18 +137,17 @@ open class PDFViewController: UIViewController {
             )
         }
         
-        if self.allowsAnnotations {
-            if self.showingAnnotations {
-                
-                buttons.append(self.annotationController.highlighterButton)
-                buttons.append(self.annotationController.penButton)
-                buttons.append(self.annotationController.textButton)
-                buttons.append(self.annotationController.undoButton)
+        if allowsAnnotations {
+            if showingAnnotations {
+                buttons.append(annotationController.highlighterButton)
+                buttons.append(annotationController.penButton)
+                buttons.append(annotationController.textButton)
+                buttons.append(annotationController.undoButton)
             }
             
             buttons.append(PDFBarButton(
                 image: UIImage.bundledImage("annot"),
-                toggled: self.showingAnnotations,
+                toggled: showingAnnotations,
                 target: self,
                 action: #selector(PDFViewController.toggleAnnotations(_:))
                 )
@@ -167,37 +158,34 @@ open class PDFViewController: UIViewController {
     }
     
     func toggleAnnotations(_ button: PDFBarButton) {
-        self.showingAnnotations = !self.showingAnnotations
-        self.reloadBarButtons()
+        showingAnnotations = !showingAnnotations
+        reloadBarButtons()
     }
     
     func showForm() {
-        self.showingFormFilling = true
-        self.showingAnnotations = false
+        showingFormFilling = true
+        showingAnnotations = false
         
-        self.annotationController.finishAnnotation()
-        self.reloadBarButtons()
+        annotationController.finishAnnotation()
+        reloadBarButtons()
     }
     
     //MARK: - IBActions
     func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
-        
-        if let nvc = self.navigationController , nvc.isNavigationBarHidden {
-            self.navigationController?.setNavigationBarHidden(false, animated: true)
-            self.pageScrubber.isHidden = false
+        if let nvc = navigationController, nvc.isNavigationBarHidden {
+            navigationController?.setNavigationBarHidden(false, animated: true)
+            pageScrubber.isHidden = false
+        } else {
+            navigationController?.setNavigationBarHidden(true, animated: true)
+            pageScrubber.isHidden = true
         }
-        else {
-            self.navigationController?.setNavigationBarHidden(true, animated: true)
-            self.pageScrubber.isHidden = true
-        }
-        self.collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     
     func shareForm() {
-        
-        let renderer = PDFRenderController(document: self.document, controllers: [
-            self.annotationController,
-            self.formController
+        let renderer = PDFRenderController(document: document, controllers: [
+            annotationController,
+            formController
             ])
         let pdf = renderer.renderOntoPDF()
         
@@ -211,53 +199,45 @@ open class PDFViewController: UIViewController {
             popController?.sourceRect = CGRect(x: self.view.frame.width - 34, y: 64, width: 0, height: 0)
             popController?.permittedArrowDirections = .up
         }
-        self.present(activityVC, animated: true, completion: nil)
+        present(activityVC, animated: true, completion: nil)
     }
     
     func dismissModal() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
 
 extension PDFViewController: PDFPageScrubberDelegate {
-    
     public func scrubber(_ scrubber: PDFPageScrubber, selectedPage: Int) {
-        
-        self.document.currentPage = selectedPage
-        self.collectionView.displayPage(selectedPage, animated: false)
+        document.currentPage = selectedPage
+        collectionView.displayPage(selectedPage, animated: false)
     }
 }
 
 extension PDFViewController: PDFSinglePageViewerDelegate {
-    
     public func singlePageViewer(_ collectionView: PDFSinglePageViewer, didDisplayPage page: Int) {
-        
-        self.document.currentPage = page
-        if self.showsScrubber {
-            self.pageScrubber.updateScrubber()
+        document.currentPage = page
+        if showsScrubber {
+            pageScrubber.updateScrubber()
         }
     }
     
     public func singlePageViewer(_ collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView) {
-        
-        if self.allowsFormFilling {
-            self.formController.showForm(content)
+        if allowsFormFilling {
+            formController.showForm(content)
         }
-        if self.allowsAnnotations {
-            self.annotationController.showAnnotations(content)
+        if allowsAnnotations {
+            annotationController.showAnnotations(content)
         }
     }
     
     public func singlePageViewer(_ collectionView: PDFSinglePageViewer, selectedAction action: PDFAction) {
-        
         if let action = action as? PDFActionURL {
-            
             let svc = SFSafariViewController(url: action.url as URL)
-            self.present(svc, animated: true, completion: nil)
-        }
-        else if let action = action as? PDFActionGoTo {
-            self.collectionView.displayPage(action.pageIndex, animated: true)
+            present(svc, animated: true, completion: nil)
+        } else if let action = action as? PDFActionGoTo {
+            collectionView.displayPage(action.pageIndex, animated: true)
         }
     }
     
@@ -270,43 +250,39 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
 
 
 open class PDFBarButton:UIBarButtonItem {
-    
-    fileprivate var button:UIButton = UIButton(frame: CGRect(x: 0,y: 0,width: 32,height: 32))
-    fileprivate var toggled:Bool = false
-    fileprivate lazy var defaultTint:UIColor = UIColor.blue
+    fileprivate var button: UIButton = UIButton(frame: CGRect(x: 0,y: 0,width: 32,height: 32))
+    fileprivate var toggled = false
+    fileprivate lazy var defaultTint = UIColor.blue
     
     override open var tintColor: UIColor? {
         didSet {
-            self.button.tintColor = tintColor
+            button.tintColor = tintColor
         }
     }
     
     convenience init(image: UIImage?, toggled: Bool, target: AnyObject?, action: Selector) {
-        
         self.init()
         
-        self.customView = button
-        self.defaultTint = self.button.tintColor
+        customView = button
+        defaultTint = button.tintColor
         
-        self.toggle(toggled)
+        toggle(toggled)
         
         self.target = target
         self.action = action
         
-        self.button.addTarget(self, action: #selector(PDFBarButton.tapped), for: .touchUpInside)
-        self.button.setImage(image?.withRenderingMode(.alwaysTemplate), for: UIControlState())
+        button.addTarget(self, action: #selector(PDFBarButton.tapped), for: .touchUpInside)
+        button.setImage(image?.withRenderingMode(.alwaysTemplate), for: UIControlState())
     }
     
     open func toggle(_ state: Bool) {
-        
-        self.toggled = state
-        if self.toggled {
+        toggled = state
+        if toggled {
             button.tintColor = UIColor.white
-            button.layer.backgroundColor = (self.tintColor ?? self.defaultTint).cgColor
+            button.layer.backgroundColor = (tintColor ?? defaultTint).cgColor
             button.layer.cornerRadius = 4.0
-        }
-        else {
-            button.tintColor = self.tintColor
+        } else {
+            button.tintColor = tintColor
             button.layer.backgroundColor = UIColor.clear.cgColor
             button.layer.cornerRadius = 4.0
         }

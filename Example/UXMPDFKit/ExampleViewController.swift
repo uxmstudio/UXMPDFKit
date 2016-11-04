@@ -17,7 +17,7 @@ class ExampleViewController: UIViewController {
         let document = try! PDFDocument(filePath: url, password: "")
         
         let pdf = PDFViewController(document: document)
-        
+        pdf.showsScrubber = false
         self.navigationController?.pushViewController(pdf, animated: true)
     }
 

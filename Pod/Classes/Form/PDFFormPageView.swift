@@ -18,7 +18,6 @@ struct PDFFormViewOptions {
 }
 
 struct PDFFormFlag: Equatable {
-    
     let rawValue: UInt
     
     static let ReadOnly             = PDFFormFlag(rawValue:1 << 0)
@@ -39,17 +38,15 @@ func ==(lhs: PDFFormFlag, rhs: PDFFormFlag) -> Bool {
 }
 
 open class PDFFormPage:NSObject {
-    
-    var fields:[PDFFormFieldObject] = []
-    var page:Int
-    var zoomScale:CGFloat = 1.0
+    var fields: [PDFFormFieldObject] = []
+    var page: Int
+    var zoomScale: CGFloat = 1.0
     
     init(page:Int) {
         self.page = page
     }
     
     func showForm(_ contentView: PDFPageContentView) {
-        
         let formView = PDFFormPageView(
             frame: contentView.contentView.cropBoxRect,
             boundingBox: contentView.containerView.frame,
@@ -59,17 +56,15 @@ open class PDFFormPage:NSObject {
         formView.zoomScale = contentView.zoomScale
         contentView.contentView.addSubview(formView)
         contentView.viewDidZoom = { scale in
-            
             formView.updateWithZoom(scale)
         }
     }
     
     func createFormField(_ dict: PDFDictionary) {
-        self.fields.append(PDFFormFieldObject(dict: dict))
+        fields.append(PDFFormFieldObject(dict: dict))
     }
     
     func renderInContext(_ context: CGContext, size: CGRect) {
-        
         let formView = PDFFormPageView(
             frame: size,
             boundingBox: size,
@@ -80,13 +75,12 @@ open class PDFFormPage:NSObject {
 }
 
 open class PDFFormPageView: UIView {
-    
     var fields: [PDFFormFieldObject]
     var fieldViews: [PDFFormField] = []
     var zoomScale: CGFloat = 1.0
     
-    var cropBox: CGRect = CGRect.zero
-    var boundingBox: CGRect = CGRect.zero
+    var cropBox = CGRect.zero
+    var boundingBox = CGRect.zero
     var baseFrame: CGRect
     
     init(frame: CGRect, boundingBox: CGRect, cropBox: CGRect, fields: [PDFFormFieldObject]) {
@@ -98,9 +92,9 @@ open class PDFFormPageView: UIView {
         
         for field in fields {
             if let fieldView = field.createFormField() {
-                self.addSubview(fieldView)
-                self.adjustFrame(fieldView)
-                self.fieldViews.append(fieldView)
+                addSubview(fieldView)
+                adjustFrame(fieldView)
+                fieldViews.append(fieldView)
             }
         }
     }
@@ -117,11 +111,10 @@ open class PDFFormPageView: UIView {
     }
     
     func adjustFrame(_ field: PDFFormField) {
-        
         let factor: CGFloat = 1.0
         let correctedFrame = CGRect(
             x: (field.baseFrame.origin.x - cropBox.origin.x) * factor,
-            y: (cropBox.height - field.baseFrame.origin.y - field.baseFrame.height - self.cropBox.origin.y) * factor,
+            y: (cropBox.height - field.baseFrame.origin.y - field.baseFrame.height - cropBox.origin.y) * factor,
             width: field.baseFrame.width * factor,
             height: field.baseFrame.height * factor)
         
@@ -129,7 +122,6 @@ open class PDFFormPageView: UIView {
     }
     
     func renderInContext(_ context: CGContext) {
-        
         for field in fieldViews {
             field.renderInContext(context)
         }

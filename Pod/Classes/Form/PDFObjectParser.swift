@@ -9,7 +9,6 @@
 import UIKit
 
 class PDFObjectParserContext {
-    
     var keys:[UnsafePointer<Int8>] = []
     
     init(keys: [UnsafePointer<Int8>]) {
@@ -18,12 +17,10 @@ class PDFObjectParserContext {
 }
 
 open class PDFObjectParser: NSObject {
-    
     var document: PDFDocument
     var attributes: PDFDictionary?
     
     public init(document: PDFDocument) {
-        
         self.document = document
         super.init()
         
@@ -31,21 +28,19 @@ open class PDFObjectParser: NSObject {
     }
     
     func getFormFields() -> AnyObject? {
-
-        guard let ref = self.document.documentRef else {
+        guard let ref = document.documentRef else {
             return nil
         }
         
         let catalogue = ref.catalog
 
-        self.attributes = PDFDictionary(dictionaryRef: catalogue!)
+        attributes = PDFDictionary(dictionaryRef: catalogue!)
 
-        return self.attributes
+        return attributes
     }
     
     func getCatalogue() -> CGPDFDictionaryRef? {
-        
-        guard let ref = self.document.documentRef else {
+        guard let ref = document.documentRef else {
             return nil
         }
         return ref.catalog

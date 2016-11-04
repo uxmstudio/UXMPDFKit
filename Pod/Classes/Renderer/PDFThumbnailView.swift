@@ -9,11 +9,9 @@
 import UIKit
 
 class PDFThumbnailView: UIView {
-    
     var imageView: UIImageView
     
     override init(frame: CGRect) {
-        
         imageView = UIImageView()
         imageView.autoresizesSubviews = false
         imageView.isUserInteractionEnabled = false
@@ -24,18 +22,18 @@ class PDFThumbnailView: UIView {
         super.init(frame: frame)
 
         imageView.frame = frame
-        self.addSubview(imageView)
+        addSubview(imageView)
         
-        self.autoresizesSubviews = false
-        self.isUserInteractionEnabled = false
-        self.contentMode = .redraw
-        self.autoresizingMask = UIViewAutoresizing()
-        self.backgroundColor = UIColor.clear
+        autoresizesSubviews = false
+        isUserInteractionEnabled = false
+        contentMode = .redraw
+        autoresizingMask = UIViewAutoresizing()
+        backgroundColor = UIColor.clear
         
         var constraints = NSLayoutConstraint.constraints(withVisualFormat: "H:[image]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": self, "image": imageView ])
         constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:[image]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": self, "image": imageView ]))
         
-        self.addConstraints(constraints)
+        addConstraints(constraints)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -43,14 +41,13 @@ class PDFThumbnailView: UIView {
     }
     
     convenience init(frame: CGRect, document: PDFDocument, page: Int) {
-        
         self.init(frame: frame)
-        self.showImage(document, page: page)
+        showImage(document, page: page)
     }
 
     func showImage(_ document: PDFDocument, page: Int) {
-        self.imageView.image = nil
-        PDFQueue.sharedQueue.fetchPage(document, page: page, size: self.frame.size) { (thumbnail) in
+        imageView.image = nil
+        PDFQueue.sharedQueue.fetchPage(document, page: page, size: frame.size) { (thumbnail) in
             self.imageView.image = thumbnail.image
         }
     }

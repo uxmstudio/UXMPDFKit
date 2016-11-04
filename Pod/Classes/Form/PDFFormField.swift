@@ -16,7 +16,6 @@ protocol PDFFormViewDelegate {
 }
 
 open class PDFFormFieldObject: NSObject {
-    
     var value: AnyObject?
     var options: PDFFormViewOptions?
     
@@ -34,15 +33,17 @@ open class PDFFormFieldObject: NSObject {
             return
         }
         
-        var flags: [PDFFormFlag] = []
+        let flags: [PDFFormFlag]
         if let flagsObj = dict["Ff"] as? UInt {
             flags = self.determineFlags(flagsObj)
+        } else {
+            flags = []
         }
         
-        let export:String = self.determineExportValue(dict)
-        let name:String = dict.stringForKey("T") ?? ""
+        let export = self.determineExportValue(dict)
+        let name = dict.stringForKey("T") ?? ""
         
-        self.options = PDFFormViewOptions(
+        options = PDFFormViewOptions(
             type: type,
             rect: rect,
             flags: flags,
@@ -53,15 +54,12 @@ open class PDFFormFieldObject: NSObject {
     }
 
     func createFormField() -> PDFFormField? {
-        
         if let options = self.options {
             if options.type == "Btn" {
                 return self.createButtonField(options)
-            }
-            else if options.type == "Tx" {
+            } else if options.type == "Tx" {
                 return self.createTextField(options)
-            }
-            else if options.type == "Sig" {
+            } else if options.type == "Sig" {
                 return self.createSignatureField(options)
             }
         }
@@ -69,8 +67,7 @@ open class PDFFormFieldObject: NSObject {
     }
     
     func determineFlags(_ flags: UInt) -> [PDFFormFlag] {
-        
-        var flagsArr:[PDFFormFlag] = []
+        var flagsArr: [PDFFormFlag] = []
         if ((flags & PDFFormFlag.ReadOnly.rawValue) > 0) {
             flagsArr.append(PDFFormFlag.ReadOnly)
         }
@@ -113,7 +110,6 @@ open class PDFFormFieldObject: NSObject {
     }
     
     func createTextField(_ options: PDFFormViewOptions) -> PDFFormField {
-        
         let multiline = options.flags?.contains(PDFFormFlag.TextFieldMultiline) ?? false
         let field = PDFFormTextField(frame: options.rect, multiline: multiline, alignment: NSTextAlignment.left)
         field.delegate = self
@@ -124,8 +120,7 @@ open class PDFFormFieldObject: NSObject {
     }
     
     func createButtonField(_ options: PDFFormViewOptions) -> PDFFormField {
-        
-        let radio:Bool = options.flags?.contains(where: { $0 == PDFFormFlag.ButtonRadio }) ?? false
+        let radio = options.flags?.contains(where: { $0 == PDFFormFlag.ButtonRadio }) ?? false
         let field = PDFFormButtonField(frame: options.rect, radio: radio)
         field.name = options.name
         field.exportValue = options.exportValue
@@ -138,7 +133,6 @@ open class PDFFormFieldObject: NSObject {
     }
     
     func createSignatureField(_ options: PDFFormViewOptions) -> PDFFormField {
-        
         let field = PDFFormSignatureField(frame: options.rect)
         field.delegate = self
         if let value = self.value {
@@ -149,7 +143,6 @@ open class PDFFormFieldObject: NSObject {
 }
 
 extension PDFFormFieldObject: PDFFormViewDelegate {
-    
     func formFieldValueChanged(_ widget: PDFFormField) {
         self.value = widget.value
     }
@@ -160,7 +153,6 @@ extension PDFFormFieldObject: PDFFormViewDelegate {
 }
 
 open class PDFFormField: UIView {
-    
     var zoomScale: CGFloat = 1.0
     var options: [AnyObject] = []
     var baseFrame: CGRect
@@ -178,7 +170,6 @@ open class PDFFormField: UIView {
     }
     
     convenience init(rect: CGRect, value: String) {
-        
         self.init(frame: rect)
         self.value = value as AnyObject?
     }
@@ -194,16 +185,16 @@ open class PDFFormField: UIView {
     func didSetValue(_ value: AnyObject?) { }
     
     func updateForZoomScale(_ scale: CGFloat) {
-        self.zoomScale = scale
+        zoomScale = scale
         let screenAndZoomScale = scale * UIScreen.main.scale
-        self.applyScale(screenAndZoomScale, toView: self)
-        self.applyScale(screenAndZoomScale, toLayer: self.layer)
+        applyScale(screenAndZoomScale, toView: self)
+        applyScale(screenAndZoomScale, toLayer: self.layer)
     }
     
     func applyScale(_ scale: CGFloat, toView view:UIView) {
         view.contentScaleFactor = scale
         for subview in view.subviews {
-            self.applyScale(scale, toView: subview)
+            applyScale(scale, toView: subview)
         }
     }
     
@@ -214,7 +205,7 @@ open class PDFFormField: UIView {
             return
         }
         for sublayer in sublayers {
-            self.applyScale(scale, toLayer: sublayer)
+            applyScale(scale, toLayer: sublayer)
         }
     }
     

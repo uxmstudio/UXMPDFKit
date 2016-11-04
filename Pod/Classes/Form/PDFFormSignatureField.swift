@@ -17,7 +17,6 @@ open class PDFFormSignatureField: PDFFormField {
     fileprivate let signatureExtraPadding: CGFloat = 22.0
     
     lazy fileprivate var signButton:UIButton = {
-        
         var button = UIButton(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
         button.setTitle("Tap To Sign", for: UIControlState())
         button.tintColor = UIColor.black
@@ -45,16 +44,16 @@ open class PDFFormSignatureField: PDFFormField {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.7)
+        backgroundColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.7)
         
-        self.addSubview(self.signImage)
-        self.addSubview(self.signButton)
+        addSubview(signImage)
+        addSubview(signButton)
         
-        self.bringSubview(toFront: self.signButton)
+        bringSubview(toFront: signButton)
     }
     
     override open func removeFromSuperview() {
-        self.removeSignatureBox()
+        removeSignatureBox()
         super.removeFromSuperview()
     }
     
@@ -64,12 +63,11 @@ open class PDFFormSignatureField: PDFFormField {
     
     override func didSetValue(_ value: AnyObject?) {
         if let value = value as? UIImage {
-            self.signImage.image = value
+            signImage.image = value
         }
     }
     
     func addSignature() {
-        
         let bounds = UIScreen.main.bounds
         
         /// Overlay
@@ -77,10 +75,10 @@ open class PDFFormSignatureField: PDFFormField {
         view.frame = bounds
         view.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         window?.addSubview(view)
-        self.signatureOverlay = view
+        signatureOverlay = view
         
         let width = bounds.width
-        let height = width / self.frame.width * self.frame.height + 44.0 + signatureExtraPadding * 2
+        let height = width / frame.width * frame.height + 44.0 + signatureExtraPadding * 2
         
         if let window = UIApplication.shared.keyWindow {
             let signatureView = PDFFormFieldSignatureCaptureView(frame:
@@ -103,32 +101,30 @@ open class PDFFormSignatureField: PDFFormField {
     
     func removeSignatureBox() {
         if let signatureView = self.signatureView {
-            self.signImage.image = signatureView.getSignature()
-            self.value = signatureView.getSignature()
-            self.delegate?.formFieldValueChanged(self)
+            signImage.image = signatureView.getSignature()
+            value = signatureView.getSignature()
+            delegate?.formFieldValueChanged(self)
             
-            self.signatureOverlay?.removeFromSuperview()
+            signatureOverlay?.removeFromSuperview()
             self.signatureView?.removeFromSuperview()
             self.signatureView = nil
-            self.signButton.alpha = 0.0
+            signButton.alpha = 0.0
         }
         
     }
     
     override func renderInContext(_ context: CGContext) {
-        
         var frame = self.frame
         frame.origin.y -= signatureExtraPadding
         frame.size.height += signatureExtraPadding * 2
         
-        self.signImage.image?.draw(in: frame)
+        signImage.image?.draw(in: frame)
     }
 }
 
 extension PDFFormSignatureField: PDFFormSignatureViewDelegate {
-    
     func completedSignatureDrawing(_ field: PDFFormFieldSignatureCaptureView) {
-        self.removeSignatureBox()
+        removeSignatureBox()
     }
 }
 
@@ -137,34 +133,32 @@ protocol PDFFormSignatureViewDelegate {
 }
 
 class PDFFormFieldSignatureCaptureView: UIView {
-    
     var delegate: PDFFormSignatureViewDelegate?
     
     // MARK: - Public properties
     var strokeWidth: CGFloat = 2.0 {
         didSet {
-            self.path.lineWidth = strokeWidth
+            path.lineWidth = strokeWidth
         }
     }
     
     var strokeColor: UIColor = UIColor.black {
         didSet {
-            self.strokeColor.setStroke()
+            strokeColor.setStroke()
         }
     }
     
     var signatureBackgroundColor: UIColor = UIColor.white {
         didSet {
-            self.backgroundColor = signatureBackgroundColor
+            backgroundColor = signatureBackgroundColor
         }
     }
     
     var containsSignature: Bool {
         get {
-            if self.path.isEmpty {
+            if path.isEmpty {
                 return false
-            }
-            else {
+            } else {
                 return true
             }
         }
@@ -194,20 +188,19 @@ class PDFFormFieldSignatureCaptureView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        self.setupUI()
+        setupUI()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.setupUI()
+        setupUI()
     }
     
     func setupUI() {
-        
-        self.backgroundColor = self.signatureBackgroundColor
-        self.path.lineWidth = self.strokeWidth
-        self.path.lineJoinStyle = CGLineJoin.round
+        backgroundColor = signatureBackgroundColor
+        path.lineWidth = strokeWidth
+        path.lineJoinStyle = .round
         
         let spacerStart = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
         spacerStart.width = 10.0
@@ -223,48 +216,47 @@ class PDFFormFieldSignatureCaptureView: UIView {
     
     // MARK: - Draw
     override func draw(_ rect: CGRect) {
-        self.strokeColor.setStroke()
-        self.path.stroke()
+        strokeColor.setStroke()
+        path.stroke()
     }
     
     // MARK: - Touch handling functions
     override func touchesBegan(_ touches: Set <UITouch>, with event: UIEvent?) {
         if let firstTouch = touches.first {
             let touchPoint = firstTouch.location(in: self)
-            self.ctr = 0
-            self.pts[0] = touchPoint
+            ctr = 0
+            pts[0] = touchPoint
         }
     }
     
     override func touchesMoved(_ touches: Set <UITouch>, with event: UIEvent?) {
         if let firstTouch = touches.first {
             let touchPoint = firstTouch.location(in: self)
-            self.ctr += 1
-            self.pts[self.ctr] = touchPoint
-            if (self.ctr == 4) {
-                self.pts[3] = CGPoint(x: (self.pts[2].x + self.pts[4].x)/2.0, y: (self.pts[2].y + self.pts[4].y)/2.0)
-                self.path.move(to: self.pts[0])
-                self.path.addCurve(to: self.pts[3], controlPoint1:self.pts[1], controlPoint2:self.pts[2])
+            ctr += 1
+            pts[ctr] = touchPoint
+            if (ctr == 4) {
+                pts[3] = CGPoint(x: (pts[2].x + pts[4].x)/2.0, y: (pts[2].y + pts[4].y)/2.0)
+                path.move(to: pts[0])
+                path.addCurve(to: pts[3], controlPoint1: pts[1], controlPoint2: pts[2])
                 
-                self.setNeedsDisplay()
-                self.pts[0] = self.pts[3]
-                self.pts[1] = self.pts[4]
-                self.ctr = 1
+                setNeedsDisplay()
+                pts[0] = pts[3]
+                pts[1] = pts[4]
+                ctr = 1
             }
             
-            self.setNeedsDisplay()
+            setNeedsDisplay()
         }
     }
     
     override func touchesEnded(_ touches: Set <UITouch>, with event: UIEvent?) {
-        if self.ctr == 0 {
-            let touchPoint = self.pts[0]
-            self.path.move(to: CGPoint(x: touchPoint.x-1.0,y: touchPoint.y))
-            self.path.addLine(to: CGPoint(x: touchPoint.x+1.0,y: touchPoint.y))
-            self.setNeedsDisplay()
-        }
-        else {
-            self.ctr = 0
+        if ctr == 0 {
+            let touchPoint = pts[0]
+            path.move(to: CGPoint(x: touchPoint.x-1.0,y: touchPoint.y))
+            path.addLine(to: CGPoint(x: touchPoint.x+1.0,y: touchPoint.y))
+            setNeedsDisplay()
+        } else {
+            ctr = 0
         }
     }
     
@@ -272,12 +264,12 @@ class PDFFormFieldSignatureCaptureView: UIView {
     
     // Clear the Signature View
     func clearSignature() {
-        self.path.removeAllPoints()
-        self.setNeedsDisplay()
+        path.removeAllPoints()
+        setNeedsDisplay()
     }
     
     func finishSignature() {
-        self.delegate?.completedSignatureDrawing(self)
+        delegate?.completedSignatureDrawing(self)
     }
     
     // Save the Signature as an UIImage
@@ -288,7 +280,7 @@ class PDFFormFieldSignatureCaptureView: UIView {
         var bounds = self.bounds.size
         bounds.height = bounds.height - 44.0
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, scale)
-        self.path.stroke()
+        path.stroke()
         let signature = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return signature
