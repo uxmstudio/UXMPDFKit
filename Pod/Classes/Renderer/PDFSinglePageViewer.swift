@@ -21,29 +21,26 @@ open class PDFSinglePageViewer: UICollectionView {
     open var document: PDFDocument?
     fileprivate var bookmarkedPages: [String]?
     
-    public init(frame: CGRect, document: PDFDocument) {
+    private static var flowLayout: UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets.zero
         layout.minimumLineSpacing = 0.0
         layout.minimumInteritemSpacing = 0.0
-        
+        return layout
+    }
+    
+    public init(frame: CGRect, document: PDFDocument) {
         self.document = document
         
-        super.init(frame: frame, collectionViewLayout: layout)
+        super.init(frame: frame, collectionViewLayout: PDFSinglePageViewer.flowLayout)
         
         setupCollectionView()
     }
     
     required public init?(coder aDecoder: NSCoder) {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.sectionInset = UIEdgeInsets.zero
-        layout.minimumLineSpacing = 0.0
-        layout.minimumInteritemSpacing = 0.0
-        
         super.init(coder: aDecoder)
-        collectionViewLayout = layout
+        collectionViewLayout = PDFSinglePageViewer.flowLayout
         
         setupCollectionView()
     }
