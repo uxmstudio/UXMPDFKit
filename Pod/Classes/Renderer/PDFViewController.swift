@@ -91,6 +91,7 @@ open class PDFViewController: UIViewController {
         self.collectionView.collectionViewLayout.invalidateLayout()
         
         self.view.layoutSubviews()
+        collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
     }
     
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
