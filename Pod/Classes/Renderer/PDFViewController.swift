@@ -57,6 +57,7 @@ open class PDFViewController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         self.setupUI()
+        collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
     }
     
     func setupUI() {
@@ -88,7 +89,6 @@ open class PDFViewController: UIViewController {
         collectionView.collectionViewLayout.invalidateLayout()
         
         view.layoutSubviews()
-        collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
     }
     
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
