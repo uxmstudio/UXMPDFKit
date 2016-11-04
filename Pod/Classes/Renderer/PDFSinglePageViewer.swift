@@ -9,7 +9,6 @@
 import UIKit
 
 public protocol PDFSinglePageViewerDelegate {
-    
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, didDisplayPage page:Int)
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, loadedContent content:PDFPageContentView)
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, selectedAction action:PDFAction)
@@ -152,8 +151,8 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
         didDisplayPage(scrollView)
     }
     
-    func didDisplayPage(_ scrollView: UIScrollView) {
         let page: Int = Int((scrollView.contentOffset.x + scrollView.frame.size.width) / scrollView.frame.size.width)
+    private func didDisplayPage(_ scrollView: UIScrollView) {
         singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
     }
 }
