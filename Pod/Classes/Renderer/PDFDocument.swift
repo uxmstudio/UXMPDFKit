@@ -10,7 +10,7 @@ import UIKit
 
 open class PDFDocument: NSObject, NSCoding {
     
-    lazy open var documentRef:CGPDFDocument? = {
+    lazy open var documentRef: CGPDFDocument? = {
         do {
             if let fileUrl = self.fileUrl {
                 return try CGPDFDocument.create(fileUrl, password: self.password)

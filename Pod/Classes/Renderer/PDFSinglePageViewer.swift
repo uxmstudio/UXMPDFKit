@@ -9,9 +9,9 @@
 import UIKit
 
 public protocol PDFSinglePageViewerDelegate {
-    func singlePageViewer(_ collectionView: PDFSinglePageViewer, didDisplayPage page:Int)
-    func singlePageViewer(_ collectionView: PDFSinglePageViewer, loadedContent content:PDFPageContentView)
-    func singlePageViewer(_ collectionView: PDFSinglePageViewer, selectedAction action:PDFAction)
+    func singlePageViewer(_ collectionView: PDFSinglePageViewer, didDisplayPage page: Int)
+    func singlePageViewer(_ collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView)
+    func singlePageViewer(_ collectionView: PDFSinglePageViewer, selectedAction action: PDFAction)
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, tapped recognizer: UITapGestureRecognizer)
 }
 

@@ -195,7 +195,7 @@ class PDFDictionary: NSObject, PDFObject {
         return nil
     }
     
-    var getDictionaryObjects:CGPDFDictionaryApplierFunction = { (key, object, info) in
+    var getDictionaryObjects: CGPDFDictionaryApplierFunction = { (key, object, info) in
         let context = info!.assumingMemoryBound(to: PDFObjectParserContext.self).pointee
         context.keys.append(key)
     }

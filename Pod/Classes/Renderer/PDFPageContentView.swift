@@ -25,7 +25,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     
     let bottomKeyboardPadding: CGFloat = 20.0
     
-    init(frame:CGRect, document: PDFDocument, page:Int) {
+    init(frame: CGRect, document: PDFDocument, page: Int) {
         self.page = page
         contentView = PDFPageContent(document: document, page: page)
         
@@ -210,7 +210,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         let keyboardEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let convertedKeyboardEndFrame = self.convert(keyboardEndFrame, from: self.window)
         
-        let height:CGFloat
+        let height: CGFloat
         if convertedKeyboardEndFrame.height > 0 && show {
             height = convertedKeyboardEndFrame.height + bottomKeyboardPadding
         } else {
@@ -222,7 +222,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     
     
     //MARK: - Helper methods
-    static func zoomScaleThatFits(_ target: CGSize, source:CGSize) -> CGFloat {
+    static func zoomScaleThatFits(_ target: CGSize, source: CGSize) -> CGFloat {
         let widthScale = target.width / source.width
         let heightScale = target.height / source.height
         return (widthScale < heightScale) ? widthScale : heightScale

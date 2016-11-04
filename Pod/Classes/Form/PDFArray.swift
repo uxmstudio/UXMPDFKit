@@ -59,7 +59,7 @@ class PDFArray: NSObject, PDFObject {
     }
     
     func pdfObjectAtIndex(_ index: Int) -> AnyObject? {
-        var object:CGPDFObjectRef? = nil
+        var object: CGPDFObjectRef? = nil
         if CGPDFArrayGetObject(arr, index, &object) {
             
             let type = CGPDFObjectGetType(object!)

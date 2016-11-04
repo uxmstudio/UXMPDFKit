@@ -147,7 +147,7 @@ class PDFSnapshotCache {
     }
     
     func setObject(_ image: UIImage, key: String) {
-        let bytes:Int = Int(image.size.width * image.size.height * 4.0)
+        let bytes = Int(image.size.width * image.size.height * 4.0)
         cache.setObject(image, forKey: (key as NSString), cost: bytes)
     }
     

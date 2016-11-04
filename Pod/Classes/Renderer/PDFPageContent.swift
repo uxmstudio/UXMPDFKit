@@ -91,7 +91,7 @@ class PDFPageContent: UIView {
         buildAnnotationLinksList()
     }
     
-    convenience init(document: PDFDocument, page:Int) {
+    convenience init(document: PDFDocument, page: Int) {
         self.init(pdfDocument: document, page: page, password: document.password)
     }
     
@@ -266,7 +266,7 @@ class PDFDocumentLink: NSObject {
     var rect: CGRect
     var dictionary: CGPDFDictionaryRef
     
-    static func new(_ rect:CGRect, dictionary:CGPDFDictionaryRef) -> PDFDocumentLink {
+    static func new(_ rect: CGRect, dictionary: CGPDFDictionaryRef) -> PDFDocumentLink {
         return PDFDocumentLink(rect: rect, dictionary: dictionary)
     }
     
