@@ -29,7 +29,6 @@ fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 open class PDFFormTextField: PDFFormField {
-    
     var multiline: Bool
     var textEntryBox: UIView
     var baseFontSize: CGFloat
@@ -38,73 +37,70 @@ open class PDFFormTextField: PDFFormField {
     
     var text: String {
         get {
-            if let textField = self.textEntryBox as? UITextField {
+            if let textField = textEntryBox as? UITextField {
                 return textField.text ?? ""
             }
-            if let textView = self.textEntryBox as? UITextView {
+            if let textView = textEntryBox as? UITextView {
                 return textView.text ?? ""
             }
             return ""
         }
         set(updatedText) {
-            if let textField = self.textEntryBox as? UITextField {
+            if let textField = textEntryBox as? UITextField {
                 textField.text = updatedText
             }
-            if let textView = self.textEntryBox as? UITextView {
+            if let textView = textEntryBox as? UITextView {
                 textView.text = updatedText
             }
         }
     }
     
     init(frame: CGRect, multiline: Bool, alignment: NSTextAlignment) {
-        
         let rect = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
         
-        self.textEntryBox = multiline
+        textEntryBox = multiline
             ? UITextView(frame: rect)
             : UITextField(frame: rect)
         self.multiline = multiline
-        self.baseFontSize = 12.0
-        self.currentFontSize = baseFontSize
+        baseFontSize = 12.0
+        currentFontSize = baseFontSize
         self.alignment = alignment
         
         super.init(frame: frame)
         
-        self.setupUI()
+        setupUI()
     }
     
     func setupUI() {
-        
-        self.backgroundColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.7)
+        backgroundColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.7)
         if multiline {
-            if let textView = self.textEntryBox as? UITextView {
+            if let textView = textEntryBox as? UITextView {
                 textView.textAlignment = alignment
                 textView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 textView.delegate = self
                 textView.isScrollEnabled = true
                 textView.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4)
-                let fontSize = self.fontSizeForRect(self.frame) < 13.0 ? self.fontSizeForRect(self.frame) : 13.0
+                let fontSize = fontSizeForRect(frame) < 13.0 ? fontSizeForRect(frame) : 13.0
                 textView.font = UIFont.systemFont(ofSize: fontSize)
             }
-        }
-        else {
-            if let textField = self.textEntryBox as? UITextField {
+        } else {
+            if let textField = textEntryBox as? UITextField {
                 textField.textAlignment = alignment
                 textField.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 textField.delegate = self
                 textField.adjustsFontSizeToFitWidth = true
                 textField.minimumFontSize = 6.0
-                textField.font = UIFont.systemFont(ofSize: self.fontSizeForRect(self.frame))
+                textField.font = UIFont.systemFont(ofSize: fontSizeForRect(self.frame))
                 textField.addTarget(self, action: #selector(PDFFormTextField.textChanged), for: .editingChanged)
             }
             
-            self.layer.cornerRadius = self.frame.size.height / 6
+            layer.cornerRadius = frame.size.height / 6
         }
         
-        self.textEntryBox.isOpaque = false
-        self.textEntryBox.backgroundColor = UIColor.clear
+        textEntryBox.isOpaque = false
+        textEntryBox.backgroundColor = UIColor.clear
         
-        self.addSubview(self.textEntryBox)
+        addSubview(textEntryBox)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -112,28 +108,27 @@ open class PDFFormTextField: PDFFormField {
     }
     
     override open func refresh() {
-        self.setNeedsDisplay()
-        self.textEntryBox.setNeedsDisplay()
+        setNeedsDisplay()
+        textEntryBox.setNeedsDisplay()
     }
     
     override func didSetValue(_ value: AnyObject?) {
         if let value = value as? String {
-            self.text = value
+            text = value
         }
     }
     
     func fontSizeForRect(_ rect: CGRect) -> CGFloat {
-        
         return rect.size.height * 0.7
     }
     
     override func renderInContext(_ context: CGContext) {
         let text: String
         let font: UIFont
-        if let textField = self.textEntryBox as? UITextField {
+        if let textField = textEntryBox as? UITextField {
             text = textField.text ?? ""
             font = textField.font!
-        } else if let textView = self.textEntryBox as? UITextView {
+        } else if let textView = textEntryBox as? UITextView {
             text = textView.text
             font = textView.font!
         } else {
@@ -141,39 +136,37 @@ open class PDFFormTextField: PDFFormField {
         }
         
         /// UGLY
-        (text as NSString!).draw(in: self.frame, withAttributes: [
+        (text as NSString!).draw(in: frame, withAttributes: [
             NSFontAttributeName: font
             ])
     }
 }
 
 extension PDFFormTextField: UITextFieldDelegate {
-
     func textChanged() {
-        self.value = self.text as AnyObject?
-        self.delegate?.formFieldValueChanged(self)
+        value = text as AnyObject?
+        delegate?.formFieldValueChanged(self)
     }
     
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        self.delegate?.formFieldEntered(self)
+        delegate?.formFieldEntered(self)
     }
 }
 
 extension PDFFormTextField: UITextViewDelegate {
-    
     public func textViewDidBeginEditing(_ textView: UITextView) {
-        self.delegate?.formFieldEntered(self)
+        delegate?.formFieldEntered(self)
     }
     
     public func textViewDidChange(_ textView: UITextView) {
-        self.delegate?.formFieldValueChanged(self)
+        delegate?.formFieldValueChanged(self)
     }
     
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newString = (textView.text! as NSString).replacingCharacters(in: range, with: text)
-        self.value = newString as AnyObject?
+        value = newString as AnyObject?
 
-        self.delegate?.formFieldValueChanged(self)
+        delegate?.formFieldValueChanged(self)
         return false
     }
 }

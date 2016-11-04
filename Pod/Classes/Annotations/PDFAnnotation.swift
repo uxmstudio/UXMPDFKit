@@ -9,10 +9,9 @@
 import UIKit
 
 protocol PDFAnnotation {
-    
     func mutableView() -> UIView
-    func touchStarted(_ touch: UITouch, point:CGPoint)
-    func touchMoved(_ touch:UITouch, point:CGPoint)
-    func touchEnded(_ touch:UITouch, point:CGPoint)
+    func touchStarted(_ touch: UITouch, point: CGPoint)
+    func touchMoved(_ touch: UITouch, point: CGPoint)
+    func touchEnded(_ touch: UITouch, point: CGPoint)
     func drawInContext(_ context: CGContext)
 }

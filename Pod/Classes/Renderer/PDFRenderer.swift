@@ -13,7 +13,6 @@ public protocol PDFRenderer {
 }
 
 open class PDFRenderController {
-    
     var document: PDFDocument
     var renderControllers: [PDFRenderer] = []
     
@@ -31,7 +30,7 @@ open class PDFRenderController {
         UIGraphicsBeginPDFContextToFile(tempPath, CGRect.zero, nil)
         for i in 1...pages {
             let page = documentRef?.page(at: i)
-            let bounds = self.document.boundsForPDFPage(i)
+            let bounds = document.boundsForPDFPage(i)
             
             if let context = UIGraphicsGetCurrentContext() {
                 UIGraphicsBeginPDFPageWithInfo(bounds, nil)

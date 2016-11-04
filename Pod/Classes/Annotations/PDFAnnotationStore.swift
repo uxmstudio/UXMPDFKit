@@ -9,17 +9,12 @@
 import UIKit
 
 open class PDFAnnotationStore {
-    
-    var pages: [Int:PDFAnnotationPage] = [:]
+    var pages: [Int: PDFAnnotationPage] = [:]
     
     func add(_ annotation: PDFAnnotation, page: Int) {
-        
-        if let storePage:PDFAnnotationPage = pages[page] {
-            
+        if let storePage = pages[page] {
             storePage.addAnnotation(annotation)
-        }
-        else {
-            
+        } else {
             let storePage = PDFAnnotationPage()
             storePage.addAnnotation(annotation)
             storePage.page = page
@@ -43,7 +38,6 @@ open class PDFAnnotationStore {
 }
 
 open class PDFAnnotationPage {
-    
     var annotations: [PDFAnnotation] = []
     var page: Int = 0
     
@@ -52,14 +46,12 @@ open class PDFAnnotationPage {
     }
     
     func renderInContext(_ context: CGContext, size: CGRect) {
-        
-        for annotation in self.annotations {
+        for annotation in annotations {
             annotation.drawInContext(context)
         }
     }
     
     func undo() -> PDFAnnotation? {
-        
-        return self.annotations.popLast()
+        return annotations.popLast()
     }
 }
