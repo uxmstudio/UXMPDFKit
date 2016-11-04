@@ -77,11 +77,6 @@ open class PDFViewController: UIViewController {
         reloadBarButtons()
     }
     
-    func loadDocument(_ document: PDFDocument) {
-        collectionView = PDFSinglePageViewer(frame: view.bounds, document: document)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-    }
-    
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
