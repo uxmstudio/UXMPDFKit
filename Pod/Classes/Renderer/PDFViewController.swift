@@ -249,7 +249,7 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
 }
 
 
-open class PDFBarButton:UIBarButtonItem {
+open class PDFBarButton: UIBarButtonItem {
     fileprivate var button: UIButton = UIButton(frame: CGRect(x: 0,y: 0,width: 32,height: 32))
     fileprivate var toggled = false
     fileprivate lazy var defaultTint = UIColor.blue
