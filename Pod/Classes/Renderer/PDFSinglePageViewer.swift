@@ -16,7 +16,6 @@ public protocol PDFSinglePageViewerDelegate {
 }
 
 open class PDFSinglePageViewer: UICollectionView {
-    
     open var singlePageDelegate: PDFSinglePageViewerDelegate?
     
     open var document: PDFDocument?

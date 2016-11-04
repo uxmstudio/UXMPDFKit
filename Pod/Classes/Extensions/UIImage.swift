@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIImage {
-    
     class func bundledImage(_ named: String) -> UIImage? {
         let image = UIImage(named: named)
         

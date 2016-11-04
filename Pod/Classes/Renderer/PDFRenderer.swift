@@ -52,7 +52,6 @@ open class PDFRenderController {
     }
     
     open func save(_ url: URL) -> Bool {
-        
         let tempUrl = self.renderOntoPDF()
         let fileManger = FileManager.default
         do {

@@ -9,7 +9,6 @@
 import UIKit
 
 open class PDFFormButtonField: PDFFormField {
-    
     open var radio = false
     open var noOff = false
     open var pushButton = false

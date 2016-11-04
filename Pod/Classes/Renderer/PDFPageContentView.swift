@@ -167,7 +167,6 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     open func zoomDecrement() {
-        
         var zoomScale = self.zoomScale
         
         if zoomScale < minimumZoomScale {
