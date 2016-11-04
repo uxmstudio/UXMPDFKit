@@ -151,8 +151,8 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
         didDisplayPage(scrollView)
     }
     
-        let page: Int = Int((scrollView.contentOffset.x + scrollView.frame.size.width) / scrollView.frame.size.width)
     private func didDisplayPage(_ scrollView: UIScrollView) {
+        let page = Int((scrollView.contentOffset.x + scrollView.frame.size.width) / scrollView.frame.size.width)
         singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
     }
 }
