@@ -19,7 +19,6 @@ open class PDFSinglePageViewer: UICollectionView {
     open var singlePageDelegate: PDFSinglePageViewerDelegate?
     
     open var document: PDFDocument?
-    fileprivate var bookmarkedPages: [String]?
     
     private static var flowLayout: UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
