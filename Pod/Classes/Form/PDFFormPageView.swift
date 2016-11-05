@@ -42,7 +42,7 @@ open class PDFFormPage:NSObject {
     var page: Int
     var zoomScale: CGFloat = 1.0
     
-    init(page:Int) {
+    init(page: Int) {
         self.page = page
     }
     

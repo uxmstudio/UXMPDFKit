@@ -273,7 +273,7 @@ class PDFFormFieldSignatureCaptureView: UIView {
     }
     
     // Save the Signature as an UIImage
-    func getSignature(scale:CGFloat = 1) -> UIImage? {
+    func getSignature(scale: CGFloat = 1) -> UIImage? {
         if !containsSignature {
             return nil
         }
@@ -286,7 +286,7 @@ class PDFFormFieldSignatureCaptureView: UIView {
         return signature
     }
     
-    func getSignatureCropped(scale:CGFloat = 1) -> UIImage? {
+    func getSignatureCropped(scale: CGFloat = 1) -> UIImage? {
         guard let fullRender = getSignature(scale:scale) else {
             return nil
         }

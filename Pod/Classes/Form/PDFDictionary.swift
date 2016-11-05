@@ -176,7 +176,6 @@ class PDFDictionary: NSObject, PDFObject {
     func pdfObjectForKey(_ key: UnsafePointer<Int8>) -> AnyObject? {
         var object: CGPDFObjectRef? = nil
         if CGPDFDictionaryGetObject(dict, key, &object) {
-            
             let type = CGPDFObjectGetType(object!)
             switch type {
             case CGPDFObjectType.boolean: return booleanFromKey(key) as AnyObject?
@@ -195,7 +194,7 @@ class PDFDictionary: NSObject, PDFObject {
         return nil
     }
     
-    var getDictionaryObjects:CGPDFDictionaryApplierFunction = { (key, object, info) in
+    var getDictionaryObjects: CGPDFDictionaryApplierFunction = { (key, object, info) in
         let context = info!.assumingMemoryBound(to: PDFObjectParserContext.self).pointee
         context.keys.append(key)
     }

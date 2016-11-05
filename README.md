@@ -63,9 +63,9 @@ collectionView.singlePageDelegate = self
 Its delegate methods are implemented as follows:
 
 ```swift
-func singlePageViewer(collectionView: PDFSinglePageViewer, didDisplayPage page:Int)
-func singlePageViewer(collectionView: PDFSinglePageViewer, loadedContent content:PDFPageContentView)
-func singlePageViewer(collectionView: PDFSinglePageViewer, selectedAction action:PDFAction)
+func singlePageViewer(collectionView: PDFSinglePageViewer, didDisplayPage page: Int)
+func singlePageViewer(collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView)
+func singlePageViewer(collectionView: PDFSinglePageViewer, selectedAction action: PDFAction)
 ```
 
 
@@ -106,7 +106,6 @@ To create a new annotation type, you must extend the following protocol:
 
 ```swift
 protocol PDFAnnotation {
-
     func mutableView() -> UIView
     func touchStarted(touch: UITouch, point:CGPoint)
     func touchMoved(touch:UITouch, point:CGPoint)

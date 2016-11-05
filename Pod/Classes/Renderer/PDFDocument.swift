@@ -10,7 +10,7 @@ import UIKit
 
 open class PDFDocument: NSObject, NSCoding {
     
-    lazy open var documentRef:CGPDFDocument? = {
+    lazy open var documentRef: CGPDFDocument? = {
         do {
             if let fileUrl = self.fileUrl {
                 return try CGPDFDocument.create(fileUrl, password: self.password)
@@ -58,12 +58,10 @@ open class PDFDocument: NSObject, NSCoding {
     }
     
     static func unarchiveDocumentForFile(_ filePath: String, password: String?) -> PDFDocument? {
-        
         return nil
     }
     
     public required init?(coder aDecoder: NSCoder) {
-        
         self.guid = aDecoder.decodeObject(forKey: "fileGUID") as! String
         self.currentPage = aDecoder.decodeObject(forKey: "currentPage") as! Int
         self.bookmarks = aDecoder.decodeObject(forKey: "bookmarks") as! NSMutableIndexSet
@@ -76,12 +74,10 @@ open class PDFDocument: NSObject, NSCoding {
     }
     
     public convenience init(filePath: String) throws {
-        
         try self.init(filePath: filePath, password: nil)
     }
     
     public init(filePath: String, password: String?) throws {
-        
         self.guid = PDFDocument.GUID()
         self.password = password
         self.fileUrl = URL(fileURLWithPath: filePath, isDirectory: false)
@@ -95,7 +91,6 @@ open class PDFDocument: NSObject, NSCoding {
     }
     
     public init(fileData: NSData, password: String?) throws {
-        
         self.guid = PDFDocument.GUID()
         self.password = password
         self.fileData = fileData
@@ -184,7 +179,6 @@ open class PDFDocument: NSObject, NSCoding {
     //MARK: - Helper methods
     
     static func GUID() -> String {
-        
         return ProcessInfo.processInfo.globallyUniqueString
     }
     
@@ -193,33 +187,28 @@ open class PDFDocument: NSObject, NSCoding {
     }
     
     open static func applicationPath() -> String {
-        
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         return (paths.first! as NSString).deletingLastPathComponent
     }
     
     open static func applicationSupportPath() -> String {
-        
         let fileManager = FileManager()
         let pathURL = try! fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         return pathURL.path
     }
     
     static func archiveFilePathForFileAtPath(_ path: String) -> String {
-        
         let archivePath = PDFDocument.applicationSupportPath()
         let archiveName = "random-name-fix-later.plist"
         return (archivePath as NSString).appendingPathComponent(archiveName)
     }
     
     func archiveWithFileAtPath(_ filePath: String) -> Bool {
-        
         let archiveFilePath = PDFDocument.archiveFilePathForFileAtPath(filePath)
         return NSKeyedArchiver.archiveRootObject(self, toFile: archiveFilePath)
     }
     
     open func save() {
-        
         if let filePath = fileUrl?.path {
             let _ = self.archiveWithFileAtPath(filePath)
         }
@@ -264,7 +253,6 @@ open class PDFDocument: NSObject, NSCoding {
     //    }
     
     open func encode(with aCoder: NSCoder) {
-        
         aCoder.encode(self.guid, forKey: "fileGUID")
         aCoder.encode(self.currentPage, forKey: "currentPage")
         aCoder.encode(self.bookmarks, forKey: "bookmarks")

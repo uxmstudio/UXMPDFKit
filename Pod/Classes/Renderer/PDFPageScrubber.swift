@@ -9,7 +9,7 @@
 import UIKit
 
 public protocol PDFPageScrubberDelegate {
-    func scrubber(_ scrubber:PDFPageScrubber, selectedPage:Int)
+    func scrubber(_ scrubber: PDFPageScrubber, selectedPage: Int)
 }
 
 open class PDFPageScrubber: UIToolbar {

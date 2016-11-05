@@ -17,25 +17,20 @@ public enum CGPDFDocumentError: Error {
 extension CGPDFDocument {
     
     public static func create(_ url: URL, password: String?) throws -> CGPDFDocument {
-        
         guard let docRef = CGPDFDocument((url as CFURL)) else {
             throw CGPDFDocumentError.fileDoesNotExist
         }
         
         if docRef.isEncrypted {
-            
             guard let password = password else {
-                
                 throw CGPDFDocumentError.passwordRequired
             }
             
             if docRef.unlockWithPassword("") == false {
-                
                 docRef.unlockWithPassword((password as NSString).utf8String!)
             }
             
             if docRef.isUnlocked == false {
-                
                 throw CGPDFDocumentError.couldNotUnlock
             }
         }

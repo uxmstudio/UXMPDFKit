@@ -9,7 +9,6 @@
 import UIKit
 
 protocol PDFFormViewDelegate {
-    
     func formFieldValueChanged(_ widget: PDFFormField)
     func formFieldEntered(_ widget: PDFFormField)
     func formFieldOptionsChanged(_ widget: PDFFormField)

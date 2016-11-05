@@ -9,9 +9,7 @@
 import Foundation
 
 open class PDFAction {
-    
     open static func fromPDFDictionary(_ sourceDictionary: CGPDFDictionaryRef, documentReference: CGPDFDocument) -> PDFAction? {
-        
         var action: PDFAction?
         var destinationName: CGPDFStringRef? = nil
         var destinationString: UnsafePointer<Int8>? = nil
@@ -199,7 +197,6 @@ open class PDFAction {
 }
 
 open class PDFActionGoTo: PDFAction {
-    
     var pageIndex: Int
     
     public init(pageIndex: Int) {
@@ -208,7 +205,6 @@ open class PDFActionGoTo: PDFAction {
 }
 
 open class PDFActionURL: PDFAction {
-    
     var url: URL
     
     public init(url: URL) {
