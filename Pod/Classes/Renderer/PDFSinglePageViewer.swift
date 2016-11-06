@@ -105,13 +105,13 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.dequeueReusableCell(withReuseIdentifier: "ContentCell", for: indexPath) as! PDFSinglePageCell
         
-        var contentSize = CGRect.zero
-        contentSize.size = self.collectionView(collectionView, layout: collectionViewLayout, sizeForItemAt: indexPath)
+        let contentSize = self.collectionView(collectionView, layout: collectionViewLayout, sizeForItemAt: indexPath)
+        let contentFrame = CGRect(origin: CGPoint.zero, size: contentSize)
         
         let page = (indexPath as NSIndexPath).row + 1
         
         cell.contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        cell.pageContentView = PDFPageContentView(frame: contentSize, document: document!, page: page)
+        cell.pageContentView = PDFPageContentView(frame: contentFrame, document: document!, page: page)
         cell.pageContentView?.contentDelegate = self
         
         return cell
