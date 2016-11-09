@@ -87,7 +87,7 @@ open class PDFAnnotationController: UIViewController {
     open func showAnnotations(_ contentView: PDFPageContentView) {
         currentPage = contentView
         
-        for annot in annotations.annotationsForPage(contentView.page) {
+        for annot in annotations.annotations(page: contentView.page) {
             pageView?.addSubview(annot.mutableView())
         }
     }
@@ -116,9 +116,8 @@ open class PDFAnnotationController: UIViewController {
     
     open func finishAnnotation() {
         guard let annotation = currentAnnotation else { return }
-        guard let currentPage = currentPage else { return }
         
-        annotations.add(annotation, page: currentPage.page)
+        annotations.add(annotation: annotation)
         
         annotationType = .none
         currentAnnotation = nil
@@ -167,7 +166,7 @@ open class PDFAnnotationController: UIViewController {
     func undo() {
         clear()
         guard let currentPage = currentPage else { return }
-        let _ = annotations.undo(currentPage.page)
+        let _ = annotations.undo()
         showAnnotations(currentPage)
     }
     
@@ -206,6 +205,6 @@ open class PDFAnnotationController: UIViewController {
 
 extension PDFAnnotationController: PDFRenderer {
     public func render(_ page: Int, context: CGContext, bounds: CGRect) {
-        annotations.get(page)?.renderInContext(context, size: bounds)
+        annotations.renderInContext(context, size: bounds, page: page)
     }
 }
