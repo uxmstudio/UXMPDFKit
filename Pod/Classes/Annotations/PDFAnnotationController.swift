@@ -19,7 +19,11 @@ open class PDFAnnotationController: UIViewController {
     var document: PDFDocument!
     var annotations = PDFAnnotationStore()
     var currentPage: PDFPageContentView?
-    var pageView: PDFPageContent?
+    
+    var pageView: PDFPageContent? {
+        return currentPage?.contentView
+    }
+    
     var annotationType: PDFAnnotationType = .none
     
     var currentAnnotation: PDFAnnotation?
@@ -75,12 +79,8 @@ open class PDFAnnotationController: UIViewController {
     //MARK: - Annotation handling
     open func showAnnotations(_ contentView: PDFPageContentView) {
         currentPage = contentView
-        let page = contentView.page
         
-        pageView = contentView.contentView
-        
-        let annotations = self.annotations.annotationsForPage(page)
-        for annot in annotations {
+        for annot in annotations.annotationsForPage(contentView.page) {
             pageView?.addSubview(annot.mutableView())
         }
     }
