@@ -15,6 +15,10 @@ public enum PDFAnnotationType {
     case highlighter
 }
 
+public protocol PDFAnnotationControllerProtocol {
+    func annotationWillStart(touch: UITouch) -> Int?
+}
+
 open class PDFAnnotationController: UIViewController {
     var document: PDFDocument!
     var annotations = PDFAnnotationStore()
@@ -25,6 +29,8 @@ open class PDFAnnotationController: UIViewController {
     }
     
     var annotationType: PDFAnnotationType = .none
+    
+    var annotationDelegate: PDFAnnotationControllerProtocol?
     
     var currentAnnotation: PDFAnnotation?
     
@@ -58,8 +64,9 @@ open class PDFAnnotationController: UIViewController {
     )
     
     //MARK: - Init
-    public init(document: PDFDocument) {
+    public init(document: PDFDocument, delegate: PDFAnnotationControllerProtocol) {
         self.document = document
+        self.annotationDelegate = delegate
         
         super.init(nibName: nil, bundle: nil)
         
@@ -174,6 +181,8 @@ open class PDFAnnotationController: UIViewController {
     //MARK: - Touches methods to pass to annotation
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
+        let page = annotationDelegate?.annotationWillStart(touch: touch)
+        
         let point = touch.location(in: pageView)
         
         currentAnnotation?.touchStarted(touch, point: point)

@@ -31,7 +31,7 @@ open class PDFViewController: UIViewController {
     public var scrollDirection: UICollectionViewScrollDirection = .horizontal
     
     lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
-    lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document)
+    lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document, delegate: self)
     
     fileprivate var showingAnnotations = false
     fileprivate var showingFormFilling = true
@@ -212,6 +212,13 @@ open class PDFViewController: UIViewController {
     
     func dismissModal() {
         dismiss(animated: true, completion: nil)
+    }
+}
+
+extension PDFViewController: PDFAnnotationControllerProtocol {
+    public func annotationWillStart(touch: UITouch) -> Int? {
+        let tapPoint = touch.location(in: collectionView)
+        return collectionView.indexPathForItem(at: tapPoint)?.row
     }
 }
 
