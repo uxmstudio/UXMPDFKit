@@ -9,6 +9,8 @@
 import UIKit
 
 class PDFPathAnnotation {
+    var page: Int?
+    
     var path: UIBezierPath = UIBezierPath()
     var color: UIColor = UIColor.black {
         didSet {

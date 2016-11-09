@@ -9,6 +9,8 @@
 import UIKit
 
 class PDFTextAnnotation: NSObject {
+    var page: Int?
+    
     var text = "" {
         didSet {
             textView.text = text
