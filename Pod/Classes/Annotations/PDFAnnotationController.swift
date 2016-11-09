@@ -176,34 +176,26 @@ open class PDFAnnotationController: UIViewController {
         guard let touch = touches.first else { return }
         let point = touch.location(in: pageView)
         
-        if let annotation = currentAnnotation {
-            annotation.touchStarted(touch, point: point)
-        }
+        currentAnnotation?.touchStarted(touch, point: point)
     }
     
     open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let point = touch.location(in: pageView)
         
-        if let annotation = currentAnnotation {
-            annotation.touchMoved(touch, point: point)
-        }
+        currentAnnotation?.touchMoved(touch, point: point)
     }
     
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let point = touch.location(in: pageView)
         
-        if let annotation = currentAnnotation {
-            annotation.touchEnded(touch, point: point)
-        }
+        currentAnnotation?.touchEnded(touch, point: point)
     }
 }
 
 extension PDFAnnotationController: PDFRenderer {
     public func render(_ page: Int, context: CGContext, bounds: CGRect) {
-        if let page = annotations.get(page) {
-            page.renderInContext(context, size: bounds)
-        }
+        annotations.get(page)?.renderInContext(context, size: bounds)
     }
 }
