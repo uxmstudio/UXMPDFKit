@@ -20,7 +20,6 @@ open class PDFAnnotationController: UIViewController {
     var annotations = PDFAnnotationStore()
     var currentPage: PDFPageContentView?
     var pageView: PDFPageContent?
-    var lastPoint: CGPoint?
     var annotationType: PDFAnnotationType = .none
     
     var currentAnnotation: PDFAnnotation?
@@ -180,8 +179,6 @@ open class PDFAnnotationController: UIViewController {
         if let annotation = currentAnnotation {
             annotation.touchStarted(touch, point: point)
         }
-        
-        lastPoint = point
     }
     
     open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -191,8 +188,6 @@ open class PDFAnnotationController: UIViewController {
         if let annotation = currentAnnotation {
             annotation.touchMoved(touch, point: point)
         }
-        
-        lastPoint = point
     }
     
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -202,8 +197,6 @@ open class PDFAnnotationController: UIViewController {
         if let annotation = currentAnnotation {
             annotation.touchEnded(touch, point: point)
         }
-        
-        lastPoint = point
     }
 }
 
