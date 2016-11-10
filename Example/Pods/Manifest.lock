@@ -1,16 +1,16 @@
 PODS:
-  - UXMPDFKit (0.4.0)
+  - UXMPDFKit (0.4.7)
 
 DEPENDENCIES:
   - UXMPDFKit (from `../`)
 
 EXTERNAL SOURCES:
   UXMPDFKit:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
-  UXMPDFKit: f5303f1c1aac4437e89e37f723e6692efc3befcb
+  UXMPDFKit: fe7d8d6ae849b679a9eb61a4eb3b38851ee4ff09
 
 PODFILE CHECKSUM: 46572415aec518e632bcccd6baa0dcc394d5ae6e
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.1.1

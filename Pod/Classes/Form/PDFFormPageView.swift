@@ -54,7 +54,9 @@ open class PDFFormPage: NSObject {
             fields: self.fields)
         
         formView.zoomScale = contentView.zoomScale
-        contentView.contentView.addSubview(formView)
+        if contentView.contentView.subviews.filter({ $0 is PDFFormPageView }).count <= 0 {
+            contentView.contentView.addSubview(formView)
+        }
         contentView.viewDidZoom = { scale in
             formView.updateWithZoom(scale)
         }

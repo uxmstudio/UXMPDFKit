@@ -13,6 +13,8 @@ public protocol PDFSinglePageViewerDelegate {
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView)
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, selectedAction action: PDFAction)
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, tapped recognizer: UITapGestureRecognizer)
+    func singlePageViewerDidBeginDragging()
+    func singlePageViewerDidEndDragging()
 }
 
 open class PDFSinglePageViewer: UICollectionView {
@@ -143,6 +145,15 @@ extension PDFSinglePageViewer: UICollectionViewDelegateFlowLayout {
 }
 
 extension PDFSinglePageViewer: UIScrollViewDelegate {
+    
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.singlePageDelegate?.singlePageViewerDidBeginDragging()
+    }
+    
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        self.singlePageDelegate?.singlePageViewerDidEndDragging()
+    }
+    
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         didDisplayPage(scrollView)
     }

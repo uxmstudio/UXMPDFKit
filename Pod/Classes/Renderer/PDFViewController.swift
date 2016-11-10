@@ -11,7 +11,7 @@ import SafariServices
 
 open class PDFViewController: UIViewController {
     
-    open var hidesBarsOnTap: Bool = false
+    open var hidesBarsOnTap: Bool = true
     open var showsScrubber: Bool = true {
         didSet {
             pageScrubber.isHidden = !showsScrubber
@@ -77,12 +77,17 @@ open class PDFViewController: UIViewController {
         view.addSubview(pageScrubber)
         view.addSubview(annotationController.view)
         
-        var constraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|[collectionView]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": view, "collectionView": collectionView])
-        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:|[collectionView]|", options: .alignAllLeft, metrics: nil, views: [ "superview": view, "collectionView": collectionView]))
-        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "H:|[scrubber]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": view, "scrubber": pageScrubber]))
-        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:[scrubber(44)]-0-[bottomLayout]", options: .alignAllLeft, metrics: nil, views: [ "scrubber": pageScrubber, "bottomLayout": bottomLayoutGuide ]))
+        self.collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        self.collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        self.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         
-        view.addConstraints(constraints)
+        self.pageScrubber.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        self.pageScrubber.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        self.pageScrubber.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        self.pageScrubber.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
+        
+        self.automaticallyAdjustsScrollViewInsets = false
         
         pageScrubber.sizeToFit()
         
@@ -177,16 +182,23 @@ open class PDFViewController: UIViewController {
         reloadBarButtons()
     }
     
-    //MARK: - IBActions
-    func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
+    func hideBars(state: Bool) {
+        navigationController?.setNavigationBarHidden(state, animated: true)
+        pageScrubber.isHidden = state
+    }
+    
+    func toggleBars() {
         if let nvc = navigationController, nvc.isNavigationBarHidden {
-            navigationController?.setNavigationBarHidden(false, animated: true)
-            pageScrubber.isHidden = false
+            hideBars(state: false)
         } else {
-            navigationController?.setNavigationBarHidden(true, animated: true)
-            pageScrubber.isHidden = true
+            hideBars(state: true)
         }
         collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+    //MARK: - IBActions
+    func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
+        self.toggleBars()
     }
     
     func shareForm() {
@@ -261,6 +273,12 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
             handleTap(recognizer)
         }
     }
+    
+    public func singlePageViewerDidBeginDragging() {
+        self.hideBars(state: true)
+    }
+    
+    public func singlePageViewerDidEndDragging() { }
 }
 
 
