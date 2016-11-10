@@ -51,7 +51,6 @@ open class PDFViewController: UIViewController {
         pageScrubber = PDFPageScrubber(frame: CGRect(x: 0, y: view.frame.size.height - bottomLayoutGuide.length, width: view.frame.size.width, height: 44.0), document: document)
         pageScrubber.scrubberDelegate = self
         pageScrubber.translatesAutoresizingMaskIntoConstraints = false
-        pageScrubber.isHidden = !showsScrubber
         
         collectionView = PDFSinglePageViewer(frame: view.bounds, document: document)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -63,7 +62,7 @@ open class PDFViewController: UIViewController {
         switch scrollDirection {
         case .horizontal:
             collectionView.isPagingEnabled = true
-            pageScrubber.isHidden = showsScrubber
+            pageScrubber.isHidden = !showsScrubber
         case .vertical:
             collectionView.isPagingEnabled = false
             pageScrubber.isHidden = true
@@ -218,7 +217,8 @@ open class PDFViewController: UIViewController {
 extension PDFViewController: PDFAnnotationControllerProtocol {
     public func annotationWillStart(touch: UITouch) -> Int? {
         let tapPoint = touch.location(in: collectionView)
-        return collectionView.indexPathForItem(at: tapPoint)?.row
+        guard let pageIndex = collectionView.indexPathForItem(at: tapPoint)?.row else { return nil }
+        return pageIndex + 1
     }
 }
 

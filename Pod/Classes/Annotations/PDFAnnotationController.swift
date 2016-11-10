@@ -21,18 +21,32 @@ public protocol PDFAnnotationControllerProtocol {
 
 open class PDFAnnotationController: UIViewController {
     var document: PDFDocument!
-    var annotations = PDFAnnotationStore()
-    var currentPage: PDFPageContentView?
     
-    var pageView: PDFPageContent? {
-        return currentPage?.contentView
-    }
+    var annotations = PDFAnnotationStore()
+    
+    var allPages = [PDFPageContentView]()
     
     var annotationType: PDFAnnotationType = .none
     
     var annotationDelegate: PDFAnnotationControllerProtocol?
     
     var currentAnnotation: PDFAnnotation?
+    
+    var currentAnnotationPage: Int? {
+        return currentAnnotation?.page
+    }
+    
+    var currentPage: PDFPageContentView? {
+        return allPages.filter({ $0.page == currentAnnotationPage }).first
+    }
+    
+    var pageView: PDFPageContent? {
+        return currentPage?.contentView
+    }
+    
+    func pageViewForPage(_ page: Int) -> PDFPageContent? {
+        return allPages.filter({ $0.page == page }).first?.contentView
+    }
     
     //MARK: - Bar button items
     lazy var penButton: PDFBarButton = PDFBarButton(
@@ -85,10 +99,15 @@ open class PDFAnnotationController: UIViewController {
     
     //MARK: - Annotation handling
     open func showAnnotations(_ contentView: PDFPageContentView) {
-        currentPage = contentView
+        let page = contentView.page
+        if let pageIndex = allPages.index(where: { $0.page == page }) {
+            allPages.remove(at: pageIndex)
+        }
+        allPages.append(contentView)
         
-        for annot in annotations.annotations(page: contentView.page) {
-            pageView?.addSubview(annot.mutableView())
+        let annotationsForPage = annotations.annotations(page: page)
+        for annotation in annotationsForPage {
+            contentView.contentView.addSubview(annotation.mutableView())
         }
     }
     
@@ -96,31 +115,20 @@ open class PDFAnnotationController: UIViewController {
         finishAnnotation()
         annotationType = type
         
-        switch type {
-        case .pen:
-            currentAnnotation = PDFPathAnnotation()
-        case .highlighter:
-            currentAnnotation = PDFHighlighterAnnotation()
-        case .text:
-            currentAnnotation = PDFTextAnnotation()
-        case .none:
-            break
-        }
+        createNewAnnotation()
         
         view.isUserInteractionEnabled = annotationType != .none
-        
-        if let annotation = currentAnnotation {
-            pageView?.addSubview(annotation.mutableView())
-        }
     }
     
     open func finishAnnotation() {
-        guard let annotation = currentAnnotation else { return }
-        
-        annotations.add(annotation: annotation)
+        // makes sure any textviews resign their first responder status
+        for annotation in annotations.annotations {
+            guard let annotation = annotation as? PDFTextAnnotation else { continue }
+            annotation.textView.resignFirstResponder()
+        }
         
         annotationType = .none
-        currentAnnotation = nil
+        addCurrentAnnotationToStore()
         view.isUserInteractionEnabled = false
     }
     
@@ -182,7 +190,16 @@ open class PDFAnnotationController: UIViewController {
         guard let touch = touches.first else { return }
         
         let page = annotationDelegate?.annotationWillStart(touch: touch)
+        
+        if currentAnnotation == nil {
+            createNewAnnotation()
+        }
+        
         currentAnnotation?.page = page
+        
+        if let currentAnnotation = currentAnnotation {
+            pageView?.addSubview(currentAnnotation.mutableView())
+        }
         
         let point = touch.location(in: pageView)
         currentAnnotation?.touchStarted(touch, point: point)
@@ -200,6 +217,28 @@ open class PDFAnnotationController: UIViewController {
         let point = touch.location(in: pageView)
         
         currentAnnotation?.touchEnded(touch, point: point)
+        
+        addCurrentAnnotationToStore()
+    }
+    
+    private func createNewAnnotation() {
+        switch annotationType {
+        case .pen:
+            currentAnnotation = PDFPathAnnotation()
+        case .highlighter:
+            currentAnnotation = PDFHighlighterAnnotation()
+        case .text:
+            currentAnnotation = PDFTextAnnotation()
+        case .none:
+            break
+        }
+    }
+    
+    private func addCurrentAnnotationToStore() {
+        if let currentAnnotation = currentAnnotation {
+            annotations.add(annotation: currentAnnotation)
+        }
+        currentAnnotation = nil
     }
 }
 

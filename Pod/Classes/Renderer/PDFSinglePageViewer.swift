@@ -128,11 +128,17 @@ extension PDFSinglePageViewer: UICollectionViewDelegate {
 
 extension PDFSinglePageViewer: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var size = bounds.size
-        //let contentInsetHeight = contentInset.bottom + contentInset.top + 1
-        //size.height -= contentInsetHeight
         
-        return size
+        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+        switch flowLayout.scrollDirection {
+        case .horizontal:
+            var size = bounds.size
+            let contentInsetHeight = contentInset.bottom + contentInset.top + 1
+            size.height -= contentInsetHeight
+            return size
+        case .vertical:
+            return bounds.size
+        }
     }
 }
 
