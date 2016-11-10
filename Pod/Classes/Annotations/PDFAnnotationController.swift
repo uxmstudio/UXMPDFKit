@@ -15,15 +15,38 @@ public enum PDFAnnotationType {
     case highlighter
 }
 
+public protocol PDFAnnotationControllerProtocol {
+    func annotationWillStart(touch: UITouch) -> Int?
+}
+
 open class PDFAnnotationController: UIViewController {
     var document: PDFDocument!
+    
     var annotations = PDFAnnotationStore()
-    var currentPage: PDFPageContentView?
-    var pageView: PDFPageContent?
-    var lastPoint: CGPoint?
+    
+    var allPages = [PDFPageContentView]()
+    
     var annotationType: PDFAnnotationType = .none
     
+    var annotationDelegate: PDFAnnotationControllerProtocol?
+    
     var currentAnnotation: PDFAnnotation?
+    
+    var currentAnnotationPage: Int? {
+        return currentAnnotation?.page
+    }
+    
+    var currentPage: PDFPageContentView? {
+        return allPages.filter({ $0.page == currentAnnotationPage }).first
+    }
+    
+    var pageView: PDFPageContent? {
+        return currentPage?.contentView
+    }
+    
+    func pageViewForPage(_ page: Int) -> PDFPageContent? {
+        return allPages.filter({ $0.page == page }).first?.contentView
+    }
     
     //MARK: - Bar button items
     lazy var penButton: PDFBarButton = PDFBarButton(
@@ -55,8 +78,9 @@ open class PDFAnnotationController: UIViewController {
     )
     
     //MARK: - Init
-    public init(document: PDFDocument) {
+    public init(document: PDFDocument, delegate: PDFAnnotationControllerProtocol) {
         self.document = document
+        self.annotationDelegate = delegate
         
         super.init(nibName: nil, bundle: nil)
         
@@ -75,14 +99,15 @@ open class PDFAnnotationController: UIViewController {
     
     //MARK: - Annotation handling
     open func showAnnotations(_ contentView: PDFPageContentView) {
-        currentPage = contentView
         let page = contentView.page
+        if let pageIndex = allPages.index(where: { $0.page == page }) {
+            allPages.remove(at: pageIndex)
+        }
+        allPages.append(contentView)
         
-        pageView = contentView.contentView
-        
-        let annotations = self.annotations.annotationsForPage(page)
-        for annot in annotations {
-            pageView?.addSubview(annot.mutableView())
+        let annotationsForPage = annotations.annotations(page: page)
+        for annotation in annotationsForPage {
+            contentView.contentView.addSubview(annotation.mutableView())
         }
     }
     
@@ -90,32 +115,20 @@ open class PDFAnnotationController: UIViewController {
         finishAnnotation()
         annotationType = type
         
-        switch type {
-        case .pen:
-            currentAnnotation = PDFPathAnnotation()
-        case .highlighter:
-            currentAnnotation = PDFHighlighterAnnotation()
-        case .text:
-            currentAnnotation = PDFTextAnnotation()
-        case .none:
-            break
-        }
+        createNewAnnotation()
         
         view.isUserInteractionEnabled = annotationType != .none
-        
-        if let annotation = currentAnnotation {
-            pageView?.addSubview(annotation.mutableView())
-        }
     }
     
     open func finishAnnotation() {
-        guard let annotation = currentAnnotation else { return }
-        guard let currentPage = currentPage else { return }
-        
-        annotations.add(annotation, page: currentPage.page)
+        // makes sure any textviews resign their first responder status
+        for annotation in annotations.annotations {
+            guard let annotation = annotation as? PDFTextAnnotation else { continue }
+            annotation.textView.resignFirstResponder()
+        }
         
         annotationType = .none
-        currentAnnotation = nil
+        addCurrentAnnotationToStore()
         view.isUserInteractionEnabled = false
     }
     
@@ -161,7 +174,7 @@ open class PDFAnnotationController: UIViewController {
     func undo() {
         clear()
         guard let currentPage = currentPage else { return }
-        let _ = annotations.undo(currentPage.page)
+        let _ = annotations.undo()
         showAnnotations(currentPage)
     }
     
@@ -175,42 +188,62 @@ open class PDFAnnotationController: UIViewController {
     //MARK: - Touches methods to pass to annotation
     open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
-        let point = touch.location(in: pageView)
         
-        if let annotation = currentAnnotation {
-            annotation.touchStarted(touch, point: point)
+        let page = annotationDelegate?.annotationWillStart(touch: touch)
+        
+        if currentAnnotation == nil {
+            createNewAnnotation()
         }
         
-        lastPoint = point
+        currentAnnotation?.page = page
+        
+        if let currentAnnotation = currentAnnotation {
+            pageView?.addSubview(currentAnnotation.mutableView())
+        }
+        
+        let point = touch.location(in: pageView)
+        currentAnnotation?.touchStarted(touch, point: point)
     }
     
     open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let point = touch.location(in: pageView)
         
-        if let annotation = currentAnnotation {
-            annotation.touchMoved(touch, point: point)
-        }
-        
-        lastPoint = point
+        currentAnnotation?.touchMoved(touch, point: point)
     }
     
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let point = touch.location(in: pageView)
         
-        if let annotation = currentAnnotation {
-            annotation.touchEnded(touch, point: point)
-        }
+        currentAnnotation?.touchEnded(touch, point: point)
         
-        lastPoint = point
+        addCurrentAnnotationToStore()
+    }
+    
+    private func createNewAnnotation() {
+        switch annotationType {
+        case .pen:
+            currentAnnotation = PDFPathAnnotation()
+        case .highlighter:
+            currentAnnotation = PDFHighlighterAnnotation()
+        case .text:
+            currentAnnotation = PDFTextAnnotation()
+        case .none:
+            break
+        }
+    }
+    
+    private func addCurrentAnnotationToStore() {
+        if let currentAnnotation = currentAnnotation {
+            annotations.add(annotation: currentAnnotation)
+        }
+        currentAnnotation = nil
     }
 }
 
 extension PDFAnnotationController: PDFRenderer {
     public func render(_ page: Int, context: CGContext, bounds: CGRect) {
-        if let page = annotations.get(page) {
-            page.renderInContext(context, size: bounds)
-        }
+        annotations.renderInContext(context, size: bounds, page: page)
     }
 }

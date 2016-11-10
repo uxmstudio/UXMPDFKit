@@ -24,23 +24,14 @@ open class PDFViewController: UIViewController {
     
     var document: PDFDocument!
     
-    lazy var collectionView: PDFSinglePageViewer = {
-        var collectionView = PDFSinglePageViewer(frame: self.view.bounds, document: self.document)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.singlePageDelegate = self
-        return collectionView
-    }()
+    var collectionView: PDFSinglePageViewer!
     
-    lazy var pageScrubber: PDFPageScrubber = {
-        var pageScrubber = PDFPageScrubber(frame: CGRect(x: 0, y: self.view.frame.size.height - self.bottomLayoutGuide.length, width: self.view.frame.size.width, height: 44.0), document: self.document)
-        pageScrubber.scrubberDelegate = self
-        pageScrubber.translatesAutoresizingMaskIntoConstraints = false
-        pageScrubber.isHidden = !self.showsScrubber
-        return pageScrubber
-    }()
+    var pageScrubber: PDFPageScrubber!
+    
+    public var scrollDirection: UICollectionViewScrollDirection = .horizontal
     
     lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
-    lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document)
+    lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document, delegate: self)
     
     fileprivate var showingAnnotations = false
     fileprivate var showingFormFilling = true
@@ -56,6 +47,27 @@ open class PDFViewController: UIViewController {
     
     override open func viewDidLoad() {
         super.viewDidLoad()
+        
+        pageScrubber = PDFPageScrubber(frame: CGRect(x: 0, y: view.frame.size.height - bottomLayoutGuide.length, width: view.frame.size.width, height: 44.0), document: document)
+        pageScrubber.scrubberDelegate = self
+        pageScrubber.translatesAutoresizingMaskIntoConstraints = false
+        
+        collectionView = PDFSinglePageViewer(frame: view.bounds, document: document)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.singlePageDelegate = self
+        
+        let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        flowLayout.scrollDirection = scrollDirection
+        
+        switch scrollDirection {
+        case .horizontal:
+            collectionView.isPagingEnabled = true
+            pageScrubber.isHidden = !showsScrubber
+        case .vertical:
+            collectionView.isPagingEnabled = false
+            pageScrubber.isHidden = true
+        }
+        
         self.setupUI()
         collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
     }
@@ -202,6 +214,14 @@ open class PDFViewController: UIViewController {
     }
 }
 
+extension PDFViewController: PDFAnnotationControllerProtocol {
+    public func annotationWillStart(touch: UITouch) -> Int? {
+        let tapPoint = touch.location(in: collectionView)
+        guard let pageIndex = collectionView.indexPathForItem(at: tapPoint)?.row else { return nil }
+        return pageIndex + 1
+    }
+}
+
 
 extension PDFViewController: PDFPageScrubberDelegate {
     public func scrubber(_ scrubber: PDFPageScrubber, selectedPage: Int) {
@@ -245,7 +265,7 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
 
 
 open class PDFBarButton: UIBarButtonItem {
-    fileprivate var button: UIButton = UIButton(frame: CGRect(x: 0,y: 0,width: 32,height: 32))
+    fileprivate var button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
     fileprivate var toggled = false
     fileprivate lazy var defaultTint = UIColor.blue
     

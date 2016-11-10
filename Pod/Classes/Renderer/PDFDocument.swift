@@ -242,16 +242,6 @@ open class PDFDocument: NSObject, NSCoding {
         }
     }
     
-    //    func setCurrentPage(currentPage: Int) {
-    //
-    //        if currentPage < 1 {
-    //            self.currentPage = 1
-    //        }
-    //        else if currentPage > self.pageCount {
-    //            self.currentPage = self.pageCount
-    //        }
-    //    }
-    
     open func encode(with aCoder: NSCoder) {
         aCoder.encode(self.guid, forKey: "fileGUID")
         aCoder.encode(self.currentPage, forKey: "currentPage")

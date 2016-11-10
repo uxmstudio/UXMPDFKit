@@ -19,7 +19,6 @@ open class PDFSinglePageViewer: UICollectionView {
     open var singlePageDelegate: PDFSinglePageViewerDelegate?
     
     open var document: PDFDocument?
-    fileprivate var bookmarkedPages: [String]?
     
     private static var flowLayout: UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
@@ -106,13 +105,13 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.dequeueReusableCell(withReuseIdentifier: "ContentCell", for: indexPath) as! PDFSinglePageCell
         
-        var contentSize = CGRect.zero
-        contentSize.size = self.collectionView(collectionView, layout: collectionViewLayout, sizeForItemAt: indexPath)
+        let contentSize = self.collectionView(collectionView, layout: collectionViewLayout, sizeForItemAt: indexPath)
+        let contentFrame = CGRect(origin: CGPoint.zero, size: contentSize)
         
         let page = (indexPath as NSIndexPath).row + 1
         
         cell.contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        cell.pageContentView = PDFPageContentView(frame: contentSize, document: document!, page: page)
+        cell.pageContentView = PDFPageContentView(frame: contentFrame, document: document!, page: page)
         cell.pageContentView?.contentDelegate = self
         
         return cell
@@ -120,10 +119,8 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
 }
 
 extension PDFSinglePageViewer: UICollectionViewDelegate {
-    
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let pdfCell = cell as! PDFSinglePageCell
-        if let pageContentView = pdfCell.pageContentView {
+        if let pdfCell = cell as? PDFSinglePageCell, let pageContentView = pdfCell.pageContentView {
             singlePageDelegate?.singlePageViewer(self, loadedContent: pageContentView)
         }
     }
@@ -131,10 +128,17 @@ extension PDFSinglePageViewer: UICollectionViewDelegate {
 
 extension PDFSinglePageViewer: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var size = bounds.size
-        size.height -= contentInset.bottom + contentInset.top + 1
         
-        return size
+        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+        switch flowLayout.scrollDirection {
+        case .horizontal:
+            var size = bounds.size
+            let contentInsetHeight = contentInset.bottom + contentInset.top + 1
+            size.height -= contentInsetHeight
+            return size
+        case .vertical:
+            return bounds.size
+        }
     }
 }
 
@@ -148,7 +152,14 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
     }
     
     private func didDisplayPage(_ scrollView: UIScrollView) {
-        let page = Int((scrollView.contentOffset.x + scrollView.frame.size.width) / scrollView.frame.size.width)
+        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+        let page: Int
+        switch flowLayout.scrollDirection {
+        case .horizontal:
+            page = Int((scrollView.contentOffset.x + scrollView.frame.width) / scrollView.frame.width)
+        case .vertical:
+            page = Int((scrollView.contentOffset.y + scrollView.frame.height) / scrollView.frame.height)
+        }
         singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
         
         let indexPath = IndexPath(row: page - 1, section: 0)
@@ -174,8 +185,9 @@ extension PDFSinglePageViewer: PDFPageContentViewDelegate {
     }
 }
 
-open class PDFSinglePageCell:UICollectionViewCell {
-    fileprivate var _pageContentView: PDFPageContentView?
+open class PDFSinglePageCell: UICollectionViewCell {
+    private var _pageContentView: PDFPageContentView?
+    
     open var pageContentView: PDFPageContentView? {
         get {
             return _pageContentView
