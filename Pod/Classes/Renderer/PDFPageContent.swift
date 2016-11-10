@@ -48,19 +48,17 @@ class PDFPageContent: UIView {
         /// Determine the page angle
         pageAngle = Int((pdfPageRef?.rotationAngle)!)
         
-        switch self.pageAngle {
+        switch pageAngle {
         case 90, 270:
             self.pageWidth = effectiveRect.size.height
             self.pageHeight = effectiveRect.size.width
             pageOffsetX = effectiveRect.origin.y
             pageOffsetY = effectiveRect.origin.x
-            break
         case 0, 180:
             self.pageWidth = effectiveRect.size.width
             self.pageHeight = effectiveRect.size.height
             pageOffsetX = effectiveRect.origin.x
             pageOffsetY = effectiveRect.origin.y
-            fallthrough
         default:
             break
         }
@@ -225,33 +223,30 @@ class PDFPageContent: UIView {
     
     //MARK: - Gesture Recognizer
     func processSingleTap(_ recognizer: UIGestureRecognizer) -> PDFAction? {
-        if recognizer.state == UIGestureRecognizerState.recognized {
-            
-            if links.count > 0 {
-                let point = recognizer.location(in: self)
-                
-                for link in links {
-                    if link.rect.contains(point) {
-                        return PDFAction.fromPDFDictionary(link.dictionary, documentReference: pdfDocRef)
-                    }
-                }
-            }
+        guard recognizer.state == .recognized else { return nil }
+        guard links.count > 0 else { return nil }
+        
+        let point = recognizer.location(in: self)
+        
+        for link in links where link.rect.contains(point) {
+            return PDFAction.fromPDFDictionary(link.dictionary, documentReference: pdfDocRef)
         }
         return nil
     }
     
     //MARK: - CATiledLayer Delegate Methods
     override func draw(_ layer: CALayer, in ctx: CGContext) {
+        guard let pdfPageRef = pdfPageRef else { return }
         ctx.setFillColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         ctx.fill(ctx.boundingBoxOfClipPath)
         
         /// Translate for page
         ctx.translateBy(x: 0.0, y: bounds.size.height)
         ctx.scaleBy(x: 1.0, y: -1.0)
-        ctx.concatenate((pdfPageRef?.getDrawingTransform(.cropBox, rect: bounds, rotate: 0, preserveAspectRatio: true))!)
+        ctx.concatenate((pdfPageRef.getDrawingTransform(.cropBox, rect: bounds, rotate: 0, preserveAspectRatio: true)))
         
         /// Render the PDF page into the context
-        ctx.drawPDFPage(pdfPageRef!)
+        ctx.drawPDFPage(pdfPageRef)
     }
     
     deinit {
