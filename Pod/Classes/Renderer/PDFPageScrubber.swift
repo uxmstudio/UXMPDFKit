@@ -17,7 +17,7 @@ open class PDFPageScrubber: UIToolbar {
     var scrubber = PDFPageScrubberTrackControl()
     
     var scrubberDelegate: PDFPageScrubberDelegate?
-    var thumbBackgroundColor = UIColor(white: 255, alpha: 0.7)
+    var thumbBackgroundColor = UIColor.white.withAlphaComponent(0.7)
     
     var thumbSmallGap: CGFloat = 2.0
     var thumbSmallWidth: CGFloat = 22.0
