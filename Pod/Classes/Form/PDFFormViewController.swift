@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class PDFFormViewController {
+open class PDFFormViewController: NSObject {
     var formPages: [Int: PDFFormPage] = [:]
     
     let document: PDFDocument
