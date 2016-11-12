@@ -231,7 +231,7 @@ open class PDFPageScrubber: UIToolbar {
             var pageThumbRect = pageThumbView!.frame
             
             if pageThumbX != pageThumbRect.origin.x {
-                pageThumbRect.origin.x = pageThumbX
+                pageThumbRect.origin.x = pageThumbX + CGFloat(page - 1)
                 pageThumbView?.frame = pageThumbRect
             }
         }
