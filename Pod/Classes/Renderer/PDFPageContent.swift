@@ -189,7 +189,7 @@ internal class PDFPageContent: UIView {
             
             let rect = CGRect(x: x, y: y, width: w, height: h)
             
-            return PDFDocumentLink.init(rect: rect, dictionary:annotation)
+            return PDFDocumentLink(rect: rect, dictionary:annotation)
         }
         return nil
     }

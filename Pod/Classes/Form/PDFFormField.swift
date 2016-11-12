@@ -14,7 +14,7 @@ protocol PDFFormViewDelegate {
     func formFieldOptionsChanged(_ widget: PDFFormField)
 }
 
-open class PDFFormFieldObject: NSObject {
+open class PDFFormFieldObject {
     var value: AnyObject?
     var options: PDFFormViewOptions?
     
@@ -23,12 +23,10 @@ open class PDFFormFieldObject: NSObject {
     init(dict: PDFDictionary) {
         self.dict = dict
         
-        super.init()
-        
         guard let type = dict["FT"] as? String else {
             return
         }
-        guard let rect = dict.arrayForKey("Rect")?.rect() else {
+        guard let rect = dict.arrayForKey("Rect")?.rect else {
             return
         }
         

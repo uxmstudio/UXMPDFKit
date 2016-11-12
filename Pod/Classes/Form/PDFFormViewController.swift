@@ -8,7 +8,7 @@
 
 import Foundation
 
-open class PDFFormViewController: NSObject {
+open class PDFFormViewController {
     var formPages: [Int: PDFFormPage] = [:]
     
     let document: PDFDocument
@@ -19,8 +19,6 @@ open class PDFFormViewController: NSObject {
         self.document = document
         
         parser = PDFObjectParser(document: document)
-        
-        super.init()
         
         setupUI()
     }
@@ -86,7 +84,7 @@ open class PDFFormViewController: NSObject {
             return nil
         }
         
-        var page = kids.count()
+        var page = kids.count
         
         for kid in kids {
             if let dict = kid as? PDFDictionary,

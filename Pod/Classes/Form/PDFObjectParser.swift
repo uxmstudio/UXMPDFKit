@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class PDFObjectParser: NSObject {
+open class PDFObjectParser {
     let document: PDFDocument
     let attributes: PDFDictionary?
     
@@ -19,8 +19,6 @@ open class PDFObjectParser: NSObject {
         } else {
             attributes = nil
         }
-        
-        super.init()
         
     }
 }
