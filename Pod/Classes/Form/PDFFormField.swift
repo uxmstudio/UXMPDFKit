@@ -18,7 +18,7 @@ open class PDFFormFieldObject: NSObject {
     var value: AnyObject?
     var options: PDFFormViewOptions?
     
-    var dict: PDFDictionary
+    let dict: PDFDictionary
     
     init(dict: PDFDictionary) {
         self.dict = dict

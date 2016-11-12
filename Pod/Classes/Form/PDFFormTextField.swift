@@ -29,11 +29,11 @@ fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 open class PDFFormTextField: PDFFormField {
-    var multiline: Bool
-    var textEntryBox: UIView
-    var baseFontSize: CGFloat
-    var currentFontSize: CGFloat
-    var alignment: NSTextAlignment
+    let multiline: Bool
+    let textEntryBox: UIView
+    let baseFontSize: CGFloat
+    let currentFontSize: CGFloat
+    let alignment: NSTextAlignment
     
     var text: String {
         get {
