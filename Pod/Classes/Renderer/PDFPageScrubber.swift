@@ -13,7 +13,7 @@ public protocol PDFPageScrubberDelegate {
 }
 
 open class PDFPageScrubber: UIToolbar {
-    var document: PDFDocument
+    let document: PDFDocument
     var scrubber = PDFPageScrubberTrackControl()
     
     var scrubberDelegate: PDFPageScrubberDelegate?

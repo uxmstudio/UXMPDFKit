@@ -9,8 +9,8 @@
 import UIKit
 
 internal class PDFDocumentLink: NSObject {
-    var rect: CGRect
-    var dictionary: CGPDFDictionaryRef
+    let rect: CGRect
+    let dictionary: CGPDFDictionaryRef
     
     static func new(_ rect: CGRect, dictionary: CGPDFDictionaryRef) -> PDFDocumentLink {
         return PDFDocumentLink(rect: rect, dictionary: dictionary)

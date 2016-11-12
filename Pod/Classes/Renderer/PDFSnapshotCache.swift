@@ -15,10 +15,10 @@ fileprivate enum SnapshotState {
 open class PDFSnapshot {
     fileprivate var state = SnapshotState.new
     var image: UIImage?
-    var document: PDFDocument
-    var page: Int
-    var guid: String
-    var size: CGSize
+    let document: PDFDocument
+    let page: Int
+    let guid: String
+    let size: CGSize
     
     init(document: PDFDocument, page: Int, guid: String, size: CGSize) {
         self.document = document

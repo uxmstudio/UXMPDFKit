@@ -9,15 +9,15 @@
 import UIKit
 
 internal class PDFPageContent: UIView {
-    fileprivate var links: [PDFDocumentLink] = []
-    fileprivate var pdfDocRef: CGPDFDocument
-    fileprivate var pdfPageRef: CGPDFPage?
-    fileprivate var pageAngle: Int /// 0, 90, 180, 270
-    fileprivate var pageWidth: CGFloat = 0.0
-    fileprivate var pageHeight: CGFloat = 0.0
-    fileprivate var pageOffsetX: CGFloat = 0.0
-    fileprivate var pageOffsetY: CGFloat = 0.0
-    fileprivate var page: Int = 0
+    private let pdfDocRef: CGPDFDocument
+    private let pdfPageRef: CGPDFPage?
+    private let pageAngle: Int /// 0, 90, 180, 270
+    private var links: [PDFDocumentLink] = []
+    private var pageWidth: CGFloat = 0.0
+    private var pageHeight: CGFloat = 0.0
+    private var pageOffsetX: CGFloat = 0.0
+    private var pageOffsetY: CGFloat = 0.0
+    private var page: Int = 0
     
     var cropBoxRect: CGRect
     var viewRect: CGRect = CGRect.zero
@@ -105,7 +105,7 @@ internal class PDFPageContent: UIView {
     
     //MARK: - Page Links Discovery
     
-    func highlightPageLinks() {
+    private func highlightPageLinks() {
         if links.count > 0 {
             let color = tintColor.withAlphaComponent(0.01)
             
@@ -122,7 +122,7 @@ internal class PDFPageContent: UIView {
         }
     }
     
-    func linkFromAnnotation(_ annotation: CGPDFDictionaryRef) -> PDFDocumentLink? {
+    private func linkFromAnnotation(_ annotation: CGPDFDictionaryRef) -> PDFDocumentLink? {
         var annotationRectArray: CGPDFArrayRef? = nil
         
         if CGPDFDictionaryGetArray(annotation, "Rect", &annotationRectArray) {
@@ -194,7 +194,7 @@ internal class PDFPageContent: UIView {
         return nil
     }
     
-    func buildAnnotationLinksList() {
+    private func buildAnnotationLinksList() {
         links = []
         var pageAnnotations: CGPDFArrayRef? = nil
         let pageDictionary: CGPDFDictionaryRef = pdfPageRef!.dictionary!

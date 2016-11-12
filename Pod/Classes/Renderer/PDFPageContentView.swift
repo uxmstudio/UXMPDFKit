@@ -14,8 +14,8 @@ public protocol PDFPageContentViewDelegate {
 }
 
 open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
-    var contentView: PDFPageContent
-    var containerView: UIView
+    let contentView: PDFPageContent
+    let containerView: UIView
     
     open var page: Int
     open var contentDelegate: PDFPageContentViewDelegate?
