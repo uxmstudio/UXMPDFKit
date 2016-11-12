@@ -20,6 +20,8 @@ open class PDFFormViewController: NSObject {
         
         parser = PDFObjectParser(document: document)
         
+        super.init()
+        
         setupUI()
     }
     
