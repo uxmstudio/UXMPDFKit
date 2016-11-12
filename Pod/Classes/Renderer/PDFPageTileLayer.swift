@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PDFPageTileLayer: CATiledLayer {
+internal class PDFPageTileLayer: CATiledLayer {
     override init() {
         super.init()
         

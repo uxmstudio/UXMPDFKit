@@ -8,12 +8,12 @@
 
 import UIKit
 
-enum SnapshotState {
+fileprivate enum SnapshotState {
     case new, started, finished, failed
 }
 
 open class PDFSnapshot {
-    var state = SnapshotState.new
+    fileprivate var state = SnapshotState.new
     var image: UIImage?
     var document: PDFDocument
     var page: Int
@@ -70,7 +70,7 @@ open class PDFQueue {
     }
 }
 
-class PDFSnapshotRenderer: Operation {
+fileprivate class PDFSnapshotRenderer: Operation {
     let snapshot: PDFSnapshot
     
     init(snapshot: PDFSnapshot) {
@@ -131,7 +131,7 @@ class PDFSnapshotRenderer: Operation {
     }
 }
 
-class PDFSnapshotCache {
+fileprivate class PDFSnapshotCache {
     lazy var cache: NSCache<NSString, UIImage> = {
         let cache: NSCache<NSString, UIImage> = NSCache<NSString, UIImage>()
         cache.name = "PDFSnapshotCache"

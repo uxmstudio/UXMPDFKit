@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PDFPageContent: UIView {
+internal class PDFPageContent: UIView {
     fileprivate var links: [PDFDocumentLink] = []
     fileprivate var pdfDocRef: CGPDFDocument
     fileprivate var pdfPageRef: CGPDFPage?
@@ -253,22 +253,5 @@ class PDFPageContent: UIView {
         layer.contents = nil
         layer.delegate = nil
         layer.removeFromSuperlayer()
-    }
-}
-
-
-class PDFDocumentLink: NSObject {
-    var rect: CGRect
-    var dictionary: CGPDFDictionaryRef
-    
-    static func new(_ rect: CGRect, dictionary: CGPDFDictionaryRef) -> PDFDocumentLink {
-        return PDFDocumentLink(rect: rect, dictionary: dictionary)
-    }
-    
-    init(rect: CGRect, dictionary: CGPDFDictionaryRef) {
-        self.rect = rect
-        self.dictionary = dictionary
-        
-        super.init()
     }
 }
