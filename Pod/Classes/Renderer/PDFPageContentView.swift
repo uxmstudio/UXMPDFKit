@@ -102,13 +102,13 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         var viewFrame = containerView.frame
         
         if viewFrame.size.width < boundsSize.width {
-            viewFrame.origin.x = (boundsSize.width - viewFrame.size.width) / 2.0 + self.contentOffset.x
+            viewFrame.origin.x = (boundsSize.width - viewFrame.size.width) / 2.0 + contentOffset.x
         } else {
             viewFrame.origin.x = 0.0
         }
         
         if viewFrame.size.height < boundsSize.height {
-            viewFrame.origin.y = (boundsSize.height - viewFrame.size.height) / 2.0 + self.contentOffset.y
+            viewFrame.origin.y = (boundsSize.height - viewFrame.size.height) / 2.0 + contentOffset.y
         } else {
             viewFrame.origin.y = 0.0
         }
