@@ -39,14 +39,15 @@ internal class PDFPageContent: UIView {
             page = pages
         }
         
-        pdfPageRef = pdfDocRef.page(at: page)!
+        guard let pdfPageRef = pdfDocRef.page(at: page) else { fatalError() }
+        self.pdfPageRef = pdfPageRef
         
-        cropBoxRect = (pdfPageRef?.getBoxRect(.cropBox))!
-        let mediaBoxRect = pdfPageRef?.getBoxRect(.mediaBox)
-        let effectiveRect = cropBoxRect.intersection(mediaBoxRect!)
+        cropBoxRect = pdfPageRef.getBoxRect(.cropBox)
+        let mediaBoxRect = pdfPageRef.getBoxRect(.mediaBox)
+        let effectiveRect = cropBoxRect.intersection(mediaBoxRect)
         
         /// Determine the page angle
-        pageAngle = Int((pdfPageRef?.rotationAngle)!)
+        pageAngle = Int(pdfPageRef.rotationAngle)
         
         switch pageAngle {
         case 90, 270:
