@@ -12,14 +12,20 @@ protocol PDFObject {
     func type() -> CGPDFObjectType
 }
 
+fileprivate class PDFObjectParserContext {
+    var keys: [UnsafePointer<Int8>] = []
+    
+    init(keys: [UnsafePointer<Int8>]) {
+        self.keys = keys
+    }
+}
+
 class PDFDictionary: NSObject, PDFObject {
     var dict: CGPDFDictionaryRef
     
     lazy var attributes: [String:AnyObject] = {
         
-        var context = PDFObjectParserContext(
-            keys: []
-        )
+        var context = PDFObjectParserContext(keys: [])
         CGPDFDictionaryApplyFunction(self.dict, self.getDictionaryObjects, &context)
         
         self.keys = context.keys
