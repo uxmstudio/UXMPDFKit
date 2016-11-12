@@ -8,8 +8,8 @@
 
 import UIKit
 
-class PDFThumbnailView: UIView {
-    var imageView: UIImageView
+internal class PDFThumbnailView: UIView {
+    let imageView: UIImageView
     
     override init(frame: CGRect) {
         imageView = UIImageView()

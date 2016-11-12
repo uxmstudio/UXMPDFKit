@@ -8,16 +8,16 @@
 
 import UIKit
 
-class PDFPageContent: UIView {
-    fileprivate var links: [PDFDocumentLink] = []
-    fileprivate var pdfDocRef: CGPDFDocument
-    fileprivate var pdfPageRef: CGPDFPage?
-    fileprivate var pageAngle: Int /// 0, 90, 180, 270
-    fileprivate var pageWidth: CGFloat = 0.0
-    fileprivate var pageHeight: CGFloat = 0.0
-    fileprivate var pageOffsetX: CGFloat = 0.0
-    fileprivate var pageOffsetY: CGFloat = 0.0
-    fileprivate var page: Int = 0
+internal class PDFPageContent: UIView {
+    private let pdfDocRef: CGPDFDocument
+    private let pdfPageRef: CGPDFPage?
+    private let pageAngle: Int /// 0, 90, 180, 270
+    private var links: [PDFDocumentLink] = []
+    private var pageWidth: CGFloat = 0.0
+    private var pageHeight: CGFloat = 0.0
+    private var pageOffsetX: CGFloat = 0.0
+    private var pageOffsetY: CGFloat = 0.0
+    private var page: Int = 0
     
     var cropBoxRect: CGRect
     var viewRect: CGRect = CGRect.zero
@@ -39,14 +39,15 @@ class PDFPageContent: UIView {
             page = pages
         }
         
-        pdfPageRef = pdfDocRef.page(at: page)!
+        guard let pdfPageRef = pdfDocRef.page(at: page) else { fatalError() }
+        self.pdfPageRef = pdfPageRef
         
-        cropBoxRect = (pdfPageRef?.getBoxRect(.cropBox))!
-        let mediaBoxRect = pdfPageRef?.getBoxRect(.mediaBox)
-        let effectiveRect = cropBoxRect.intersection(mediaBoxRect!)
+        cropBoxRect = pdfPageRef.getBoxRect(.cropBox)
+        let mediaBoxRect = pdfPageRef.getBoxRect(.mediaBox)
+        let effectiveRect = cropBoxRect.intersection(mediaBoxRect)
         
         /// Determine the page angle
-        pageAngle = Int((pdfPageRef?.rotationAngle)!)
+        pageAngle = Int(pdfPageRef.rotationAngle)
         
         switch pageAngle {
         case 90, 270:
@@ -104,7 +105,7 @@ class PDFPageContent: UIView {
     
     //MARK: - Page Links Discovery
     
-    func highlightPageLinks() {
+    private func highlightPageLinks() {
         if links.count > 0 {
             let color = tintColor.withAlphaComponent(0.01)
             
@@ -121,7 +122,7 @@ class PDFPageContent: UIView {
         }
     }
     
-    func linkFromAnnotation(_ annotation: CGPDFDictionaryRef) -> PDFDocumentLink? {
+    private func linkFromAnnotation(_ annotation: CGPDFDictionaryRef) -> PDFDocumentLink? {
         var annotationRectArray: CGPDFArrayRef? = nil
         
         if CGPDFDictionaryGetArray(annotation, "Rect", &annotationRectArray) {
@@ -188,12 +189,12 @@ class PDFPageContent: UIView {
             
             let rect = CGRect(x: x, y: y, width: w, height: h)
             
-            return PDFDocumentLink.init(rect: rect, dictionary:annotation)
+            return PDFDocumentLink(rect: rect, dictionary:annotation)
         }
         return nil
     }
     
-    func buildAnnotationLinksList() {
+    private func buildAnnotationLinksList() {
         links = []
         var pageAnnotations: CGPDFArrayRef? = nil
         let pageDictionary: CGPDFDictionaryRef = pdfPageRef!.dictionary!
@@ -253,22 +254,5 @@ class PDFPageContent: UIView {
         layer.contents = nil
         layer.delegate = nil
         layer.removeFromSuperlayer()
-    }
-}
-
-
-class PDFDocumentLink: NSObject {
-    var rect: CGRect
-    var dictionary: CGPDFDictionaryRef
-    
-    static func new(_ rect: CGRect, dictionary: CGPDFDictionaryRef) -> PDFDocumentLink {
-        return PDFDocumentLink(rect: rect, dictionary: dictionary)
-    }
-    
-    init(rect: CGRect, dictionary: CGPDFDictionaryRef) {
-        self.rect = rect
-        self.dictionary = dictionary
-        
-        super.init()
     }
 }

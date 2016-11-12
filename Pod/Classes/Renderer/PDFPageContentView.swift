@@ -14,8 +14,8 @@ public protocol PDFPageContentViewDelegate {
 }
 
 open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
-    var contentView: PDFPageContent
-    var containerView: UIView
+    let contentView: PDFPageContent
+    let containerView: UIView
     
     open var page: Int
     open var contentDelegate: PDFPageContentViewDelegate?
@@ -91,8 +91,8 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
     }
     
     override open func layoutSubviews() {
@@ -102,13 +102,13 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         var viewFrame = containerView.frame
         
         if viewFrame.size.width < boundsSize.width {
-            viewFrame.origin.x = (boundsSize.width - viewFrame.size.width) / 2.0 + self.contentOffset.x
+            viewFrame.origin.x = (boundsSize.width - viewFrame.size.width) / 2.0 + contentOffset.x
         } else {
             viewFrame.origin.x = 0.0
         }
         
         if viewFrame.size.height < boundsSize.height {
-            viewFrame.origin.y = (boundsSize.height - viewFrame.size.height) / 2.0 + self.contentOffset.y
+            viewFrame.origin.y = (boundsSize.height - viewFrame.size.height) / 2.0 + contentOffset.y
         } else {
             viewFrame.origin.y = 0.0
         }

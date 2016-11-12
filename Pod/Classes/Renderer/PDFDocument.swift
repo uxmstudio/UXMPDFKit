@@ -219,13 +219,14 @@ open class PDFDocument: NSObject, NSCoding {
     }
     
     open func boundsForPDFPage(_ page: Int) -> CGRect {
-        let pageRef = documentRef?.page(at: page)
+        guard let documentRef = documentRef else { return .zero }
+        guard let pageRef = documentRef.page(at: page) else { return .zero }
         
-        let cropBoxRect = pageRef!.getBoxRect(.cropBox)
-        let mediaBoxRect = pageRef!.getBoxRect(.mediaBox)
+        let cropBoxRect = pageRef.getBoxRect(.cropBox)
+        let mediaBoxRect = pageRef.getBoxRect(.mediaBox)
         let effectiveRect = cropBoxRect.intersection(mediaBoxRect)
         
-        let pageAngle = Int(pageRef?.rotationAngle ?? 0)
+        let pageAngle = Int(pageRef.rotationAngle)
         
         switch (pageAngle) {
         case 0, 180: // 0 and 180 degrees

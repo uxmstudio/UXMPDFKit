@@ -13,7 +13,7 @@ public protocol PDFPageScrubberDelegate {
 }
 
 open class PDFPageScrubber: UIToolbar {
-    var document: PDFDocument
+    let document: PDFDocument
     var scrubber = PDFPageScrubberTrackControl()
     
     var scrubberDelegate: PDFPageScrubberDelegate?
@@ -231,7 +231,7 @@ open class PDFPageScrubber: UIToolbar {
             var pageThumbRect = pageThumbView!.frame
             
             if pageThumbX != pageThumbRect.origin.x {
-                pageThumbRect.origin.x = pageThumbX
+                pageThumbRect.origin.x = pageThumbX + CGFloat(page - 1)
                 pageThumbView?.frame = pageThumbRect
             }
         }
@@ -329,92 +329,5 @@ open class PDFPageScrubber: UIToolbar {
             
             restartTrackTimer()
         }
-    }
-}
-
-class PDFPageScrubberTrackControl: UIControl {
-    var value: CGFloat = 0.0
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        autoresizesSubviews = false
-        isUserInteractionEnabled = true
-        contentMode = .redraw
-        autoresizingMask = UIViewAutoresizing()
-        backgroundColor = UIColor.clear
-        isExclusiveTouch = true
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func limitValue(_ x: CGFloat) -> CGFloat {
-        var valueX = x
-        let minX = bounds.origin.x
-        let maxX = bounds.size.width - 1.0
-        
-        if valueX < minX {
-            valueX = minX
-        }
-        
-        if valueX > maxX {
-            valueX = maxX
-        }
-        
-        return valueX
-    }
-    
-    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        let point = touch.location(in: self)
-        value = limitValue(point.x)
-        return true
-    }
-    
-    override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        if isTouchInside {
-            let point = touch.location(in: touch.view)
-            let x = limitValue(point.x)
-            if x != value {
-                value = x
-                sendActions(for: .valueChanged)
-            }
-        }
-        return true
-    }
-    
-    override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
-        if let point = touch?.location(in: self) {
-            value = limitValue(point.x)
-        }
-    }
-}
-
-class PDFPageScrubberThumb:PDFThumbnailView {
-    var small = false
-    var color = UIColor.white
-    
-    init(frame: CGRect, small: Bool, color: UIColor) {
-        self.small = small
-        self.color = color
-        
-        super.init(frame: frame)
-        setupUI()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupUI()
-    }
-    
-    func setupUI() {
-        let alpha: CGFloat = small ? 0.6 : 0.7
-        let background = color.withAlphaComponent(alpha)
-        
-        backgroundColor = background
-        imageView.backgroundColor = background
-        imageView.layer.borderColor = UIColor.lightGray.cgColor
-        imageView.layer.borderWidth = 0.5
     }
 }

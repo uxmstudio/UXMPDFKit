@@ -8,18 +8,24 @@
 
 import UIKit
 
-protocol PDFObject {
-    func type() -> CGPDFObjectType
+internal protocol PDFObject {
+    var type: CGPDFObjectType { get }
 }
 
-class PDFDictionary: NSObject, PDFObject {
+fileprivate class PDFObjectParserContext {
+    var keys: [UnsafePointer<Int8>] = []
+    
+    init(keys: [UnsafePointer<Int8>]) {
+        self.keys = keys
+    }
+}
+
+internal class PDFDictionary: PDFObject {
     var dict: CGPDFDictionaryRef
     
     lazy var attributes: [String:AnyObject] = {
         
-        var context = PDFObjectParserContext(
-            keys: []
-        )
+        var context = PDFObjectParserContext(keys: [])
         CGPDFDictionaryApplyFunction(self.dict, self.getDictionaryObjects, &context)
         
         self.keys = context.keys
@@ -45,18 +51,16 @@ class PDFDictionary: NSObject, PDFObject {
     
     var isParent: Bool = false
     
+    var type: CGPDFObjectType {
+        return CGPDFObjectType.dictionary
+    }
+    
     init(dictionaryRef: CGPDFDictionaryRef) {
         dict = dictionaryRef
-
-        super.init()
     }
     
     subscript(key: String) -> AnyObject? {
         return attributes[key]
-    }
-    
-    func type() -> CGPDFObjectType {
-        return CGPDFObjectType.dictionary
     }
     
     func arrayForKey(_ key: String) -> PDFArray? {
@@ -71,11 +75,11 @@ class PDFDictionary: NSObject, PDFObject {
         return stringKeys
     }
     
-    override func isEqual(_ object: Any?) -> Bool {
+    func isEqual(_ object: Any?) -> Bool {
         if let object = object as? PDFDictionary {
             
-            let rect1 = arrayForKey("Rect")?.rect()
-            let rect2 = object.arrayForKey("Rect")?.rect()
+            let rect1 = arrayForKey("Rect")?.rect
+            let rect2 = object.arrayForKey("Rect")?.rect
             
             let keys1 = allKeys()
             let keys2 = object.allKeys()
@@ -215,7 +219,7 @@ class PDFDictionary: NSObject, PDFObject {
         return string
     }
     
-    override var description: String {
+    var description: String {
         return description(0)
     }
 }

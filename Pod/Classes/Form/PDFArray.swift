@@ -8,23 +8,22 @@
 
 import UIKit
 
-class PDFArray: NSObject, PDFObject {
+internal class PDFArray: PDFObject {
     fileprivate var arr: CGPDFArrayRef
     
     var array: [AnyObject] = []
     
     required init(arrayRef: CGPDFArrayRef) {
         self.arr = arrayRef
-        super.init()
         
         array = copyAsArray()
     }
     
-    func type() -> CGPDFObjectType {
+    var type: CGPDFObjectType {
         return CGPDFObjectType.array
     }
     
-    func count() -> Int {
+    var count: Int {
         return array.count
     }
     
@@ -35,7 +34,7 @@ class PDFArray: NSObject, PDFObject {
         return a
     }
     
-    func rect() -> CGRect? {
+    var rect: CGRect? {
         if array.count != 4 {
             return nil
         }

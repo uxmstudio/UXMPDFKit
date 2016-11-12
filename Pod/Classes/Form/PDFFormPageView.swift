@@ -38,8 +38,8 @@ func ==(lhs: PDFFormFlag, rhs: PDFFormFlag) -> Bool {
 }
 
 open class PDFFormPage: NSObject {
+    let page: Int
     var fields: [PDFFormFieldObject] = []
-    var page: Int
     var zoomScale: CGFloat = 1.0
     
     init(page: Int) {
