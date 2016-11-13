@@ -92,7 +92,7 @@ open class PDFFormViewController: NSObject {
             if let dict = kid as? PDFDictionary,
                 let annots = dict.arrayForKey("Annots") {
                 for subField in annots {
-                    if field.isEqual(subField) {
+                    if let subField = subField as? PDFDictionary, field == subField {
                         return page
                     }
                 }
