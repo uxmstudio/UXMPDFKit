@@ -10,6 +10,14 @@ import UIKit
 import SafariServices
 
 open class PDFViewController: UIViewController {
+    /// Action button style
+    public enum ActionStyle {
+        /// Brings up an activity sheet to share or open PDF in another app
+        case activitySheet
+        
+        /// Performs a custom action
+        case customAction((Void) -> ())
+    }
     
     open var hidesBarsOnTap: Bool = true
     open var showsScrubber: Bool = true {
@@ -21,6 +29,8 @@ open class PDFViewController: UIViewController {
     open var allowsAnnotations: Bool = true
     open var allowsSharing: Bool = true
     open var isPresentingInModal: Bool = false
+    
+    public var actionStyle: ActionStyle = .activitySheet
     
     var document: PDFDocument!
     
@@ -215,22 +225,27 @@ open class PDFViewController: UIViewController {
     }
     
     func shareForm() {
-        let renderer = PDFRenderController(document: document, controllers: [
-            annotationController,
-            formController
-            ])
-        let pdf = renderer.renderOntoPDF()
-        
-        let items = [pdf]
-        let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            activityVC.modalPresentationStyle = .popover
-            let popController = activityVC.popoverPresentationController
-            popController?.barButtonItem = shareFormBarButtonItem
-            popController?.permittedArrowDirections = .up
+        switch actionStyle {
+        case .activitySheet:
+            let renderer = PDFRenderController(document: document, controllers: [
+                annotationController,
+                formController
+                ])
+            let pdf = renderer.renderOntoPDF()
+            
+            let items = [pdf]
+            let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
+            
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                activityVC.modalPresentationStyle = .popover
+                let popController = activityVC.popoverPresentationController
+                popController?.barButtonItem = shareFormBarButtonItem
+                popController?.permittedArrowDirections = .up
+            }
+            present(activityVC, animated: true, completion: nil)
+        case .customAction(let customAction):
+            customAction()
         }
-        present(activityVC, animated: true, completion: nil)
     }
     
     func dismissModal() {
