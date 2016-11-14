@@ -56,7 +56,7 @@ self.navigationController?.pushViewController(pdf, animated: true)
 ```
 
 #### Objective-C
-Although written in Swift, the main code reader can be used in Objective-C.
+Although written in Swift, the core reader can be used in Objective-C.
 ```objective-c
 NSError *error;
 NSString *path = [[NSBundle mainBundle] pathForResource:@"sample" ofType:@"pdf"];
