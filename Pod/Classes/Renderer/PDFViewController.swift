@@ -77,17 +77,17 @@ open class PDFViewController: UIViewController {
         view.addSubview(pageScrubber)
         view.addSubview(annotationController.view)
         
-        self.collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        self.collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        self.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        self.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        self.pageScrubber.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        self.pageScrubber.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        self.pageScrubber.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        self.pageScrubber.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
+        pageScrubber.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        pageScrubber.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        pageScrubber.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        pageScrubber.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
         
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         
         pageScrubber.sizeToFit()
         
