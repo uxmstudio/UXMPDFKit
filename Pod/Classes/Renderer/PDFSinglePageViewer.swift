@@ -83,7 +83,12 @@ open class PDFSinglePageViewer: UICollectionView {
     open func displayPage(_ page: Int, animated: Bool) {
         let currentPage = indexForPage(page)
         let indexPath = IndexPath(item: currentPage, section: 0)
-        self.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
+        switch scrollDirection {
+        case .horizontal:
+            scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
+        case .vertical:
+            scrollToItem(at: indexPath, at: .top, animated: animated)
+        }
     }
     
     open func getPageContent(_ page: Int) -> PDFPageContentView? {
@@ -187,7 +192,8 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
         case .horizontal:
             page = Int((scrollView.contentOffset.x + scrollView.frame.width) / scrollView.frame.width)
         case .vertical:
-            page = Int((scrollView.contentOffset.y + scrollView.frame.height) / scrollView.frame.height)
+            let currentlyShownIndexPath = indexPathsForVisibleItems.first ?? IndexPath(item: 0, section: 0)
+            page = currentlyShownIndexPath.row + 1
         }
         singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
         
