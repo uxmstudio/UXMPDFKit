@@ -106,92 +106,89 @@ internal class PDFPageContent: UIView {
     //MARK: - Page Links Discovery
     
     private func highlightPageLinks() {
-        if links.count > 0 {
-            let color = tintColor.withAlphaComponent(0.01)
+        guard links.count > 0 else { return }
+        let color = tintColor.withAlphaComponent(0.01)
+        
+        for link in links {
+            let highlight = UIView(frame: link.rect)
+            highlight.autoresizesSubviews = false
+            highlight.isUserInteractionEnabled = false
+            highlight.contentMode = .redraw
+            highlight.autoresizingMask = UIViewAutoresizing()
+            highlight.backgroundColor = color
             
-            for link in links {
-                let highlight = UIView(frame: link.rect)
-                highlight.autoresizesSubviews = false
-                highlight.isUserInteractionEnabled = false
-                highlight.contentMode = .redraw
-                highlight.autoresizingMask = UIViewAutoresizing()
-                highlight.backgroundColor = color
-                
-                addSubview(highlight)
-            }
+            addSubview(highlight)
         }
     }
     
     private func linkFromAnnotation(_ annotation: CGPDFDictionaryRef) -> PDFDocumentLink? {
         var annotationRectArray: CGPDFArrayRef? = nil
         
-        if CGPDFDictionaryGetArray(annotation, "Rect", &annotationRectArray) {
-            var lowerLeftX: CGPDFReal = 0.0
-            var lowerLeftY: CGPDFReal = 0.0
-            
-            var upperRightX: CGPDFReal = 0.0
-            var upperRightY: CGPDFReal = 0.0
-            
-            CGPDFArrayGetNumber(annotationRectArray!, 0, &lowerLeftX)
-            CGPDFArrayGetNumber(annotationRectArray!, 1, &lowerLeftY)
-            CGPDFArrayGetNumber(annotationRectArray!, 2, &upperRightX)
-            CGPDFArrayGetNumber(annotationRectArray!, 3, &upperRightY)
-            
-            if lowerLeftX > upperRightX {
-                let t = lowerLeftX
-                lowerLeftX = upperRightX
-                upperRightX = t
-            }
-            
-            if lowerLeftY > upperRightY {
-                let t = lowerLeftY
-                lowerLeftY = upperRightY
-                upperRightY = t
-            }
-            
-            lowerLeftX -= pageOffsetX
-            lowerLeftY -= pageOffsetY
-            upperRightX -= pageOffsetX
-            upperRightY -= pageOffsetY
-            
-            switch pageAngle {
-            case 90:
-                var swap = lowerLeftY
-                lowerLeftY = lowerLeftX
-                lowerLeftX = swap
-                swap = upperRightY
-                upperRightY = upperRightX
-                upperRightX = swap
-                break
-            case 270:
-                var swap = lowerLeftY
-                lowerLeftY = lowerLeftX
-                lowerLeftX = swap
-                swap = upperRightY
-                upperRightY = upperRightX
-                upperRightX = swap
-                
-                lowerLeftX = 0.0 - lowerLeftX + pageWidth
-                upperRightX = 0.0 - upperRightX + pageWidth
-                break
-            case 0:
-                lowerLeftY = 0.0 - lowerLeftY + pageHeight
-                upperRightY = 0.0 - upperRightY + pageHeight
-                break
-            default:
-                break
-            }
-            
-            let x = lowerLeftX
-            let w = upperRightX - lowerLeftX
-            let y = lowerLeftY
-            let h = upperRightY - lowerLeftY
-            
-            let rect = CGRect(x: x, y: y, width: w, height: h)
-            
-            return PDFDocumentLink(rect: rect, dictionary:annotation)
+        guard CGPDFDictionaryGetArray(annotation, "Rect", &annotationRectArray) else { return nil }
+        var lowerLeftX: CGPDFReal = 0.0
+        var lowerLeftY: CGPDFReal = 0.0
+        
+        var upperRightX: CGPDFReal = 0.0
+        var upperRightY: CGPDFReal = 0.0
+        
+        CGPDFArrayGetNumber(annotationRectArray!, 0, &lowerLeftX)
+        CGPDFArrayGetNumber(annotationRectArray!, 1, &lowerLeftY)
+        CGPDFArrayGetNumber(annotationRectArray!, 2, &upperRightX)
+        CGPDFArrayGetNumber(annotationRectArray!, 3, &upperRightY)
+        
+        if lowerLeftX > upperRightX {
+            let t = lowerLeftX
+            lowerLeftX = upperRightX
+            upperRightX = t
         }
-        return nil
+        
+        if lowerLeftY > upperRightY {
+            let t = lowerLeftY
+            lowerLeftY = upperRightY
+            upperRightY = t
+        }
+        
+        lowerLeftX -= pageOffsetX
+        lowerLeftY -= pageOffsetY
+        upperRightX -= pageOffsetX
+        upperRightY -= pageOffsetY
+        
+        switch pageAngle {
+        case 90:
+            var swap = lowerLeftY
+            lowerLeftY = lowerLeftX
+            lowerLeftX = swap
+            swap = upperRightY
+            upperRightY = upperRightX
+            upperRightX = swap
+            break
+        case 270:
+            var swap = lowerLeftY
+            lowerLeftY = lowerLeftX
+            lowerLeftX = swap
+            swap = upperRightY
+            upperRightY = upperRightX
+            upperRightX = swap
+            
+            lowerLeftX = 0.0 - lowerLeftX + pageWidth
+            upperRightX = 0.0 - upperRightX + pageWidth
+            break
+        case 0:
+            lowerLeftY = 0.0 - lowerLeftY + pageHeight
+            upperRightY = 0.0 - upperRightY + pageHeight
+            break
+        default:
+            break
+        }
+        
+        let x = lowerLeftX
+        let w = upperRightX - lowerLeftX
+        let y = lowerLeftY
+        let h = upperRightY - lowerLeftY
+        
+        let rect = CGRect(x: x, y: y, width: w, height: h)
+        
+        return PDFDocumentLink(rect: rect, dictionary:annotation)
     }
     
     private func buildAnnotationLinksList() {
@@ -200,23 +197,15 @@ internal class PDFPageContent: UIView {
         let pageDictionary: CGPDFDictionaryRef = pdfPageRef!.dictionary!
         
         if CGPDFDictionaryGetArray(pageDictionary, "Annots", &pageAnnotations) {
-            
             for i in 0...CGPDFArrayGetCount(pageAnnotations!) {
-                
                 var annotationDictionary: CGPDFDictionaryRef? = nil
-                if CGPDFArrayGetDictionary(pageAnnotations!, i, &annotationDictionary) {
+                guard CGPDFArrayGetDictionary(pageAnnotations!, i, &annotationDictionary) else { continue }
                     
-                    var annotationSubtype: UnsafePointer<Int8>? = nil
-                    if CGPDFDictionaryGetName(annotationDictionary!, "Subtype", &annotationSubtype) {
-                        
-                        if strcmp(annotationSubtype, "Link") == 0 {
-                            
-                            if let documentLink = linkFromAnnotation(annotationDictionary!) {
-                                links.append(documentLink)
-                            }
-                        }
-                    }
-                }
+                var annotationSubtype: UnsafePointer<Int8>? = nil
+                guard CGPDFDictionaryGetName(annotationDictionary!, "Subtype", &annotationSubtype) else { continue }
+                guard strcmp(annotationSubtype, "Link") == 0 else { continue }
+                guard let documentLink = linkFromAnnotation(annotationDictionary!) else { continue }
+                links.append(documentLink)
             }
         }
         self.highlightPageLinks()
