@@ -139,7 +139,23 @@ extension PDFSinglePageViewer: UICollectionViewDelegateFlowLayout {
             size.height -= contentInsetHeight
             return size
         case .vertical:
-            return bounds.size
+            let page = indexPath.row + 1
+            let contentViewSize = PDFPageContentView(frame: bounds, document: document!, page: page).contentSize
+            
+            // Find proper aspect ratio so that cell is full width
+            let widthMultiplier: CGFloat
+            let heightMultiplier: CGFloat
+            if contentViewSize.width == bounds.width {
+                widthMultiplier = bounds.height / contentViewSize.height
+                heightMultiplier = 1
+            } else if contentViewSize.height == bounds.height {
+                heightMultiplier = bounds.width / contentViewSize.width
+                widthMultiplier = 1
+            } else {
+                fatalError()
+            }
+            
+            return CGSize(width: bounds.size.width * widthMultiplier, height: bounds.size.height * heightMultiplier)
         }
     }
 }
