@@ -22,6 +22,11 @@ open class PDFSinglePageViewer: UICollectionView {
     
     open var document: PDFDocument?
     
+    var scrollDirection: UICollectionViewScrollDirection {
+        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+        return flowLayout.scrollDirection
+    }
+    
     private static var flowLayout: UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -65,14 +70,14 @@ open class PDFSinglePageViewer: UICollectionView {
     }
     
     open func indexForPage(_ page: Int) -> Int {
-        var currentPage = page - 1
+        let currentPage = page - 1
         if currentPage <= 0 {
-            currentPage = 0
+            return 0
+        } else if let pageCount = document?.pageCount, currentPage > pageCount {
+            return pageCount - 1
+        } else {
+            return currentPage
         }
-        if let document = document, currentPage > document.pageCount {
-            currentPage = document.pageCount - 1
-        }
-        return currentPage
     }
     
     open func displayPage(_ page: Int, animated: Bool) {
@@ -130,9 +135,7 @@ extension PDFSinglePageViewer: UICollectionViewDelegate {
 
 extension PDFSinglePageViewer: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
-        switch flowLayout.scrollDirection {
+        switch scrollDirection {
         case .horizontal:
             var size = bounds.size
             let contentInsetHeight = contentInset.bottom + contentInset.top + 1
@@ -179,9 +182,8 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
     }
     
     private func didDisplayPage(_ scrollView: UIScrollView) {
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
         let page: Int
-        switch flowLayout.scrollDirection {
+        switch scrollDirection {
         case .horizontal:
             page = Int((scrollView.contentOffset.x + scrollView.frame.width) / scrollView.frame.width)
         case .vertical:
