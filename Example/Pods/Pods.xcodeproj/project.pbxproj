@@ -243,11 +243,11 @@
 				EC4678DC63259E1E556B22354639F826 /* PDFPageScrubberTrackControl.swift */,
 				AE1C7B951EC7E6CED0390CF07A023630 /* PDFPageTileLayer.swift */,
 				B7D9346501AFA05A330677D39DB1650F /* PDFRenderer.swift */,
+				14E3AEB01DD6ED3800CC9C60 /* PDFSinglePageCell.swift */,
 				F33BD08506077733D10565FD32AAE01D /* PDFSinglePageViewer.swift */,
 				C9FE943FC9A290F6F65198FF53EF96E6 /* PDFSnapshotCache.swift */,
 				C6C164216F04F2C8E8102F383F660F44 /* PDFThumbnailView.swift */,
 				C998B073AF0AE6121E63EFF482E2E251 /* PDFViewController.swift */,
-				14E3AEB01DD6ED3800CC9C60 /* PDFSinglePageCell.swift */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
