@@ -184,7 +184,17 @@ open class PDFViewController: UIViewController {
     
     func hideBars(state: Bool) {
         navigationController?.setNavigationBarHidden(state, animated: true)
-        pageScrubber.isHidden = state
+        
+        switch scrollDirection {
+        case .horizontal:
+            if showsScrubber {
+                pageScrubber.isHidden = state
+            } else {
+                pageScrubber.isHidden = true
+            }
+        case .vertical:
+            pageScrubber.isHidden = true
+        }
     }
     
     func toggleBars() {
