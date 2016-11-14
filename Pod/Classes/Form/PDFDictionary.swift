@@ -43,18 +43,15 @@ internal class PDFDictionary: PDFObject, Equatable {
         
         self.keys = context.keys
         for key in self.keys {
-            if let stringKey = String(validatingUTF8: key) {
-                self.stringKeys.append(stringKey)
-            }
+            guard let stringKey = String(validatingUTF8: key) else { continue }
+            self.stringKeys.append(stringKey)
         }
 
         var attributes: [String:AnyObject] = [:]
         for key in self.keys {
-            if let stringKey = String(validatingUTF8: key) {
-                if let obj = self.pdfObjectForKey(key) {
-                    attributes[stringKey] = obj
-                }
-            }
+            guard let stringKey = String(validatingUTF8: key) else { continue }
+            guard let obj = self.pdfObjectForKey(key) else { continue }
+            attributes[stringKey] = obj
         }
         return attributes
     }()

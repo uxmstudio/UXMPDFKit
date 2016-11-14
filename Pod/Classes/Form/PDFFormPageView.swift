@@ -93,11 +93,10 @@ open class PDFFormPageView: UIView {
         super.init(frame: frame)
         
         for field in fields {
-            if let fieldView = field.createFormField() {
-                addSubview(fieldView)
-                adjustFrame(fieldView)
-                fieldViews.append(fieldView)
-            }
+            guard let fieldView = field.createFormField() else { continue }
+            addSubview(fieldView)
+            adjustFrame(fieldView)
+            fieldViews.append(fieldView)
         }
     }
     

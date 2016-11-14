@@ -32,18 +32,17 @@ open class PDFRenderController {
             let page = documentRef?.page(at: i)
             let bounds = document.boundsForPDFPage(i)
             
-            if let context = UIGraphicsGetCurrentContext() {
-                UIGraphicsBeginPDFPageWithInfo(bounds, nil)
-                context.translateBy(x: 0, y: bounds.size.height)
-                context.scaleBy(x: 1.0, y: -1.0)
-                context.drawPDFPage (page!)
-                
-                context.scaleBy(x: 1.0, y: -1.0)
-                context.translateBy(x: 0, y: -bounds.size.height)
-                
-                for controller in renderControllers {
-                    controller.render(i, context:context, bounds:bounds)
-                }
+            guard let context = UIGraphicsGetCurrentContext() else { continue }
+            UIGraphicsBeginPDFPageWithInfo(bounds, nil)
+            context.translateBy(x: 0, y: bounds.size.height)
+            context.scaleBy(x: 1.0, y: -1.0)
+            context.drawPDFPage (page!)
+            
+            context.scaleBy(x: 1.0, y: -1.0)
+            context.translateBy(x: 0, y: -bounds.size.height)
+            
+            for controller in renderControllers {
+                controller.render(i, context:context, bounds:bounds)
             }
         }
         UIGraphicsEndPDFContext()

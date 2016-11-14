@@ -40,9 +40,8 @@ open class PDFFormViewController: NSObject {
             }
 
             for field in fields {
-                if let dictField = field as? PDFDictionary {
-                    self.enumerate(dictField)
-                }
+                guard let dictField = field as? PDFDictionary else { continue }
+                self.enumerate(dictField)
             }
 
             if let lastPage = self.lastPage {
@@ -64,13 +63,11 @@ open class PDFFormViewController: NSObject {
         }
         
         for dict in array {
-            if let innerFieldDict = dict as? PDFDictionary {
-                
-                if let type = innerFieldDict["Type"] as? String , type == "Annot" {
-                    createFormField(innerFieldDict)
-                } else {
-                    enumerate(innerFieldDict)
-                }
+            guard let innerFieldDict = dict as? PDFDictionary else { continue }
+            if let type = innerFieldDict["Type"] as? String , type == "Annot" {
+                createFormField(innerFieldDict)
+            } else {
+                enumerate(innerFieldDict)
             }
         }
     }
@@ -92,9 +89,8 @@ open class PDFFormViewController: NSObject {
             if let dict = kid as? PDFDictionary,
                 let annots = dict.arrayForKey("Annots") {
                 for subField in annots {
-                    if let subField = subField as? PDFDictionary, field == subField {
-                        return page
-                    }
+                    guard let subField = subField as? PDFDictionary, field == subField else { continue }
+                    return page
                 }
             }
             page -= 1
