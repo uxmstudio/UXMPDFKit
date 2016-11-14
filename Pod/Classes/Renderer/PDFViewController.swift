@@ -28,6 +28,8 @@ open class PDFViewController: UIViewController {
     
     var pageScrubber: PDFPageScrubber!
     
+    var shareFormBarButtonItem: UIBarButtonItem?
+    
     public var scrollDirection: UICollectionViewScrollDirection = .horizontal
     
     lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
@@ -131,12 +133,13 @@ open class PDFViewController: UIViewController {
         var buttons: [UIBarButtonItem] = []
         
         if allowsSharing {
-            buttons.append(UIBarButtonItem(
+            let shareFormBarButtonItem = UIBarButtonItem(
                 barButtonSystemItem: .action,
                 target: self,
                 action: #selector(PDFViewController.shareForm)
-                )
             )
+            buttons.append(shareFormBarButtonItem)
+            self.shareFormBarButtonItem = shareFormBarButtonItem
         }
         
         if allowsFormFilling {
@@ -224,8 +227,7 @@ open class PDFViewController: UIViewController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             activityVC.modalPresentationStyle = .popover
             let popController = activityVC.popoverPresentationController
-            popController?.sourceView = self.view
-            popController?.sourceRect = CGRect(x: self.view.frame.width - 34, y: 64, width: 0, height: 0)
+            popController?.barButtonItem = shareFormBarButtonItem
             popController?.permittedArrowDirections = .up
         }
         present(activityVC, animated: true, completion: nil)
