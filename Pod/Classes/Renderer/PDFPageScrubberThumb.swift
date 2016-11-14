@@ -9,8 +9,8 @@
 import UIKit
 
 internal class PDFPageScrubberThumb: PDFThumbnailView {
-    var small = false
-    var color = UIColor.white
+    let small: Bool
+    let color: UIColor
     
     init(frame: CGRect, small: Bool, color: UIColor) {
         self.small = small
@@ -21,6 +21,8 @@ internal class PDFPageScrubberThumb: PDFThumbnailView {
     }
     
     required init?(coder aDecoder: NSCoder) {
+        small = false
+        color = UIColor.white
         super.init(coder: aDecoder)
         setupUI()
     }

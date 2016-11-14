@@ -208,10 +208,10 @@ class PDFFormFieldSignatureCaptureView: UIView {
         let spacerEnd = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
         spacerEnd.width = 10.0
         
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: self.frame.height - 44.0, width: self.frame.width, height: 44.0))
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: frame.height - 44.0, width: frame.width, height: 44.0))
         toolbar.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
         toolbar.setItems([spacerStart, clearButton, spacer, doneButton, spacerEnd], animated: false)
-        self.addSubview(toolbar)
+        addSubview(toolbar)
     }
     
     // MARK: - Draw

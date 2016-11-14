@@ -17,17 +17,17 @@ open class PDFPageScrubber: UIToolbar {
     var scrubber = PDFPageScrubberTrackControl()
     
     var scrubberDelegate: PDFPageScrubberDelegate?
-    var thumbBackgroundColor = UIColor.white.withAlphaComponent(0.7)
+    let thumbBackgroundColor = UIColor.white.withAlphaComponent(0.7)
     
-    var thumbSmallGap: CGFloat = 2.0
-    var thumbSmallWidth: CGFloat = 22.0
-    var thumbSmallHeight: CGFloat = 28.0
-    var thumbLargeWidth: CGFloat = 32.0
-    var thumbLargeHeight: CGFloat = 42.0
+    let thumbSmallGap: CGFloat = 2.0
+    let thumbSmallWidth: CGFloat = 22.0
+    let thumbSmallHeight: CGFloat = 28.0
+    let thumbLargeWidth: CGFloat = 32.0
+    let thumbLargeHeight: CGFloat = 42.0
     
-    var pageNumberWidth: CGFloat = 96.0
-    var pageNumberHeight: CGFloat = 30.0
-    var pageNumberSpace: CGFloat = 20.0
+    let pageNumberWidth: CGFloat = 96.0
+    let pageNumberHeight: CGFloat = 30.0
+    let pageNumberSpace: CGFloat = 20.0
     
     var thumbViews: [Int: PDFThumbnailView] = [:]
     
@@ -49,11 +49,11 @@ open class PDFPageScrubber: UIToolbar {
     }()
     
     lazy var pageNumberView: UIView = {
-        var numberY = 0.0 - (self.pageNumberHeight + self.pageNumberSpace)
-        var numberX = (self.containerView.bounds.size.width - self.pageNumberWidth) / 2.0
-        var numberRect = CGRect(x: numberX, y: numberY, width: self.pageNumberWidth, height: self.pageNumberHeight)
+        let numberY = 0.0 - (self.pageNumberHeight + self.pageNumberSpace)
+        let numberX = (self.containerView.bounds.size.width - self.pageNumberWidth) / 2.0
+        let numberRect = CGRect(x: numberX, y: numberY, width: self.pageNumberWidth, height: self.pageNumberHeight)
         
-        var pageNumberView = UIView(frame: numberRect)
+        let pageNumberView = UIView(frame: numberRect)
         
         pageNumberView.autoresizesSubviews = false
         pageNumberView.isUserInteractionEnabled = false
@@ -67,7 +67,7 @@ open class PDFPageScrubber: UIToolbar {
     lazy var pageNumberLabel: UILabel = {
         let textRect = self.pageNumberView.bounds.insetBy(dx: 4.0, dy: 2.0)
 
-        var pageNumberLabel = UILabel(frame: textRect)
+        let pageNumberLabel = UILabel(frame: textRect)
         
         pageNumberLabel.autoresizesSubviews = false
         pageNumberLabel.autoresizingMask = UIViewAutoresizing()

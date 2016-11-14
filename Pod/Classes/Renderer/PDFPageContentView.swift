@@ -68,12 +68,12 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(PDFPageContentView.keyboardWillShowNotification(_:)),
-            name: NSNotification.Name.UIKeyboardWillShow,
+            name: .UIKeyboardWillShow,
             object: nil)
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(PDFPageContentView.keyboardWillHideNotification(_:)),
-            name: NSNotification.Name.UIKeyboardWillHide,
+            name: .UIKeyboardWillHide,
             object: nil
         )
         
@@ -216,7 +216,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
             height = 0
         }
 
-        self.contentInset = UIEdgeInsetsMake(0, 0, height, 0)
+        contentInset = UIEdgeInsetsMake(0, 0, height, 0)
     }
     
     
