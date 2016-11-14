@@ -110,7 +110,7 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
         let contentSize = self.collectionView(collectionView, layout: collectionViewLayout, sizeForItemAt: indexPath)
         let contentFrame = CGRect(origin: CGPoint.zero, size: contentSize)
         
-        let page = (indexPath as NSIndexPath).row + 1
+        let page = indexPath.row + 1
         
         cell.contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         cell.pageContentView = PDFPageContentView(frame: contentFrame, document: document!, page: page)
