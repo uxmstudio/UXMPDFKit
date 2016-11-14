@@ -20,7 +20,8 @@ This project is still in early stages. Right now the PDF reader works both progr
 
 ### CocoaPods
 
-To install it, simply add the following line to your Podfile:
+UXMPDFKit is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
 
 ```ruby
 pod "UXMPDFKit"
@@ -33,7 +34,8 @@ pod "UXMPDFKit", "~> 0.3.0"
 
 ### Carthage
 
-To install it, simply add the following line to your Cartfile:
+UXMPDFKit is also available through [Carthage](https://github.com/Carthage/Carthage).
+To install just write into your Cartfile:
 
 ```ogdl
 github "uxmstudio/UXMPDFKit"
@@ -44,14 +46,25 @@ Run `carthage update` to build the framework and drag the built `UXMPDFKit.frame
 ## Usage
 ### Simple Usage
 UXMPDFKit comes with a single page PDF reader with many features implemented right out of the box. Simply create a new PDFViewController, pass it a document and display it like any other view controller. It includes support for forms, a page scrubber and page scrolling.
+#### Swift
 ```swift
-let url = NSBundle.mainBundle().pathForResource("sample", ofType: "pdf")!
-let document = try! PDFDocument(filePath: url, password: "password_if_needed")
+let path = NSBundle.mainBundle().pathForResource("sample", ofType: "pdf")!
+let document = try! PDFDocument(filePath: path, password: "password_if_needed")
 let pdf = PDFViewController(document: document)
 
 self.navigationController?.pushViewController(pdf, animated: true)
 ```
 
+#### Objective-C
+Although written in Swift, the main code reader can be used in Objective-C.
+```objective-c
+NSError *error;
+NSString *path = [[NSBundle mainBundle] pathForResource:@"sample" ofType:@"pdf"];
+PDFDocument *document = [[PDFDocument alloc] initWithFilePath:path password:@"password_if_needed" error:&error];
+PDFViewController *pdfVC = [[PDFViewController alloc] initWithDocument:document];
+
+[self.navigationController pushViewController:pdfVC animated:true];
+```
 
 ### Single Page Collection View
 This collection view renders a PDF in its entirety one page at a time in photo-slideshow style. 
@@ -149,6 +162,7 @@ let renderer = PDFRenderController(document: self.document, controllers: [
 ])
 let pdf = renderer.renderOntoPDF()
 ```
+
 
 # Author
 Chris Anderson:
