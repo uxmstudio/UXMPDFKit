@@ -20,7 +20,20 @@ fileprivate class PDFObjectParserContext {
     }
 }
 
-internal class PDFDictionary: PDFObject {
+func == (lhs: PDFDictionary, rhs: PDFDictionary) -> Bool {
+    let rect1 = lhs.arrayForKey("Rect")?.rect
+    let rect2 = rhs.arrayForKey("Rect")?.rect
+    
+    let keys1 = lhs.allKeys()
+    let keys2 = rhs.allKeys()
+    
+    let t1 = lhs["T"] as? String
+    let t2 = rhs["T"] as? String
+    
+    return rect1 == rect2 && keys1 == keys2 && t1 == t2
+}
+
+internal class PDFDictionary: PDFObject, Equatable {
     var dict: CGPDFDictionaryRef
     
     lazy var attributes: [String:AnyObject] = {
@@ -30,18 +43,15 @@ internal class PDFDictionary: PDFObject {
         
         self.keys = context.keys
         for key in self.keys {
-            if let stringKey = String(validatingUTF8: key) {
-                self.stringKeys.append(stringKey)
-            }
+            guard let stringKey = String(validatingUTF8: key) else { continue }
+            self.stringKeys.append(stringKey)
         }
 
         var attributes: [String:AnyObject] = [:]
         for key in self.keys {
-            if let stringKey = String(validatingUTF8: key) {
-                if let obj = self.pdfObjectForKey(key) {
-                    attributes[stringKey] = obj
-                }
-            }
+            guard let stringKey = String(validatingUTF8: key) else { continue }
+            guard let obj = self.pdfObjectForKey(key) else { continue }
+            attributes[stringKey] = obj
         }
         return attributes
     }()
@@ -73,23 +83,6 @@ internal class PDFDictionary: PDFObject {
     
     func allKeys() -> [String] {
         return stringKeys
-    }
-    
-    func isEqual(_ object: Any?) -> Bool {
-        if let object = object as? PDFDictionary {
-            
-            let rect1 = arrayForKey("Rect")?.rect
-            let rect2 = object.arrayForKey("Rect")?.rect
-            
-            let keys1 = allKeys()
-            let keys2 = object.allKeys()
-            
-            let t1 = self["T"] as? String
-            let t2 = object["T"] as? String
-            
-            return rect1 == rect2 && keys1 == keys2 && t1 == t2
-        }
-        return false
     }
     
     fileprivate func booleanFromKey(_ key: UnsafePointer<Int8>) -> Bool? {

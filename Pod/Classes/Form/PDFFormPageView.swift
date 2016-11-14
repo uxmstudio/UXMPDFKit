@@ -40,7 +40,7 @@ func ==(lhs: PDFFormFlag, rhs: PDFFormFlag) -> Bool {
 open class PDFFormPage: NSObject {
     let page: Int
     var fields: [PDFFormFieldObject] = []
-    var zoomScale: CGFloat = 1.0
+    let zoomScale: CGFloat = 1.0
     
     init(page: Int) {
         self.page = page
@@ -81,9 +81,9 @@ open class PDFFormPageView: UIView {
     var fieldViews: [PDFFormField] = []
     var zoomScale: CGFloat = 1.0
     
-    var cropBox = CGRect.zero
-    var boundingBox = CGRect.zero
-    var baseFrame: CGRect
+    let cropBox: CGRect
+    let boundingBox: CGRect
+    let baseFrame: CGRect
     
     init(frame: CGRect, boundingBox: CGRect, cropBox: CGRect, fields: [PDFFormFieldObject]) {
         self.baseFrame = frame
@@ -93,11 +93,10 @@ open class PDFFormPageView: UIView {
         super.init(frame: frame)
         
         for field in fields {
-            if let fieldView = field.createFormField() {
-                addSubview(fieldView)
-                adjustFrame(fieldView)
-                fieldViews.append(fieldView)
-            }
+            guard let fieldView = field.createFormField() else { continue }
+            addSubview(fieldView)
+            adjustFrame(fieldView)
+            fieldViews.append(fieldView)
         }
     }
     

@@ -28,6 +28,8 @@ open class PDFViewController: UIViewController {
     
     var pageScrubber: PDFPageScrubber!
     
+    var shareFormBarButtonItem: UIBarButtonItem?
+    
     public var scrollDirection: UICollectionViewScrollDirection = .horizontal
     
     lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
@@ -77,17 +79,17 @@ open class PDFViewController: UIViewController {
         view.addSubview(pageScrubber)
         view.addSubview(annotationController.view)
         
-        self.collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        self.collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        self.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        self.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        self.pageScrubber.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        self.pageScrubber.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        self.pageScrubber.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        self.pageScrubber.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
+        pageScrubber.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        pageScrubber.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        pageScrubber.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        pageScrubber.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
         
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         
         pageScrubber.sizeToFit()
         
@@ -131,12 +133,13 @@ open class PDFViewController: UIViewController {
         var buttons: [UIBarButtonItem] = []
         
         if allowsSharing {
-            buttons.append(UIBarButtonItem(
+            let shareFormBarButtonItem = UIBarButtonItem(
                 barButtonSystemItem: .action,
                 target: self,
                 action: #selector(PDFViewController.shareForm)
-                )
             )
+            buttons.append(shareFormBarButtonItem)
+            self.shareFormBarButtonItem = shareFormBarButtonItem
         }
         
         if allowsFormFilling {
@@ -184,7 +187,17 @@ open class PDFViewController: UIViewController {
     
     func hideBars(state: Bool) {
         navigationController?.setNavigationBarHidden(state, animated: true)
-        pageScrubber.isHidden = state
+        
+        switch scrollDirection {
+        case .horizontal:
+            if showsScrubber {
+                pageScrubber.isHidden = state
+            } else {
+                pageScrubber.isHidden = true
+            }
+        case .vertical:
+            pageScrubber.isHidden = true
+        }
     }
     
     func toggleBars() {
@@ -214,8 +227,7 @@ open class PDFViewController: UIViewController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             activityVC.modalPresentationStyle = .popover
             let popController = activityVC.popoverPresentationController
-            popController?.sourceView = self.view
-            popController?.sourceRect = CGRect(x: self.view.frame.width - 34, y: 64, width: 0, height: 0)
+            popController?.barButtonItem = shareFormBarButtonItem
             popController?.permittedArrowDirections = .up
         }
         present(activityVC, animated: true, completion: nil)

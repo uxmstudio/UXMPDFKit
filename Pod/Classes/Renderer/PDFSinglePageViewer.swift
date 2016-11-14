@@ -22,6 +22,11 @@ open class PDFSinglePageViewer: UICollectionView {
     
     open var document: PDFDocument?
     
+    var scrollDirection: UICollectionViewScrollDirection {
+        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+        return flowLayout.scrollDirection
+    }
+    
     private static var flowLayout: UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -65,20 +70,25 @@ open class PDFSinglePageViewer: UICollectionView {
     }
     
     open func indexForPage(_ page: Int) -> Int {
-        var currentPage = page - 1
+        let currentPage = page - 1
         if currentPage <= 0 {
-            currentPage = 0
+            return 0
+        } else if let pageCount = document?.pageCount, currentPage > pageCount {
+            return pageCount - 1
+        } else {
+            return currentPage
         }
-        if let document = document, currentPage > document.pageCount {
-            currentPage = document.pageCount - 1
-        }
-        return currentPage
     }
     
     open func displayPage(_ page: Int, animated: Bool) {
         let currentPage = indexForPage(page)
         let indexPath = IndexPath(item: currentPage, section: 0)
-        self.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
+        switch scrollDirection {
+        case .horizontal:
+            scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
+        case .vertical:
+            scrollToItem(at: indexPath, at: .top, animated: animated)
+        }
     }
     
     open func getPageContent(_ page: Int) -> PDFPageContentView? {
@@ -110,7 +120,7 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
         let contentSize = self.collectionView(collectionView, layout: collectionViewLayout, sizeForItemAt: indexPath)
         let contentFrame = CGRect(origin: CGPoint.zero, size: contentSize)
         
-        let page = (indexPath as NSIndexPath).row + 1
+        let page = indexPath.row + 1
         
         cell.contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         cell.pageContentView = PDFPageContentView(frame: contentFrame, document: document!, page: page)
@@ -130,16 +140,30 @@ extension PDFSinglePageViewer: UICollectionViewDelegate {
 
 extension PDFSinglePageViewer: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
-        switch flowLayout.scrollDirection {
+        switch scrollDirection {
         case .horizontal:
             var size = bounds.size
             let contentInsetHeight = contentInset.bottom + contentInset.top + 1
             size.height -= contentInsetHeight
             return size
         case .vertical:
-            return bounds.size
+            let page = indexPath.row + 1
+            let contentViewSize = PDFPageContentView(frame: bounds, document: document!, page: page).contentSize
+            
+            // Find proper aspect ratio so that cell is full width
+            let widthMultiplier: CGFloat
+            let heightMultiplier: CGFloat
+            if contentViewSize.width == bounds.width {
+                widthMultiplier = bounds.height / contentViewSize.height
+                heightMultiplier = 1
+            } else if contentViewSize.height == bounds.height {
+                heightMultiplier = bounds.width / contentViewSize.width
+                widthMultiplier = 1
+            } else {
+                fatalError()
+            }
+            
+            return CGSize(width: bounds.size.width * widthMultiplier, height: bounds.size.height * heightMultiplier)
         }
     }
 }
@@ -163,13 +187,13 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
     }
     
     private func didDisplayPage(_ scrollView: UIScrollView) {
-        let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
         let page: Int
-        switch flowLayout.scrollDirection {
+        switch scrollDirection {
         case .horizontal:
             page = Int((scrollView.contentOffset.x + scrollView.frame.width) / scrollView.frame.width)
         case .vertical:
-            page = Int((scrollView.contentOffset.y + scrollView.frame.height) / scrollView.frame.height)
+            let currentlyShownIndexPath = indexPathsForVisibleItems.first ?? IndexPath(item: 0, section: 0)
+            page = currentlyShownIndexPath.row + 1
         }
         singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
         

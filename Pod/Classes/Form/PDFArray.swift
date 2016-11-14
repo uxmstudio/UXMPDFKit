@@ -153,9 +153,8 @@ internal class PDFArray: PDFObject {
         let count = CGPDFArrayGetCount(arr)
         
         for i in stride(from: 0, to: count, by: 1) {
-            if let obj = pdfObjectAtIndex(i) {
-                temp.append(obj)
-            }
+            guard let obj = pdfObjectAtIndex(i) else { continue }
+            temp.append(obj)
         }
         
         return temp
