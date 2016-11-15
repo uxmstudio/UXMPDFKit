@@ -34,5 +34,4 @@ open class PDFSinglePageCell: UICollectionViewCell {
     override open func prepareForReuse() {
         pageContentView = nil
     }
-    
 }
