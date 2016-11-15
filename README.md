@@ -48,7 +48,7 @@ Run `carthage update` to build the framework and drag the built `UXMPDFKit.frame
 UXMPDFKit comes with a single page PDF reader with many features implemented right out of the box. Simply create a new PDFViewController, pass it a document and display it like any other view controller. It includes support for forms, a page scrubber and page scrolling.
 #### Swift
 ```swift
-let path = NSBundle.mainBundle().pathForResource("sample", ofType: "pdf")!
+let path = Bundle.main.path(forResource: "sample", ofType: "pdf")!
 let document = try! PDFDocument(filePath: path, password: "password_if_needed")
 let pdf = PDFViewController(document: document)
 
