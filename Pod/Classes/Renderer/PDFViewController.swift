@@ -11,24 +11,45 @@ import SafariServices
 
 open class PDFViewController: UIViewController {
     
+    /// A boolean value that determines whether the navigation bar and scrubber bar hide on screen tap
     open var hidesBarsOnTap: Bool = true
+    
+    /// A boolean value that determines if the scrubber bar should be visible
     open var showsScrubber: Bool = true {
         didSet {
             pageScrubber.isHidden = !showsScrubber
         }
     }
+    
+    /// A boolean value that determines if a PDF should have fillable form elements
     open var allowsFormFilling: Bool = true
+    
+    /// A boolean value that determines if annotations are allowed
     open var allowsAnnotations: Bool = true
+    
+    /// A boolean value that determines if sharing should be allowed
     open var allowsSharing: Bool = true
+    
+    /// A boolean value that determines if view controller is displayed as modal
     open var isPresentingInModal: Bool = false
+    
+    /// The scroll direction of the reader
     open var scrollDirection: UICollectionViewScrollDirection = .horizontal
     
+    /// A reference to the document that is being displayed
     var document: PDFDocument!
     
+    /// A reference to the share button
     var shareBarButtonItem: UIBarButtonItem?
+    
+    /// A closure that defines an action to take upon selecting the share button.
+    /// The default action brings up a UIActivityViewController
     open lazy var shareBarButtonAction: () -> () = { self.showActivitySheet() }
     
+    /// A reference to the collection view handling page presentation
     var collectionView: PDFSinglePageViewer!
+    
+    /// A reference to the page scrubber bar
     var pageScrubber: PDFPageScrubber!
     lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
     lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document, delegate: self)
@@ -36,6 +57,15 @@ open class PDFViewController: UIViewController {
     fileprivate var showingAnnotations = false
     fileprivate var showingFormFilling = true
     
+    
+    /**
+     Initializes a new reader with a given document
+     
+     - Parameters:
+        - document: The document to display
+     
+     - Returns: An instance of the PDFViewController
+     */
     public init(document: PDFDocument) {
         super.init(nibName: nil, bundle: nil)
         self.document = document
@@ -72,7 +102,7 @@ open class PDFViewController: UIViewController {
         collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
     }
     
-    func setupUI() {
+    fileprivate func setupUI() {
         view.addSubview(collectionView)
         view.addSubview(pageScrubber)
         view.addSubview(annotationController.view)
@@ -224,6 +254,7 @@ open class PDFViewController: UIViewController {
         }
     }
     
+    /// Toggles the display of the navigation bar and scrubber bar
     func toggleBars() {
         hideBars(state: navigationController?.isNavigationBarHidden ?? false)
         collectionView.collectionViewLayout.invalidateLayout()
