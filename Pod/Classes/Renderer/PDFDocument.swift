@@ -103,6 +103,15 @@ open class PDFDocument: NSObject, NSCoding {
         self.save()
     }
     
+    func page(at page: Int) -> CGPDFPage? {
+        
+        if let documentRef = self.documentRef,
+            let pageRef = documentRef.page(at: page) {
+            return pageRef
+        }
+        return nil
+    }
+    
     func loadDocumentInformation() throws {
         guard let pdfDocRef = documentRef else {
             return

@@ -39,7 +39,7 @@ internal class PDFPageContent: UIView {
             page = pages
         }
         
-        guard let pdfPageRef = pdfDocRef.page(at: page) else { fatalError() }
+        guard let pdfPageRef = pdfDocument.page(at: page) else { fatalError() }
         self.pdfPageRef = pdfPageRef
         
         cropBoxRect = pdfPageRef.getBoxRect(.cropBox)
