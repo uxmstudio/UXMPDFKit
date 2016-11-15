@@ -195,23 +195,3 @@ open class PDFAction {
         return nil
     }
 }
-
-open class PDFActionGoTo: PDFAction {
-    var pageIndex: Int
-    
-    public init(pageIndex: Int) {
-        self.pageIndex = pageIndex
-    }
-}
-
-open class PDFActionURL: PDFAction {
-    var url: URL
-    
-    public init(url: URL) {
-        self.url = url
-    }
-    
-    public init(stringUrl: String) {
-        self.url = URL(string: stringUrl)!
-    }
-}

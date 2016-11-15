@@ -10,44 +10,62 @@ import UIKit
 import SafariServices
 
 open class PDFViewController: UIViewController {
-    /// Action button style
-    public enum ActionStyle {
-        /// Brings up an activity sheet to share or open PDF in another app
-        case activitySheet
-        
-        /// Performs a custom action
-        case customAction((Void) -> ())
-    }
     
+    /// A boolean value that determines whether the navigation bar and scrubber bar hide on screen tap
     open var hidesBarsOnTap: Bool = true
+    
+    /// A boolean value that determines if the scrubber bar should be visible
     open var showsScrubber: Bool = true {
         didSet {
             pageScrubber.isHidden = !showsScrubber
         }
     }
+    
+    /// A boolean value that determines if a PDF should have fillable form elements
     open var allowsFormFilling: Bool = true
+    
+    /// A boolean value that determines if annotations are allowed
     open var allowsAnnotations: Bool = true
+    
+    /// A boolean value that determines if sharing should be allowed
     open var allowsSharing: Bool = true
+    
+    /// A boolean value that determines if view controller is displayed as modal
     open var isPresentingInModal: Bool = false
     
-    public var actionStyle: ActionStyle = .activitySheet
+    /// The scroll direction of the reader
+    open var scrollDirection: UICollectionViewScrollDirection = .horizontal
     
+    /// A reference to the document that is being displayed
     var document: PDFDocument!
     
+    /// A reference to the share button
+    var shareBarButtonItem: UIBarButtonItem?
+    
+    /// A closure that defines an action to take upon selecting the share button.
+    /// The default action brings up a UIActivityViewController
+    open lazy var shareBarButtonAction: () -> () = { self.showActivitySheet() }
+    
+    /// A reference to the collection view handling page presentation
     var collectionView: PDFSinglePageViewer!
     
+    /// A reference to the page scrubber bar
     var pageScrubber: PDFPageScrubber!
-    
-    var shareFormBarButtonItem: UIBarButtonItem?
-    
-    public var scrollDirection: UICollectionViewScrollDirection = .horizontal
-    
     lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
     lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document, delegate: self)
     
     fileprivate var showingAnnotations = false
     fileprivate var showingFormFilling = true
     
+    
+    /**
+     Initializes a new reader with a given document
+     
+     - Parameters:
+        - document: The document to display
+     
+     - Returns: An instance of the PDFViewController
+     */
     public init(document: PDFDocument) {
         super.init(nibName: nil, bundle: nil)
         self.document = document
@@ -84,7 +102,7 @@ open class PDFViewController: UIViewController {
         collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
     }
     
-    func setupUI() {
+    fileprivate func setupUI() {
         view.addSubview(collectionView)
         view.addSubview(pageScrubber)
         view.addSubview(annotationController.view)
@@ -128,6 +146,14 @@ open class PDFViewController: UIViewController {
     }
     
     //MARK: - Private helpers
+    fileprivate func scrollTo(page: Int) {
+        document.currentPage = page
+        collectionView.displayPage(page, animated: false)
+        if showsScrubber {
+            pageScrubber.updateScrubber()
+        }
+    }
+    
     fileprivate func reloadBarButtons() {
         navigationItem.rightBarButtonItems = rightBarButtons()
         
@@ -146,21 +172,20 @@ open class PDFViewController: UIViewController {
             let shareFormBarButtonItem = UIBarButtonItem(
                 barButtonSystemItem: .action,
                 target: self,
-                action: #selector(PDFViewController.shareForm)
+                action: #selector(PDFViewController.shareDocument)
             )
             buttons.append(shareFormBarButtonItem)
-            self.shareFormBarButtonItem = shareFormBarButtonItem
+            self.shareBarButtonItem = shareFormBarButtonItem
         }
         
-        if allowsFormFilling {
-            buttons.append(UIBarButtonItem(
-                image: UIImage.bundledImage("form"),
-                style: .plain,
-                target: self,
-                action: #selector(PDFViewController.showForm)
-                )
+        buttons.append(UIBarButtonItem(
+            image: UIImage.bundledImage("thumbs"),
+            style: .plain,
+            target: self,
+            action: #selector(PDFViewController.showThumbnailView)
             )
-        }
+        )
+        
         
         if allowsAnnotations {
             if showingAnnotations {
@@ -187,12 +212,31 @@ open class PDFViewController: UIViewController {
         reloadBarButtons()
     }
     
-    func showForm() {
-        showingFormFilling = true
-        showingAnnotations = false
+    func showActivitySheet() {
+        let renderer = PDFRenderController(document: document, controllers: [
+            annotationController,
+            formController
+            ])
+        let pdf = renderer.renderOntoPDF()
         
-        annotationController.finishAnnotation()
-        reloadBarButtons()
+        let items = [pdf]
+        let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            activityVC.modalPresentationStyle = .popover
+            let popController = activityVC.popoverPresentationController
+            popController?.barButtonItem = shareBarButtonItem
+            popController?.permittedArrowDirections = .up
+        }
+        present(activityVC, animated: true, completion: nil)
+    }
+    
+    func showThumbnailView() {
+        let vc = PDFThumbnailViewController(document: document)
+        vc.delegate = self
+        let nvc = UINavigationController(rootViewController: vc)
+        nvc.modalTransitionStyle = .crossDissolve
+        present(nvc, animated: true, completion: nil)
     }
     
     func hideBars(state: Bool) {
@@ -210,12 +254,9 @@ open class PDFViewController: UIViewController {
         }
     }
     
+    /// Toggles the display of the navigation bar and scrubber bar
     func toggleBars() {
-        if let nvc = navigationController, nvc.isNavigationBarHidden {
-            hideBars(state: false)
-        } else {
-            hideBars(state: true)
-        }
+        hideBars(state: navigationController?.isNavigationBarHidden ?? false)
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
@@ -224,28 +265,8 @@ open class PDFViewController: UIViewController {
         self.toggleBars()
     }
     
-    func shareForm() {
-        switch actionStyle {
-        case .activitySheet:
-            let renderer = PDFRenderController(document: document, controllers: [
-                annotationController,
-                formController
-                ])
-            let pdf = renderer.renderOntoPDF()
-            
-            let items = [pdf]
-            let activityVC = UIActivityViewController(activityItems: items, applicationActivities: nil)
-            
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                activityVC.modalPresentationStyle = .popover
-                let popController = activityVC.popoverPresentationController
-                popController?.barButtonItem = shareFormBarButtonItem
-                popController?.permittedArrowDirections = .up
-            }
-            present(activityVC, animated: true, completion: nil)
-        case .customAction(let customAction):
-            customAction()
-        }
+    func shareDocument() {
+        self.shareBarButtonAction()
     }
     
     func dismissModal() {
@@ -264,8 +285,7 @@ extension PDFViewController: PDFAnnotationControllerProtocol {
 
 extension PDFViewController: PDFPageScrubberDelegate {
     public func scrubber(_ scrubber: PDFPageScrubber, selectedPage: Int) {
-        document.currentPage = selectedPage
-        collectionView.displayPage(selectedPage, animated: false)
+        self.scrollTo(page: selectedPage)
     }
 }
 
@@ -306,4 +326,11 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
     }
     
     public func singlePageViewerDidEndDragging() { }
+}
+
+extension PDFViewController: PDFThumbnailViewControllerDelegate {
+    public func thumbnailCollection(_ collection: PDFThumbnailViewController, didSelect page: Int) {
+        self.scrollTo(page: page)
+        self.dismiss(animated: true, completion: nil)
+    }
 }

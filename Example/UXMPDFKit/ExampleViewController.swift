@@ -20,5 +20,4 @@ class ExampleViewController: UIViewController {
         
         self.navigationController?.pushViewController(pdf, animated: true)
     }
-
 }
