@@ -119,6 +119,9 @@ open class PDFViewController: UIViewController {
     fileprivate func scrollTo(page: Int) {
         document.currentPage = page
         collectionView.displayPage(page, animated: false)
+        if showsScrubber {
+            pageScrubber.updateScrubber()
+        }
     }
     
     fileprivate func reloadBarButtons() {
@@ -145,15 +148,14 @@ open class PDFViewController: UIViewController {
             self.shareBarButtonItem = shareFormBarButtonItem
         }
         
-        if allowsFormFilling {
-            buttons.append(UIBarButtonItem(
-                image: UIImage.bundledImage("form"),
-                style: .plain,
-                target: self,
-                action: #selector(PDFViewController.showForm)
-                )
+        buttons.append(UIBarButtonItem(
+            image: UIImage.bundledImage("thumbs"),
+            style: .plain,
+            target: self,
+            action: #selector(PDFViewController.showThumbnailView)
             )
-        }
+        )
+        
         
         if allowsAnnotations {
             if showingAnnotations {
@@ -177,14 +179,6 @@ open class PDFViewController: UIViewController {
     
     func toggleAnnotations(_ button: PDFBarButton) {
         showingAnnotations = !showingAnnotations
-        reloadBarButtons()
-    }
-    
-    func showForm() {
-        showingFormFilling = true
-        showingAnnotations = false
-        
-        annotationController.finishAnnotation()
         reloadBarButtons()
     }
     
