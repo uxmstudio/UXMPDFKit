@@ -256,7 +256,7 @@ open class PDFViewController: UIViewController {
     
     /// Toggles the display of the navigation bar and scrubber bar
     func toggleBars() {
-        hideBars(state: navigationController?.isNavigationBarHidden ?? false)
+        hideBars(state: !(navigationController?.isNavigationBarHidden ?? false))
         collectionView.collectionViewLayout.invalidateLayout()
     }
     
