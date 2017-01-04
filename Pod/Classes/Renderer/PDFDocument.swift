@@ -47,7 +47,7 @@ open class PDFDocument: NSObject, NSCoding {
     open var producer: String?
     open var modificationDate: Date?
     open var creationDate: Date?
-    open var version:Float = 0.0
+    open var version: Float = 0.0
     
     static func documentFromFile(_ filePath: String, password: String?) throws -> PDFDocument? {
         if let document = PDFDocument.unarchiveDocumentForFile(filePath, password: password) {
@@ -73,11 +73,7 @@ open class PDFDocument: NSObject, NSCoding {
         try! self.loadDocumentInformation()
     }
     
-    public convenience init(filePath: String) throws {
-        try self.init(filePath: filePath, password: nil)
-    }
-    
-    public init(filePath: String, password: String?) throws {
+    public init(filePath: String, password: String? = nil) throws {
         self.guid = PDFDocument.GUID()
         self.password = password
         self.fileUrl = URL(fileURLWithPath: filePath, isDirectory: false)
@@ -90,7 +86,7 @@ open class PDFDocument: NSObject, NSCoding {
         self.save()
     }
     
-    public init(fileData: NSData, password: String?) throws {
+    public init(fileData: NSData, password: String? = nil) throws {
         self.guid = PDFDocument.GUID()
         self.password = password
         self.fileData = fileData

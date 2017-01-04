@@ -22,11 +22,13 @@ extension CGPDFDocument {
         }
         
         if docRef.isEncrypted {
-            guard let password = password else {
-                throw CGPDFDocumentError.passwordRequired
-            }
             
             if docRef.unlockWithPassword("") == false {
+                
+                guard let password = password else {
+                    throw CGPDFDocumentError.passwordRequired
+                }
+                
                 docRef.unlockWithPassword((password as NSString).utf8String!)
             }
             
