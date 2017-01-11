@@ -14,24 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-               BuildableName = "UXMPDFKit_Example.app"
-               BlueprintName = "UXMPDFKit_Example"
-               ReferencedContainer = "container:UXMPDFKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D7C77B95095598F2FFA1E9456D29905E"
-               BuildableName = "Pods_UXMPDFKit_Example.framework"
-               BlueprintName = "Pods-UXMPDFKit_Example"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+               BlueprintIdentifier = "806AC9F20336348B8F1E6138E470491D"
+               BuildableName = "UXMPDFKit.framework"
+               BlueprintName = "UXMPDFKit"
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -43,15 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "UXMPDFKit_Example.app"
-            BlueprintName = "UXMPDFKit_Example"
-            ReferencedContainer = "container:UXMPDFKit.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -65,22 +42,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "UXMPDFKit_Example.app"
-            BlueprintName = "UXMPDFKit_Example"
-            ReferencedContainer = "container:UXMPDFKit.xcodeproj">
+            BlueprintIdentifier = "806AC9F20336348B8F1E6138E470491D"
+            BuildableName = "UXMPDFKit.framework"
+            BlueprintName = "UXMPDFKit"
+            ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
-         <AdditionalOption
-            key = "NSZombieEnabled"
-            value = "YES"
-            isEnabled = "YES">
-         </AdditionalOption>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
@@ -89,16 +60,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "UXMPDFKit_Example.app"
-            BlueprintName = "UXMPDFKit_Example"
-            ReferencedContainer = "container:UXMPDFKit.xcodeproj">
+            BlueprintIdentifier = "806AC9F20336348B8F1E6138E470491D"
+            BuildableName = "UXMPDFKit.framework"
+            BlueprintName = "UXMPDFKit"
+            ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
