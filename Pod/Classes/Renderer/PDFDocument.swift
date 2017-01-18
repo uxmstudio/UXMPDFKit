@@ -10,22 +10,7 @@ import UIKit
 
 open class PDFDocument: NSObject, NSCoding {
     
-    lazy open var documentRef: CGPDFDocument? = {
-        do {
-            if let fileUrl = self.fileUrl {
-                return try CGPDFDocument.create(fileUrl, password: self.password)
-            }
-            else if let fileData = self.fileData,
-                let dataProvider = CGDataProvider(data: fileData) {
-                return CGPDFDocument(dataProvider)
-            }
-            else {
-                return nil
-            }
-        } catch {
-            return nil
-        }
-    }()
+    open var documentRef: CGPDFDocument?
     
     /// Document Properties
     open var password: String?
@@ -52,7 +37,8 @@ open class PDFDocument: NSObject, NSCoding {
     static func documentFromFile(_ filePath: String, password: String?) throws -> PDFDocument? {
         if let document = PDFDocument.unarchiveDocumentForFile(filePath, password: password) {
             return document
-        } else {
+        }
+        else {
             return try PDFDocument(filePath: filePath, password: password)
         }
     }
@@ -67,10 +53,11 @@ open class PDFDocument: NSObject, NSCoding {
         self.bookmarks = aDecoder.decodeObject(forKey: "bookmarks") as! NSMutableIndexSet
         self.lastOpen = aDecoder.decodeObject(forKey: "lastOpen") as? Date
         self.fileUrl = URL(fileURLWithPath: aDecoder.decodeObject(forKey: "fileURL") as! String)
+        self.fileData = aDecoder.decodeObject(forKey: "fileData") as? NSData
         
         super.init()
         
-        try! self.loadDocumentInformation()
+        try! self.loadDocument()
     }
     
     public init(filePath: String, password: String? = nil) throws {
@@ -81,7 +68,7 @@ open class PDFDocument: NSObject, NSCoding {
         
         super.init()
         
-        try self.loadDocumentInformation()
+        try self.loadDocument()
         
         self.save()
     }
@@ -94,21 +81,28 @@ open class PDFDocument: NSObject, NSCoding {
         
         super.init()
         
-        try self.loadDocumentInformation()
+        try self.loadDocument()
         
         self.save()
     }
     
-    func page(at page: Int) -> CGPDFPage? {
+    func loadDocument() throws {
         
-        if let documentRef = self.documentRef,
-            let pageRef = documentRef.page(at: page) {
-            return pageRef
+        if let fileUrl = self.fileUrl {
+            self.documentRef =  try CGPDFDocument.create(url: fileUrl, password: self.password)
         }
-        return nil
+        else if let fileData = self.fileData {
+            self.documentRef =  try CGPDFDocument.create(data: fileData, password: self.password)
+        }
+        
+        if documentRef == nil {
+            throw CGPDFDocumentError.unableToOpen
+        }
+        
+        self.loadDocumentInformation()
     }
     
-    func loadDocumentInformation() throws {
+    func loadDocumentInformation() {
         guard let pdfDocRef = documentRef else {
             return
         }
@@ -180,6 +174,15 @@ open class PDFDocument: NSObject, NSCoding {
         self.pageCount = pdfDocRef.numberOfPages
     }
     
+    func page(at page: Int) -> CGPDFPage? {
+        
+        if let documentRef = self.documentRef,
+            let pageRef = documentRef.page(at: page) {
+            return pageRef
+        }
+        return nil
+    }
+    
     
     //MARK: - Helper methods
     
@@ -220,7 +223,7 @@ open class PDFDocument: NSObject, NSCoding {
     }
     
     open func reloadProperties() {
-        try! self.loadDocumentInformation()
+        self.loadDocumentInformation()
     }
     
     open func boundsForPDFPage(_ page: Int) -> CGRect {
@@ -254,5 +257,6 @@ open class PDFDocument: NSObject, NSCoding {
         aCoder.encode(self.bookmarks, forKey: "bookmarks")
         aCoder.encode(self.lastOpen, forKey: "lastOpen")
         aCoder.encode(self.fileUrl?.path, forKey: "fileURL")
+        aCoder.encode(self.fileData, forKey: "fileData")
     }
 }
