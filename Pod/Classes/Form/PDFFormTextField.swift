@@ -63,7 +63,8 @@ open class PDFFormTextField: PDFFormField {
                 let fontSize = fontSizeForRect(frame) < 13.0 ? fontSizeForRect(frame) : 13.0
                 textView.font = UIFont.systemFont(ofSize: fontSize)
             }
-        } else {
+        }
+        else {
             if let textField = textEntryBox as? UITextField {
                 textField.textAlignment = alignment
                 textField.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -108,10 +109,12 @@ open class PDFFormTextField: PDFFormField {
         if let textField = textEntryBox as? UITextField {
             text = textField.text ?? ""
             font = textField.font!
-        } else if let textView = textEntryBox as? UITextView {
+        }
+        else if let textView = textEntryBox as? UITextView {
             text = textView.text
             font = textView.font!
-        } else {
+        }
+        else {
             fatalError()
         }
         

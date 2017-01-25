@@ -16,9 +16,9 @@ open class PDFObjectParser {
         self.document = document
         if let catalogue = document.documentRef?.catalog {
             attributes = PDFDictionary(dictionaryRef: catalogue)
-        } else {
+        }
+        else {
             attributes = nil
         }
-        
     }
 }

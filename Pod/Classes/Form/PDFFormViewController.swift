@@ -30,18 +30,27 @@ open class PDFFormViewController: NSObject {
             guard let attributes = self.parser.attributes else {
                 return
             }
-            
-            guard let forms = attributes["AcroForm"] as? PDFDictionary else {
+            guard let pages = attributes["Pages"] as? PDFDictionary else {
+                return
+            }
+            guard let kids = pages.arrayForKey("Kids") else {
                 return
             }
             
-            guard let fields = forms.arrayForKey("Fields") else {
-                return
-            }
-
-            for field in fields {
-                guard let dictField = field as? PDFDictionary else { continue }
-                self.enumerate(dictField)
+            var page = kids.count
+            
+            for kid in kids {
+                if let dict = kid as? PDFDictionary,
+                    let annots = dict.arrayForKey("Annots") {
+                    
+                    for annot in annots {
+                        
+                        guard let annot = annot as? PDFDictionary else { continue }
+                        
+                        self.enumerate(annot, page: page)
+                    }
+                }
+                page -= 1
             }
 
             if let lastPage = self.lastPage {
@@ -52,9 +61,11 @@ open class PDFFormViewController: NSObject {
         }
     }
     
-    func enumerate(_ fieldDict: PDFDictionary) {
+    func enumerate(_ fieldDict: PDFDictionary, page: Int = 0) {
+        
+        
         if fieldDict["Subtype"] != nil {
-            createFormField(fieldDict)
+            createFormField(fieldDict, page: page)
             return
         }
         
@@ -65,50 +76,23 @@ open class PDFFormViewController: NSObject {
         for dict in array {
             guard let innerFieldDict = dict as? PDFDictionary else { continue }
             if let type = innerFieldDict["Type"] as? String , type == "Annot" {
-                createFormField(innerFieldDict)
-            } else {
-                enumerate(innerFieldDict)
+                createFormField(innerFieldDict, page: page)
+            }
+            else {
+                enumerate(innerFieldDict, page: page)
             }
         }
     }
     
-    func getPageNumber(_ field: PDFDictionary) -> Int? {
-        guard let attributes = parser.attributes else {
-            return nil
-        }
-        guard let pages = attributes["Pages"] as? PDFDictionary else {
-            return nil
-        }
-        guard let kids = pages.arrayForKey("Kids") else {
-            return nil
-        }
-        
-        var page = kids.count
-        
-        for kid in kids {
-            if let dict = kid as? PDFDictionary,
-                let annots = dict.arrayForKey("Annots") {
-                for subField in annots {
-                    guard let subField = subField as? PDFDictionary, field == subField else { continue }
-                    return page
-                }
+    func createFormField(_ dict: PDFDictionary, page: Int = 0) {
+        DispatchQueue.main.async {
+            if let formView = self.formPage(page) {
+                formView.createFormField(dict)
             }
-            page -= 1
-        }
-        
-        return page
-    }
-    
-    func createFormField(_ dict: PDFDictionary) {
-        if let page = getPageNumber(dict) {
-            DispatchQueue.main.async {
-                if let formView = self.formPage(page) {
-                    formView.createFormField(dict)
-                } else {
-                    let formView = PDFFormPage(page: page)
-                    formView.createFormField(dict)
-                    self.formPages[page] = formView
-                }
+            else {
+                let formView = PDFFormPage(page: page)
+                formView.createFormField(dict)
+                self.formPages[page] = formView
             }
         }
     }

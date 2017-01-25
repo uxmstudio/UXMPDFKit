@@ -31,9 +31,10 @@ open class PDFFormFieldObject {
         }
         
         let flags: [PDFFormFlag]
-        if let flagsObj = dict["Ff"] as? UInt {
-            flags = self.determineFlags(flagsObj)
-        } else {
+        if let flagsObj = dict["Ff"] as? NSNumber {
+            flags = self.determineFlags(UInt(flagsObj))
+        }
+        else {
             flags = []
         }
         
@@ -54,9 +55,11 @@ open class PDFFormFieldObject {
         if let options = self.options {
             if options.type == "Btn" {
                 return self.createButtonField(options)
-            } else if options.type == "Tx" {
+            }
+            else if options.type == "Tx" {
                 return self.createTextField(options)
-            } else if options.type == "Sig" {
+            }
+            else if options.type == "Sig" {
                 return self.createSignatureField(options)
             }
         }
