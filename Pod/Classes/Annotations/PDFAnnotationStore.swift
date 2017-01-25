@@ -23,6 +23,11 @@ open class PDFAnnotationStore {
         return annotations.filter({ $0.page == page })
     }
     
+    func saveToTemp() {
+        
+        //TODO: Save all pages and objects to local defaults
+    }
+    
     func renderInContext(_ context: CGContext, size: CGRect, page: Int) {
         for annotation in annotations(page: page) {
             annotation.drawInContext(context)

@@ -11,19 +11,19 @@ import UIKit
 class PDFTextAnnotation: NSObject {
     var page: Int?
     
-    var text = "" {
+    var text: String = "" {
         didSet {
             textView.text = text
         }
     }
     
-    var rect = CGRect.zero {
+    var rect: CGRect = CGRect.zero {
         didSet {
             textView.frame = self.rect
         }
     }
     
-    var font = UIFont.systemFont(ofSize: 14.0) {
+    var font: UIFont = UIFont.systemFont(ofSize: 14.0) {
         didSet {
             textView.font = self.font
         }
@@ -46,6 +46,20 @@ class PDFTextAnnotation: NSObject {
         textView.backgroundColor = UIColor(red: 0.7, green: 0.85, blue: 1.0, alpha: 0.2)
         
         return textView
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        page = aDecoder.decodeInteger(forKey: "page")
+        text = aDecoder.decodeObject(forKey: "text") as! String
+        rect = aDecoder.decodeCGRect(forKey: "rect")
+        font = aDecoder.decodeObject(forKey: "font") as! UIFont
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(page, forKey: "page")
+        aCoder.encode(text, forKey: "text")
+        aCoder.encode(rect, forKey: "rect")
+        aCoder.encode(font, forKey: "font")
     }
 }
 

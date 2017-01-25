@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PDFPathAnnotation {
+class PDFPathAnnotation: NSObject {
     var page: Int?
     
     var path: UIBezierPath = UIBezierPath()
@@ -35,10 +35,34 @@ class PDFPathAnnotation {
     fileprivate var points: [CGPoint] = [CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero]
     fileprivate var ctr: Int = 0
     
+    override init() {
+        
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        page = aDecoder.decodeInteger(forKey: "page")
+        color = aDecoder.decodeObject(forKey: "color") as! UIColor
+        fill = aDecoder.decodeBool(forKey: "fill")
+        lineWidth = CGFloat(aDecoder.decodeFloat(forKey: "lineWidth"))
+        rect = aDecoder.decodeCGRect(forKey: "rect")
+        points = aDecoder.decodeObject(forKey: "points") as! [CGPoint]
+        ctr = aDecoder.decodeInteger(forKey: "ctr")
+    }
+    
     func drawRect(_ frame: CGRect) {
         self.incrementalImage?.draw(in: rect)
         self.color.setStroke()
         self.path.stroke()
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(page, forKey: "page")
+        aCoder.encode(color, forKey: "color")
+        aCoder.encode(fill, forKey: "fill")
+        aCoder.encode(lineWidth, forKey: "lineWidth")
+        aCoder.encode(rect, forKey: "rect")
+        aCoder.encode(points, forKey: "points")
+        aCoder.encode(ctr, forKey: "ctr")
     }
 }
 
@@ -120,11 +144,20 @@ extension PDFPathAnnotation: PDFAnnotation {
     }
 }
 
+
 class PDFHighlighterAnnotation: PDFPathAnnotation {
+    
     override init() {
         super.init()
         
         color = UIColor.yellow.withAlphaComponent(0.3)
         lineWidth = 10.0
     }
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
 }
+
+
+
