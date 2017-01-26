@@ -62,7 +62,7 @@ open class PDFViewController: UIViewController {
      Initializes a new reader with a given document
      
      - Parameters:
-        - document: The document to display
+     - document: The document to display
      
      - Returns: An instance of the PDFViewController
      */
@@ -147,8 +147,8 @@ open class PDFViewController: UIViewController {
             self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0)
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.pageScrubber.sizeToFit()
-            }, completion: { (context) in
-                self.collectionView.displayPage(self.document.currentPage, animated: false)
+        }, completion: { (context) in
+            self.collectionView.displayPage(self.document.currentPage, animated: false)
         })
     }
     
@@ -176,8 +176,10 @@ open class PDFViewController: UIViewController {
         var buttons: [UIBarButtonItem] = []
         
         if allowsSharing {
-            let shareFormBarButtonItem = UIBarButtonItem(
-                barButtonSystemItem: .action,
+
+            let shareFormBarButtonItem = PDFBarButton(
+                image: UIImage.bundledImage("share"),
+                toggled: false,
                 target: self,
                 action: #selector(PDFViewController.shareDocument)
             )
@@ -185,9 +187,9 @@ open class PDFViewController: UIViewController {
             self.shareBarButtonItem = shareFormBarButtonItem
         }
         
-        buttons.append(UIBarButtonItem(
+        buttons.append(PDFBarButton(
             image: UIImage.bundledImage("thumbs"),
-            style: .plain,
+            toggled: false,
             target: self,
             action: #selector(PDFViewController.showThumbnailView)
             )
@@ -253,7 +255,8 @@ open class PDFViewController: UIViewController {
         case .horizontal:
             if showsScrubber {
                 pageScrubber.isHidden = state
-            } else {
+            }
+            else {
                 pageScrubber.isHidden = true
             }
         case .vertical:

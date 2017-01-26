@@ -2,16 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "annot-1.png",
+      "filename" : "annotationTools_static.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "annot.png",
+      "filename" : "annotationTools_static@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "annotationTools_static@3x.png",
       "scale" : "3x"
     }
   ],
