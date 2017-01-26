@@ -17,7 +17,6 @@ class ExampleViewController: UIViewController {
         let document = try! PDFDocument.from(filePath: url)
         
         let pdf = PDFViewController(document: document!)
-        pdf.scrollDirection = .vertical
         
         self.navigationController?.pushViewController(pdf, animated: true)
     }

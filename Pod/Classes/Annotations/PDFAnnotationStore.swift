@@ -8,15 +8,30 @@
 
 import UIKit
 
+
+public protocol PDFAnnotationStoreDelegate {
+    
+    func annotationStore(store: PDFAnnotationStore, addedAnnotation: PDFAnnotation)
+    func annotationStore(store: PDFAnnotationStore, removedAnnotation: PDFAnnotation)
+}
+
 open class PDFAnnotationStore: NSObject, NSCoding {
+    
     var annotations: [PDFAnnotation] = []
+    var delegate: PDFAnnotationStoreDelegate?
     
     func add(annotation: PDFAnnotation) {
         annotations.append(annotation)
+        self.delegate?.annotationStore(store: self, addedAnnotation: annotation)
     }
     
     func undo() -> PDFAnnotation? {
-        return annotations.popLast()
+        
+        if let annotation = annotations.popLast() {
+            self.delegate?.annotationStore(store: self, addedAnnotation: annotation)
+            return annotation
+        }
+        return nil
     }
     
     func annotations(page: Int) -> [PDFAnnotation] {

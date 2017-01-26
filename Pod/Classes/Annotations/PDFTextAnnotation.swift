@@ -36,7 +36,7 @@ class PDFTextAnnotation: NSObject, NSCoding {
     fileprivate var isDragging: Bool = false
     
     func createTextView() -> UITextView {
-        let textView = UITextView(frame: rect)
+        let textView = PDFTextAnnotationView(frame: rect)
         textView.delegate = self
         textView.font = font
         textView.text = text
@@ -127,6 +127,8 @@ extension PDFTextAnnotation: PDFAnnotation {
         UIGraphicsPopContext()
     }
 }
+
+class PDFTextAnnotationView: UITextView, PDFAnnotationView { }
 
 extension PDFTextAnnotation: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {

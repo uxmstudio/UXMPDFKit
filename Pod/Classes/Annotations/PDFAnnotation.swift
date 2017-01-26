@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PDFAnnotation {
+public protocol PDFAnnotation {
     var page: Int? { get set }
     func mutableView() -> UIView
     func touchStarted(_ touch: UITouch, point: CGPoint)
@@ -18,3 +18,5 @@ protocol PDFAnnotation {
     
     func encode(with aCoder: NSCoder)
 }
+
+public protocol PDFAnnotationView { }

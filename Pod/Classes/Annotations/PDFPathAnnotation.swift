@@ -70,7 +70,7 @@ class PDFPathAnnotation: NSObject, NSCoding {
     }
 }
 
-class PDFPathView: UIView {
+class PDFPathView: UIView, PDFAnnotationView {
     var parent: PDFPathAnnotation?
     
     convenience init(parent: PDFPathAnnotation, frame: CGRect) {

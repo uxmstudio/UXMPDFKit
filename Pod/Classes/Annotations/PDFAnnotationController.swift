@@ -44,8 +44,12 @@ open class PDFAnnotationController: UIViewController {
         return currentPage?.contentView
     }
     
-    func pageViewForPage(_ page: Int) -> PDFPageContent? {
-        return allPages.filter({ $0.page == page }).first?.contentView
+    func pageViewFor(page: Int) -> PDFPageContent? {
+        return self.pageContentViewFor(page: page)?.contentView
+    }
+    
+    func pageContentViewFor(page: Int) -> PDFPageContentView? {
+        return allPages.filter({ $0.page == page }).first
     }
     
     //MARK: - Bar button items
@@ -83,7 +87,6 @@ open class PDFAnnotationController: UIViewController {
         self.annotations = document.annotations
         self.annotationDelegate = delegate
         
-        print(self.annotations.annotations)
         super.init(nibName: nil, bundle: nil)
         
         setupUI()
@@ -106,9 +109,9 @@ open class PDFAnnotationController: UIViewController {
             allPages.remove(at: pageIndex)
         }
         allPages.append(contentView)
-
+        
         let annotationsForPage = annotations.annotations(page: page)
-
+        
         for annotation in annotationsForPage {
             contentView.contentView.addSubview(annotation.mutableView())
         }
@@ -174,16 +177,22 @@ open class PDFAnnotationController: UIViewController {
     }
     
     func undo() {
-        clear()
-        guard let currentPage = currentPage else { return }
-        let _ = annotations.undo()
-        showAnnotations(currentPage)
+        
+        if let annotation = annotations.undo() {
+            if let annotationPage = annotation.page,
+                let pageContentView = self.pageContentViewFor(page: annotationPage) {
+                clear(pageView: pageContentView.contentView)
+                showAnnotations(pageContentView)
+                return
+            }
+        }
     }
     
-    func clear() {
-        guard let pageView = pageView else { return }
+    func clear(pageView: PDFPageContent) {
         for subview in pageView.subviews {
-            subview.removeFromSuperview()
+            if subview is PDFAnnotationView {
+                subview.removeFromSuperview()
+            }
         }
     }
     
@@ -234,8 +243,6 @@ open class PDFAnnotationController: UIViewController {
         case .none:
             break
         }
-        
-        
     }
     
     private func addCurrentAnnotationToStore() {
