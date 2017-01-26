@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PDFTextAnnotation: NSObject {
+class PDFTextAnnotation: NSObject, NSCoding {
     var page: Int?
     
     var text: String = "" {
@@ -48,8 +48,10 @@ class PDFTextAnnotation: NSObject {
         return textView
     }
     
+    override init() { super.init() }
+    
     required init(coder aDecoder: NSCoder) {
-        page = aDecoder.decodeInteger(forKey: "page")
+        page = aDecoder.decodeObject(forKey: "page") as? Int
         text = aDecoder.decodeObject(forKey: "text") as! String
         rect = aDecoder.decodeCGRect(forKey: "rect")
         font = aDecoder.decodeObject(forKey: "font") as! UIFont
@@ -75,7 +77,8 @@ extension PDFTextAnnotation: PDFAnnotation {
         
         if textView.frame.contains(point) {
             isDragging = true
-        } else {
+        }
+        else {
             textView.resignFirstResponder()
         }
         

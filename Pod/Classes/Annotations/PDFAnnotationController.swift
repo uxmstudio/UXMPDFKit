@@ -80,8 +80,10 @@ open class PDFAnnotationController: UIViewController {
     //MARK: - Init
     public init(document: PDFDocument, delegate: PDFAnnotationControllerProtocol) {
         self.document = document
+        self.annotations = document.annotations
         self.annotationDelegate = delegate
         
+        print(self.annotations.annotations)
         super.init(nibName: nil, bundle: nil)
         
         setupUI()
@@ -104,8 +106,9 @@ open class PDFAnnotationController: UIViewController {
             allPages.remove(at: pageIndex)
         }
         allPages.append(contentView)
-        
+
         let annotationsForPage = annotations.annotations(page: page)
+
         for annotation in annotationsForPage {
             contentView.contentView.addSubview(annotation.mutableView())
         }
@@ -114,8 +117,6 @@ open class PDFAnnotationController: UIViewController {
     open func startAnnotation(_ type: PDFAnnotationType) {
         finishAnnotation()
         annotationType = type
-        
-        createNewAnnotation()
         
         view.isUserInteractionEnabled = annotationType != .none
     }
@@ -142,6 +143,7 @@ open class PDFAnnotationController: UIViewController {
     
     func selectedType(_ button: PDFBarButton, type: PDFAnnotationType) {
         unselectAll()
+        
         if annotationType == type {
             finishAnnotation()
             button.toggle(false)
@@ -191,15 +193,17 @@ open class PDFAnnotationController: UIViewController {
         
         let page = annotationDelegate?.annotationWillStart(touch: touch)
         
+        // Do not add an annotation unless it is a new one
+        // IMPORTANT
         if currentAnnotation == nil {
             createNewAnnotation()
+            currentAnnotation?.page = page
+            if let currentAnnotation = currentAnnotation {
+                
+                pageView?.addSubview(currentAnnotation.mutableView())
+            }
         }
         
-        currentAnnotation?.page = page
-        
-        if let currentAnnotation = currentAnnotation {
-            pageView?.addSubview(currentAnnotation.mutableView())
-        }
         
         let point = touch.location(in: pageView)
         currentAnnotation?.touchStarted(touch, point: point)
@@ -217,8 +221,6 @@ open class PDFAnnotationController: UIViewController {
         let point = touch.location(in: pageView)
         
         currentAnnotation?.touchEnded(touch, point: point)
-        
-        addCurrentAnnotationToStore()
     }
     
     private func createNewAnnotation() {
@@ -232,6 +234,8 @@ open class PDFAnnotationController: UIViewController {
         case .none:
             break
         }
+        
+        
     }
     
     private func addCurrentAnnotationToStore() {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class PDFAnnotationStore {
+open class PDFAnnotationStore: NSObject, NSCoding {
     var annotations: [PDFAnnotation] = []
     
     func add(annotation: PDFAnnotation) {
@@ -23,14 +23,19 @@ open class PDFAnnotationStore {
         return annotations.filter({ $0.page == page })
     }
     
-    func saveToTemp() {
-        
-        //TODO: Save all pages and objects to local defaults
-    }
-    
     func renderInContext(_ context: CGContext, size: CGRect, page: Int) {
         for annotation in annotations(page: page) {
             annotation.drawInContext(context)
         }
+    }
+    
+    override init() { super.init() }
+    
+    required public init(coder aDecoder: NSCoder) {
+        annotations = aDecoder.decodeObject(forKey: "annotations") as! [PDFAnnotation]
+    }
+    
+    public func encode(with aCoder: NSCoder) {
+        aCoder.encode(annotations, forKey: "annotations")
     }
 }

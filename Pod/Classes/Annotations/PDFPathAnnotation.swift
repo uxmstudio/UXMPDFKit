@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PDFPathAnnotation: NSObject {
+class PDFPathAnnotation: NSObject, NSCoding {
     var page: Int?
     
     var path: UIBezierPath = UIBezierPath()
@@ -35,18 +35,20 @@ class PDFPathAnnotation: NSObject {
     fileprivate var points: [CGPoint] = [CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero]
     fileprivate var ctr: Int = 0
     
-    override init() {
-        
-    }
+    override init() { super.init() }
     
     required init(coder aDecoder: NSCoder) {
-        page = aDecoder.decodeInteger(forKey: "page")
+        page = aDecoder.decodeObject(forKey: "page") as? Int
+        path = aDecoder.decodeObject(forKey: "path") as! UIBezierPath
         color = aDecoder.decodeObject(forKey: "color") as! UIColor
         fill = aDecoder.decodeBool(forKey: "fill")
-        lineWidth = CGFloat(aDecoder.decodeFloat(forKey: "lineWidth"))
+        lineWidth = aDecoder.decodeObject(forKey: "lineWidth") as! CGFloat
         rect = aDecoder.decodeCGRect(forKey: "rect")
         points = aDecoder.decodeObject(forKey: "points") as! [CGPoint]
+        incrementalImage = aDecoder.decodeObject(forKey: "image") as? UIImage
         ctr = aDecoder.decodeInteger(forKey: "ctr")
+        
+        super.init()
     }
     
     func drawRect(_ frame: CGRect) {
@@ -57,12 +59,14 @@ class PDFPathAnnotation: NSObject {
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(page, forKey: "page")
+        aCoder.encode(path, forKey: "path")
         aCoder.encode(color, forKey: "color")
         aCoder.encode(fill, forKey: "fill")
         aCoder.encode(lineWidth, forKey: "lineWidth")
         aCoder.encode(rect, forKey: "rect")
         aCoder.encode(points, forKey: "points")
         aCoder.encode(ctr, forKey: "ctr")
+        aCoder.encode(incrementalImage, forKey: "image")
     }
 }
 
@@ -159,5 +163,41 @@ class PDFHighlighterAnnotation: PDFPathAnnotation {
     }
 }
 
+
+extension CGPath {
+    func points() -> [CGPoint]
+    {
+        var bezierPoints = [CGPoint]()
+        self.forEach(body: { (element: CGPathElement) in
+            let numberOfPoints: Int = {
+                switch element.type {
+                case .moveToPoint, .addLineToPoint: // contains 1 point
+                    return 1
+                case .addQuadCurveToPoint: // contains 2 points
+                    return 2
+                case .addCurveToPoint: // contains 3 points
+                    return 3
+                case .closeSubpath:
+                    return 0
+                }
+            }()
+            for index in 0..<numberOfPoints {
+                let point = element.points[index]
+                bezierPoints.append(point)
+            }
+        })
+        return bezierPoints
+    }
+    
+    func forEach( body: @convention(block) (CGPathElement) -> Void) {
+        typealias Body = @convention(block) (CGPathElement) -> Void
+        func callback(info: UnsafeMutableRawPointer, element: UnsafePointer<CGPathElement>) {
+            let body = unsafeBitCast(info, to: Body.self)
+            body(element.pointee)
+        }
+        let unsafeBody = unsafeBitCast(body, to: UnsafeMutableRawPointer.self)
+        self.apply(info: unsafeBody, function: callback as! CGPathApplierFunction)
+    }
+}
 
 

@@ -14,9 +14,9 @@ class ExampleViewController: UIViewController {
     @IBAction func loadPDF() {
 
         let url = Bundle.main.path(forResource: "sample2", ofType: "pdf")!
-        let document = try! PDFDocument(filePath: url)
+        let document = try! PDFDocument.from(filePath: url)
         
-        let pdf = PDFViewController(document: document)
+        let pdf = PDFViewController(document: document!)
         pdf.scrollDirection = .vertical
         
         self.navigationController?.pushViewController(pdf, animated: true)

@@ -15,4 +15,6 @@ protocol PDFAnnotation {
     func touchMoved(_ touch: UITouch, point: CGPoint)
     func touchEnded(_ touch: UITouch, point: CGPoint)
     func drawInContext(_ context: CGContext)
+    
+    func encode(with aCoder: NSCoder)
 }

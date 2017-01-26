@@ -133,6 +133,13 @@ open class PDFViewController: UIViewController {
         view.layoutSubviews()
     }
     
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.document.annotations = self.annotationController.annotations
+        self.document.save()
+    }
+    
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         

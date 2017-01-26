@@ -34,8 +34,11 @@ open class PDFDocument: NSObject, NSCoding {
     open var creationDate: Date?
     open var version: Float = 0.0
     
-    static func documentFromFile(_ filePath: String, password: String?) throws -> PDFDocument? {
-        if let document = PDFDocument.unarchiveDocumentForFile(filePath, password: password) {
+    /// Document annotations
+    open var annotations: PDFAnnotationStore = PDFAnnotationStore()
+    
+    public static func from(filePath: String, password: String? = nil) throws -> PDFDocument? {
+        if let document = try PDFDocument.unarchiveDocument(filePath: filePath, password: password) {
             return document
         }
         else {
@@ -43,24 +46,31 @@ open class PDFDocument: NSObject, NSCoding {
         }
     }
     
-    static func unarchiveDocumentForFile(_ filePath: String, password: String?) -> PDFDocument? {
+    static func unarchiveDocument(filePath: String, password: String?) throws -> PDFDocument? {
+        
+        let archiveFilePath = PDFDocument.archiveFilePathForFile(path: filePath)
+        if let document = NSKeyedUnarchiver.unarchiveObject(withFile: archiveFilePath) as? PDFDocument {
+            document.fileUrl = URL(fileURLWithPath: filePath, isDirectory: false)
+            document.password = password
+            
+            try document.loadDocument()
+            return document
+        }
         return nil
     }
     
     public required init?(coder aDecoder: NSCoder) {
         self.guid = aDecoder.decodeObject(forKey: "fileGUID") as! String
-        self.currentPage = aDecoder.decodeObject(forKey: "currentPage") as! Int
+        self.currentPage = aDecoder.decodeInteger(forKey: "currentPage")
         self.bookmarks = aDecoder.decodeObject(forKey: "bookmarks") as! NSMutableIndexSet
         self.lastOpen = aDecoder.decodeObject(forKey: "lastOpen") as? Date
-        self.fileUrl = URL(fileURLWithPath: aDecoder.decodeObject(forKey: "fileURL") as! String)
-        self.fileData = aDecoder.decodeObject(forKey: "fileData") as? NSData
+        self.annotations = aDecoder.decodeObject(forKey: "annotations") as! PDFAnnotationStore
         
         super.init()
-        
-        try! self.loadDocument()
     }
     
     public init(filePath: String, password: String? = nil) throws {
+        
         self.guid = PDFDocument.GUID()
         self.password = password
         self.fileUrl = URL(fileURLWithPath: filePath, isDirectory: false)
@@ -205,18 +215,21 @@ open class PDFDocument: NSObject, NSCoding {
         return pathURL.path
     }
     
-    static func archiveFilePathForFileAtPath(_ path: String) -> String {
+    static func archiveFilePathForFile(path: String) -> String {
         let archivePath = PDFDocument.applicationSupportPath()
-        let archiveName = "random-name-fix-later.plist"
+        
+        let archiveName = (path as NSString).lastPathComponent + ".plist"
         return (archivePath as NSString).appendingPathComponent(archiveName)
     }
     
     func archiveWithFileAtPath(_ filePath: String) -> Bool {
-        let archiveFilePath = PDFDocument.archiveFilePathForFileAtPath(filePath)
+        let archiveFilePath = PDFDocument.archiveFilePathForFile(path: filePath)
         return NSKeyedArchiver.archiveRootObject(self, toFile: archiveFilePath)
     }
     
     open func save() {
+        
+        //TODO: Better solution to support NSData
         if let filePath = fileUrl?.path {
             let _ = self.archiveWithFileAtPath(filePath)
         }
@@ -256,7 +269,6 @@ open class PDFDocument: NSObject, NSCoding {
         aCoder.encode(self.currentPage, forKey: "currentPage")
         aCoder.encode(self.bookmarks, forKey: "bookmarks")
         aCoder.encode(self.lastOpen, forKey: "lastOpen")
-        aCoder.encode(self.fileUrl?.path, forKey: "fileURL")
-        aCoder.encode(self.fileData, forKey: "fileData")
+        aCoder.encode(self.annotations, forKey: "annotations")
     }
 }
