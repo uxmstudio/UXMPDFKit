@@ -106,6 +106,7 @@ open class PDFAnnotationController: UIViewController {
     open func showAnnotations(_ contentView: PDFPageContentView) {
         let page = contentView.page
         if let pageIndex = allPages.index(where: { $0.page == page }) {
+            clear(pageView: allPages[pageIndex].contentView)
             allPages.remove(at: pageIndex)
         }
         allPages.append(contentView)

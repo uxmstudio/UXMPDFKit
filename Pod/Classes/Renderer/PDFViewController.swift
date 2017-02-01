@@ -136,6 +136,7 @@ open class PDFViewController: UIViewController {
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        self.annotationController.finishAnnotation()
         self.document.annotations = self.annotationController.annotations
         self.document.save()
     }

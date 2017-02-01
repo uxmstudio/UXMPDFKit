@@ -119,9 +119,17 @@ fileprivate class PDFSnapshotRenderer: Operation {
 
         context.translateBy(x: 0.0, y: pageRect.size.height)
         context.scaleBy(x: 1.0, y: -1.0)
-        
+
         context.scaleBy(x: scale, y: scale)
         context.drawPDFPage(page)
+
+        context.translateBy(x: 0.0, y: pageRect.size.height / scale)
+        context.scaleBy(x: 1.0, y: -1.0)
+        
+        self.snapshot.document.annotations.renderInContext(context,
+                                                           size: pageRect,
+                                                           page: self.snapshot.page)
+        
         context.restoreGState()
         
         let img = UIGraphicsGetImageFromCurrentImageContext()
