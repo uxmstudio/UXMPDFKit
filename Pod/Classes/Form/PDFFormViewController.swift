@@ -46,7 +46,6 @@ open class PDFFormViewController: NSObject {
                     for annot in annots {
                         
                         guard let annot = annot as? PDFDictionary else { continue }
-                        
                         self.enumerate(annot, page: page)
                     }
                 }
@@ -86,7 +85,7 @@ open class PDFFormViewController: NSObject {
     
     func createFormField(_ dict: PDFDictionary, page: Int = 0) {
         DispatchQueue.main.async {
-            if let formView = self.formPage(page) {
+            if let formView = self.form(page: page) {
                 formView.createFormField(dict)
             }
             else {
@@ -100,22 +99,19 @@ open class PDFFormViewController: NSObject {
     func showForm(_ contentView: PDFPageContentView) {
         lastPage = contentView
         let page = contentView.page
-        if let formPage = self.formPage(page) {
+        if let formPage = self.form(page: page) {
             formPage.showForm(contentView)
         }
     }
     
-    func formPage(_ page: Int) -> PDFFormPage? {
-        if page > (formPages.count + 1) {
-            return nil
-        }
+    func form(page: Int) -> PDFFormPage? {
         return formPages[page]
     }
 }
 
 extension PDFFormViewController: PDFRenderer {
     public func render(_ page: Int, context: CGContext, bounds: CGRect) {
-        if let form = formPage(page) {
+        if let form = form(page: page) {
             form.renderInContext(context, size: bounds)
         }
     }
