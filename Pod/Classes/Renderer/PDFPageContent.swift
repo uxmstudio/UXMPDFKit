@@ -9,6 +9,7 @@
 import UIKit
 
 internal class PDFPageContent: UIView {
+    
     private let pdfDocRef: CGPDFDocument
     private let pdfPageRef: CGPDFPage?
     private let pageAngle: Int /// 0, 90, 180, 270
@@ -212,15 +213,19 @@ internal class PDFPageContent: UIView {
     }
     
     //MARK: - Gesture Recognizer
-    func processSingleTap(_ recognizer: UIGestureRecognizer) -> PDFAction? {
+    func processSingleTap(_ recognizer: UIGestureRecognizer) -> AnyObject? {
         guard recognizer.state == .recognized else { return nil }
-        guard links.count > 0 else { return nil }
         
         let point = recognizer.location(in: self)
         
         for link in links where link.rect.contains(point) {
             return PDFAction.fromPDFDictionary(link.dictionary, documentReference: pdfDocRef)
         }
+        
+        for annotation in subviews where annotation.frame.contains(point) {
+            return annotation
+        }
+        
         return nil
     }
     

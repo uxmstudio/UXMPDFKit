@@ -309,20 +309,26 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
     }
     
     public func singlePageViewer(_ collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView) {
-        if allowsFormFilling {
-            formController.showForm(content)
-        }
+//        if allowsFormFilling {
+//            formController.showForm(content)
+//        }
         if allowsAnnotations {
             annotationController.showAnnotations(content)
         }
     }
     
-    public func singlePageViewer(_ collectionView: PDFSinglePageViewer, selectedAction action: PDFAction) {
+    public func singlePageViewer(_ collectionView: PDFSinglePageViewer, selected action: PDFAction) {
         if let action = action as? PDFActionURL {
             let svc = SFSafariViewController(url: action.url as URL)
             present(svc, animated: true, completion: nil)
         } else if let action = action as? PDFActionGoTo {
             collectionView.displayPage(action.pageIndex, animated: true)
+        }
+    }
+    
+    public func singlePageViewer(_ collectionView: PDFSinglePageViewer, selected annotation: PDFAnnotationView) {
+        if let annotation = annotation.parent {
+            annotationController.select(annotation: annotation)
         }
     }
     

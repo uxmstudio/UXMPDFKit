@@ -9,7 +9,8 @@
 import UIKit
 
 public protocol PDFPageContentViewDelegate {
-    func contentView(_ contentView: PDFPageContentView, didSelectAction action: PDFAction)
+    func contentView(_ contentView: PDFPageContentView, didSelect action: PDFAction)
+    func contentView(_ contentView: PDFPageContentView, didSelect annotation: PDFAnnotationView)
     func contentView(_ contentView: PDFPageContentView, tapped recognizer: UITapGestureRecognizer)
 }
 
@@ -143,11 +144,16 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     open func processSingleTap(_ recognizer: UITapGestureRecognizer) {
-        guard let action = contentView.processSingleTap(recognizer) else {
-            contentDelegate?.contentView(self, tapped: recognizer)
-            return
+
+        if let action = contentView.processSingleTap(recognizer) as? PDFAction {
+            contentDelegate?.contentView(self, didSelect: action)
         }
-        contentDelegate?.contentView(self, didSelectAction: action)
+        else if let annotation = contentView.processSingleTap(recognizer) as? PDFAnnotationView {
+            contentDelegate?.contentView(self, didSelect: annotation)
+        }
+        else {
+            contentDelegate?.contentView(self, tapped: recognizer)
+        }
     }
     
     

@@ -114,7 +114,9 @@ open class PDFAnnotationController: UIViewController {
         let annotationsForPage = annotations.annotations(page: page)
         
         for annotation in annotationsForPage {
-            contentView.contentView.addSubview(annotation.mutableView())
+            let view = annotation.mutableView()
+            contentView.contentView.addSubview(view)
+            contentView.contentView.bringSubview(toFront: view)
         }
     }
     
@@ -126,6 +128,7 @@ open class PDFAnnotationController: UIViewController {
     }
     
     open func finishAnnotation() {
+        
         // makes sure any textviews resign their first responder status
         for annotation in annotations.annotations {
             guard let annotation = annotation as? PDFTextAnnotation else { continue }
@@ -173,8 +176,17 @@ open class PDFAnnotationController: UIViewController {
         undo()
     }
     
-    func hide() {
+    override open func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        return false
+    }
+    
+    func select(annotation: PDFAnnotation) {
         
+        self.currentAnnotation = annotation
+        
+        if let view = self.view(uuid: annotation.uuid) {
+            self.showEditMenu(view: view)
+        }
     }
     
     func undo() {
@@ -186,6 +198,12 @@ open class PDFAnnotationController: UIViewController {
                 showAnnotations(pageContentView)
                 return
             }
+        }
+    }
+    
+    func deleteCurrent() {
+        if let currentAnnotation = self.currentAnnotation {
+            self.annotations.remove(annotation: currentAnnotation)
         }
     }
     
@@ -214,10 +232,10 @@ open class PDFAnnotationController: UIViewController {
             }
         }
         
-        
         let point = touch.location(in: pageView)
         currentAnnotation?.touchStarted(touch, point: point)
     }
+    
     
     open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
@@ -231,6 +249,34 @@ open class PDFAnnotationController: UIViewController {
         let point = touch.location(in: pageView)
         
         currentAnnotation?.touchEnded(touch, point: point)
+    }
+    
+    private func showEditMenu(view: UIView) {
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        
+        if let pageView = self.pageView {
+            
+            print(view.frame)
+            view.becomeFirstResponder()
+            UIMenuController.shared.setTargetRect(view.frame, in: pageView)
+            UIMenuController.shared.menuItems = [ UIMenuItem(
+                title: "Delete",
+                action: #selector(PDFAnnotationController.deleteCurrent))
+            ]
+            UIMenuController.shared.setMenuVisible(true, animated: true)
+        }
+    }
+    
+    private func view(uuid: String) -> UIView? {
+        guard let pageView = self.pageView else { return nil }
+        for subview in pageView.subviews {
+            if let annotView = subview as? PDFAnnotationView,
+                let parent = annotView.parent,
+                parent.uuid == uuid {
+                return subview
+            }
+        }
+        return nil
     }
     
     private func createNewAnnotation() {

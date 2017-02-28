@@ -10,6 +10,8 @@ import UIKit
 
 class PDFTextAnnotation: NSObject, NSCoding {
     var page: Int?
+    var uuid: String = UUID().uuidString
+    var saved: Bool = false
     
     var text: String = "" {
         didSet {
@@ -35,7 +37,7 @@ class PDFTextAnnotation: NSObject, NSCoding {
     fileprivate var startInternalPosition: CGPoint = CGPoint.zero
     fileprivate var isDragging: Bool = false
     
-    func createTextView() -> UITextView {
+    func createTextView() -> PDFTextAnnotationView {
         let textView = PDFTextAnnotationView(frame: rect)
         textView.delegate = self
         textView.font = font
@@ -67,8 +69,7 @@ class PDFTextAnnotation: NSObject, NSCoding {
 
 extension PDFTextAnnotation: PDFAnnotation {
     func mutableView() -> UIView {
-        textView = createTextView()
-        return textView
+        return createTextView()
     }
     
     func touchStarted(_ touch: UITouch, point: CGPoint) {
@@ -105,6 +106,10 @@ extension PDFTextAnnotation: PDFAnnotation {
         isDragging = false
     }
     
+    func save() {
+        self.saved = true
+    }
+    
     func drawInContext(_ context: CGContext) {
         UIGraphicsPushContext(context)
         context.setAlpha(1.0)
@@ -128,7 +133,19 @@ extension PDFTextAnnotation: PDFAnnotation {
     }
 }
 
-class PDFTextAnnotationView: UITextView, PDFAnnotationView { }
+class PDFTextAnnotationView: UITextView, PDFAnnotationView {
+    
+    var parent: PDFAnnotation?
+    override var canBecomeFirstResponder: Bool { return true }
+    
+    convenience init(parent: PDFPathAnnotation, frame: CGRect) {
+        
+        self.init()
+        
+        self.frame = frame
+        self.parent = parent
+    }
+}
 
 extension PDFTextAnnotation: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {

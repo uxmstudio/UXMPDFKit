@@ -10,6 +10,8 @@ import UIKit
 
 class PDFPathAnnotation: NSObject, NSCoding {
     var page: Int?
+    var uuid: String = UUID().uuidString
+    var saved: Bool = false
     
     var path: UIBezierPath = UIBezierPath()
     var color: UIColor = UIColor.black {
@@ -52,7 +54,7 @@ class PDFPathAnnotation: NSObject, NSCoding {
     }
     
     func drawRect(_ frame: CGRect) {
-        self.incrementalImage?.draw(in: rect)
+        self.incrementalImage?.draw(at: CGPoint.zero)
         self.color.setStroke()
         self.path.stroke()
     }
@@ -71,9 +73,11 @@ class PDFPathAnnotation: NSObject, NSCoding {
 }
 
 class PDFPathView: UIView, PDFAnnotationView {
-    var parent: PDFPathAnnotation?
+    var parent: PDFAnnotation?
+    override var canBecomeFirstResponder: Bool { return true }
     
     convenience init(parent: PDFPathAnnotation, frame: CGRect) {
+        
         self.init()
         
         self.frame = frame
@@ -84,7 +88,7 @@ class PDFPathView: UIView, PDFAnnotationView {
     }
     
     override func draw(_ rect: CGRect) {
-        parent?.drawRect(rect)
+        (parent as? PDFPathAnnotation)?.drawRect(rect)
     }
 }
 
@@ -97,6 +101,7 @@ extension PDFPathAnnotation: PDFAnnotation {
     func touchStarted(_ touch: UITouch, point: CGPoint) {
         ctr = 0
         points[0] = point
+        path.move(to: points[0])
     }
     
     func touchMoved(_ touch: UITouch, point: CGPoint) {
@@ -121,16 +126,34 @@ extension PDFPathAnnotation: PDFAnnotation {
     }
     
     func touchEnded(_ touch: UITouch, point: CGPoint) {
-        drawBitmap()
+        
         view.setNeedsDisplay()
-        path.removeAllPoints()
         ctr = 0
     }
     
+    func save() {
+        
+        let rect = path.bounds
+        let inset: CGFloat = 5.0
+        let translation = CGAffineTransform(translationX: -path.bounds.minX + inset,
+                                            y: -path.bounds.minY + inset)
+        path.apply(translation)
+        
+        print(self.rect)
+        print(rect)
+        self.rect = rect.insetBy(dx: -1 * inset, dy: -1 * inset)
+        
+        drawBitmap()
+        view.setNeedsDisplay()
+        ctr = 0
+        
+        self.saved = true
+    }
+    
     func drawBitmap() {
-        UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0.0)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
         if incrementalImage == nil {
-            let path = UIBezierPath(rect: view.bounds)
+            let path = UIBezierPath(rect: rect)
             UIColor.clear.setFill()
             path.fill()
         }
@@ -162,42 +185,3 @@ class PDFHighlighterAnnotation: PDFPathAnnotation {
         super.init(coder: aDecoder)
     }
 }
-
-
-extension CGPath {
-    func points() -> [CGPoint]
-    {
-        var bezierPoints = [CGPoint]()
-        self.forEach(body: { (element: CGPathElement) in
-            let numberOfPoints: Int = {
-                switch element.type {
-                case .moveToPoint, .addLineToPoint: // contains 1 point
-                    return 1
-                case .addQuadCurveToPoint: // contains 2 points
-                    return 2
-                case .addCurveToPoint: // contains 3 points
-                    return 3
-                case .closeSubpath:
-                    return 0
-                }
-            }()
-            for index in 0..<numberOfPoints {
-                let point = element.points[index]
-                bezierPoints.append(point)
-            }
-        })
-        return bezierPoints
-    }
-    
-    func forEach( body: @convention(block) (CGPathElement) -> Void) {
-        typealias Body = @convention(block) (CGPathElement) -> Void
-        func callback(info: UnsafeMutableRawPointer, element: UnsafePointer<CGPathElement>) {
-            let body = unsafeBitCast(info, to: Body.self)
-            body(element.pointee)
-        }
-        let unsafeBody = unsafeBitCast(body, to: UnsafeMutableRawPointer.self)
-        self.apply(info: unsafeBody, function: callback as! CGPathApplierFunction)
-    }
-}
-
-

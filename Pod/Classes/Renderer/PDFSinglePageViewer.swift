@@ -11,16 +11,19 @@ import UIKit
 public protocol PDFSinglePageViewerDelegate {
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, didDisplayPage page: Int)
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, loadedContent content: PDFPageContentView)
-    func singlePageViewer(_ collectionView: PDFSinglePageViewer, selectedAction action: PDFAction)
+    func singlePageViewer(_ collectionView: PDFSinglePageViewer, selected action: PDFAction)
+    func singlePageViewer(_ collectionView: PDFSinglePageViewer, selected annotation: PDFAnnotationView)
     func singlePageViewer(_ collectionView: PDFSinglePageViewer, tapped recognizer: UITapGestureRecognizer)
     func singlePageViewerDidBeginDragging()
     func singlePageViewerDidEndDragging()
 }
 
 open class PDFSinglePageViewer: UICollectionView {
-    open var singlePageDelegate: PDFSinglePageViewerDelegate?
     
+    open var singlePageDelegate: PDFSinglePageViewerDelegate?
     open var document: PDFDocument?
+    
+    var internalPage: Int = 0
     
     var scrollDirection: UICollectionViewScrollDirection {
         let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
@@ -179,6 +182,13 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
     }
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        switch scrollDirection {
+        case .horizontal:
+            internalPage = Int((scrollView.contentOffset.x + scrollView.frame.width) / scrollView.frame.width)
+        case .vertical:
+            let currentlyShownIndexPath = indexPathsForVisibleItems.first ?? IndexPath(item: 0, section: 0)
+            internalPage = currentlyShownIndexPath.row + 1
+        }
         didDisplayPage(scrollView)
     }
     
@@ -195,6 +205,15 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
             let currentlyShownIndexPath = indexPathsForVisibleItems.first ?? IndexPath(item: 0, section: 0)
             page = currentlyShownIndexPath.row + 1
         }
+        
+        print(page)
+        print(internalPage)
+        
+        /// If nothing has changed, dont reload
+        if page == internalPage {
+            return
+        }
+        
         singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
         
         let indexPath = IndexPath(row: page - 1, section: 0)
@@ -207,12 +226,16 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
 }
 
 extension PDFSinglePageViewer: PDFPageContentViewDelegate {
-    public func contentView(_ contentView: PDFPageContentView, didSelectAction action: PDFAction) {
+    public func contentView(_ contentView: PDFPageContentView, didSelect action: PDFAction) {
         if let singlePageDelegate = singlePageDelegate {
-            singlePageDelegate.singlePageViewer(self, selectedAction: action)
+            singlePageDelegate.singlePageViewer(self, selected: action)
         } else if let action = action as? PDFActionGoTo {
             displayPage(action.pageIndex, animated: true)
         }
+    }
+    
+    public func contentView(_ contentView: PDFPageContentView, didSelect annotation: PDFAnnotationView) {
+        singlePageDelegate?.singlePageViewer(self, selected: annotation)
     }
     
     public func contentView(_ contentView: PDFPageContentView, tapped recognizer: UITapGestureRecognizer) {

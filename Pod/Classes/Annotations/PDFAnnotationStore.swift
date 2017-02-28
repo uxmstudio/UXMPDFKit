@@ -21,14 +21,22 @@ open class PDFAnnotationStore: NSObject, NSCoding {
     var delegate: PDFAnnotationStoreDelegate?
     
     func add(annotation: PDFAnnotation) {
+        annotation.save()
         annotations.append(annotation)
         self.delegate?.annotationStore(store: self, addedAnnotation: annotation)
+    }
+    
+    func remove(annotation: PDFAnnotation) {
+        if let index = annotations.index(where: { $0.uuid == annotation.uuid }), index > -1 {
+            self.delegate?.annotationStore(store: self, removedAnnotation: annotation)
+            self.annotations.remove(at: index)
+        }
     }
     
     func undo() -> PDFAnnotation? {
         
         if let annotation = annotations.popLast() {
-            self.delegate?.annotationStore(store: self, addedAnnotation: annotation)
+            self.delegate?.annotationStore(store: self, removedAnnotation: annotation)
             return annotation
         }
         return nil

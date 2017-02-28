@@ -60,6 +60,7 @@ open class PDFFormPage: NSObject {
         contentView.viewDidZoom = { scale in
             formView.updateWithZoom(scale)
         }
+        contentView.sendSubview(toBack: formView)
     }
     
     func createFormField(_ dict: PDFDictionary) {
