@@ -64,7 +64,12 @@ open class PDFDocument: NSObject, NSCoding {
         self.currentPage = aDecoder.decodeInteger(forKey: "currentPage")
         self.bookmarks = aDecoder.decodeObject(forKey: "bookmarks") as! NSMutableIndexSet
         self.lastOpen = aDecoder.decodeObject(forKey: "lastOpen") as? Date
-        self.annotations = aDecoder.decodeObject(forKey: "annotations") as! PDFAnnotationStore
+        if let annotations = aDecoder.decodeObject(forKey: "annotations") as? PDFAnnotationStore {
+            self.annotations = annotations
+        }
+        else {
+            self.annotations = PDFAnnotationStore()
+        }
         
         super.init()
     }

@@ -16,7 +16,7 @@ open class PDFRenderController {
     let document: PDFDocument
     let renderControllers: [PDFRenderer]
     
-    init(document: PDFDocument, controllers: [PDFRenderer]) {
+    public init(document: PDFDocument, controllers: [PDFRenderer]) {
         self.document = document
         self.renderControllers = controllers
     }

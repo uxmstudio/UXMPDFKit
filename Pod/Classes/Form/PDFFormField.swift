@@ -40,7 +40,7 @@ open class PDFFormFieldObject {
         
         let export = self.determineExportValue(dict)
         let name = dict.stringForKey("T") ?? ""
-        
+
         options = PDFFormViewOptions(
             type: type,
             rect: rect,

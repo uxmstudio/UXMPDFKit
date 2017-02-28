@@ -53,7 +53,7 @@ open class PDFQueue {
         }
 
         let thumbRender = PDFSnapshotRenderer(snapshot: thumbnail)
-        thumbRender.completionBlock = {
+        thumbRender.completionBlock = { [unowned self] in
             self.rendersInProgress.removeValue(forKey: guid)
             DispatchQueue.main.async {
                 self.progressBlock?(thumbRender.snapshot)

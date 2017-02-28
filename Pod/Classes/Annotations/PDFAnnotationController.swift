@@ -173,6 +173,8 @@ open class PDFAnnotationController: UIViewController {
     }
     
     @IBAction func selectedUndo(_ button: PDFBarButton) {
+        
+        finishAnnotation()
         undo()
     }
     
