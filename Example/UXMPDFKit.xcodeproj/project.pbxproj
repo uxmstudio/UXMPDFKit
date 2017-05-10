@@ -15,7 +15,6 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		614D2EE31C8C8A9A00A856CD /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 614D2EE21C8C8A9A00A856CD /* sample.pdf */; };
 		616B61061CF7395100B743A7 /* sample2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 616B61051CF7395100B743A7 /* sample2.pdf */; };
-		61C453CD1E5758B500A7BC7B /* ISSUE_TEMPLATE.md in Sources */ = {isa = PBXBuildFile; fileRef = 61C453CC1E5758B500A7BC7B /* ISSUE_TEMPLATE.md */; };
 		61CBF9411D86EB7F00282554 /* sample3.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 61CBF9401D86EB7F00282554 /* sample3.pdf */; };
 		61D3B3771CDE9C1600E7C3A6 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B3761CDE9C1600E7C3A6 /* ExampleViewController.swift */; };
 /* End PBXBuildFile section */
@@ -255,7 +254,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61C453CD1E5758B500A7BC7B /* ISSUE_TEMPLATE.md in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				61D3B3771CDE9C1600E7C3A6 /* ExampleViewController.swift in Sources */,
