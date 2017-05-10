@@ -178,17 +178,10 @@ open class PDFAnnotationController: UIViewController {
         undo()
     }
     
-    override open func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return false
-    }
-    
     func select(annotation: PDFAnnotation) {
         
         self.currentAnnotation = annotation
-        
-        if let view = self.view(uuid: annotation.uuid) {
-            self.showEditMenu(view: view)
-        }
+        print("new current")
     }
     
     func undo() {
@@ -251,22 +244,6 @@ open class PDFAnnotationController: UIViewController {
         let point = touch.location(in: pageView)
         
         currentAnnotation?.touchEnded(touch, point: point)
-    }
-    
-    private func showEditMenu(view: UIView) {
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        
-        if let pageView = self.pageView {
-            
-            print(view.frame)
-            view.becomeFirstResponder()
-            UIMenuController.shared.setTargetRect(view.frame, in: pageView)
-            UIMenuController.shared.menuItems = [ UIMenuItem(
-                title: "Delete",
-                action: #selector(PDFAnnotationController.deleteCurrent))
-            ]
-            UIMenuController.shared.setMenuVisible(true, animated: true)
-        }
     }
     
     private func view(uuid: String) -> UIView? {

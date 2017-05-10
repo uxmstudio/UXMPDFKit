@@ -72,7 +72,7 @@ class PDFPathAnnotation: NSObject, NSCoding {
     }
 }
 
-class PDFPathView: UIView, PDFAnnotationView {
+class PDFPathView: ResizableView, PDFAnnotationView {
     var parent: PDFAnnotation?
     override var canBecomeFirstResponder: Bool { return true }
     
@@ -85,6 +85,7 @@ class PDFPathView: UIView, PDFAnnotationView {
         
         backgroundColor = UIColor.clear
         isOpaque = false
+        clipsToBounds = false
     }
     
     override func draw(_ rect: CGRect) {
@@ -168,6 +169,19 @@ extension PDFPathAnnotation: PDFAnnotation {
     func drawInContext(_ context: CGContext) {
         drawBitmap()
         drawRect(rect)
+    }
+}
+
+extension PDFPathAnnotation: ResizableViewDelegate {
+    func resizableViewDidBeginEditing(view: ResizableView) {
+        //self.view.delegate?.annotationDidSelect(annotation: self)
+        print("started editing")
+    }
+    func resizableViewDidEndEditing(view: ResizableView) {
+        print("done editing")
+    }
+    func resizableViewDidSelectAction(view: ResizableView, action: String) {
+        print(action)
     }
 }
 

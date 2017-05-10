@@ -22,6 +22,10 @@ public protocol PDFAnnotation {
     func encode(with aCoder: NSCoder)
 }
 
+public protocol PDFAnnotationEvent {
+    func annotationDidSelect(annotation: PDFAnnotation)
+}
+
 public protocol PDFAnnotationView {
     var parent: PDFAnnotation? { get }
     var canBecomeFirstResponder: Bool { get }

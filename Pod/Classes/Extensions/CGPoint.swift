@@ -16,4 +16,10 @@ extension CGPoint {
                       width: fabs(self.x - point.x),
                       height: fabs(self.y - point.y))
     }
+    
+    func distance(point: CGPoint) -> CGFloat {
+        let dx = point.x - self.x
+        let dy = point.y - self.y
+        return sqrt(dx*dx + dy*dy)
+    }
 }

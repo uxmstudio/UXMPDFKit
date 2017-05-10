@@ -84,6 +84,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         )
         singleTapRecognizer.numberOfTouchesRequired = 1
         singleTapRecognizer.numberOfTapsRequired = 1
+        singleTapRecognizer.cancelsTouchesInView = false
         self.addGestureRecognizer(singleTapRecognizer)
     }
 
@@ -144,7 +145,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     open func processSingleTap(_ recognizer: UITapGestureRecognizer) {
-
+        print("this still goes")
         if let action = contentView.processSingleTap(recognizer) as? PDFAction {
             contentDelegate?.contentView(self, didSelect: action)
         }
@@ -154,6 +155,12 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         else {
             contentDelegate?.contentView(self, tapped: recognizer)
         }
+    }
+    
+    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let result = super.hitTest(point, with: event)
+        self.isScrollEnabled = !(result is ResizableBorderView)
+        return result
     }
     
     

@@ -222,12 +222,50 @@ internal class PDFPageContent: UIView {
             return PDFAction.fromPDFDictionary(link.dictionary, documentReference: pdfDocRef)
         }
         
+        print("should process")
         for annotation in subviews where annotation.frame.contains(point) {
             return annotation
         }
         
         return nil
     }
+    
+    func objectInside(touch: UITouch) -> AnyObject? {
+        let point = touch.location(in: self)
+        
+        for link in links where link.rect.contains(point) {
+            return PDFAction.fromPDFDictionary(link.dictionary, documentReference: pdfDocRef)
+        }
+        
+        for annotation in subviews where annotation.frame.contains(point) {
+            return annotation
+        }
+        
+        return nil
+    }
+    
+    
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesBegan(touches, with: event)
+//        print("touches began")
+//    }
+//    
+//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesMoved(touches, with: event)
+//        print("touches moved")
+//    }
+//    
+//    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesEnded(touches, with: event)
+//        print("touches ended")
+//        
+//        guard let touch = touches.first else { return }
+//        
+//        print("obj inside")
+//        if let obj = self.objectInside(touch: touch) as? PDFPathView {
+//            obj.backgroundColor = UIColor.blue
+//        }
+//    }
     
     //MARK: - CATiledLayer Delegate Methods
     override func draw(_ layer: CALayer, in ctx: CGContext) {

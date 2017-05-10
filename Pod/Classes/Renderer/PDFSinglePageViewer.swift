@@ -103,6 +103,12 @@ open class PDFSinglePageViewer: UICollectionView {
         }
         return nil
     }
+    
+    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let result = super.hitTest(point, with: event)
+        self.isScrollEnabled = !(result is ResizableBorderView)
+        return result
+    }
 }
 
 extension PDFSinglePageViewer: UICollectionViewDataSource {
