@@ -20,16 +20,23 @@ public protocol PDFAnnotationControllerProtocol {
 }
 
 open class PDFAnnotationController: UIViewController {
+    
+    /// Reference to document
     var document: PDFDocument!
     
+    /// Store containing all annotations for document
     var annotations = PDFAnnotationStore()
     
+    /// References to pages within view
     var allPages = [PDFPageContentView]()
     
+    /// Type of annotation being added
     var annotationType: PDFAnnotationType = .none
     
+    /// Delegate reference for annotation events
     var annotationDelegate: PDFAnnotationControllerProtocol?
     
+    /// Current annotation
     var currentAnnotation: PDFAnnotation?
     
     var currentAnnotationPage: Int? {

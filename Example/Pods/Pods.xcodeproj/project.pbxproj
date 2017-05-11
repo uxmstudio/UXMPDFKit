@@ -98,7 +98,7 @@
 		614525CCFB2767D95FE12EEEC2FD622C /* UXMPDFKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UXMPDFKit-prefix.pch"; sourceTree = "<group>"; };
 		61561CB21DDA7B4E00C314EB /* PDFThumbnailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFThumbnailViewController.swift; sourceTree = "<group>"; };
 		61561CB51DDA7F6200C314EB /* PDFThumbnailViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFThumbnailViewCell.swift; sourceTree = "<group>"; };
-		61C3A26D1EC2859A00807C4B /* ResizeableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeableView.swift; sourceTree = "<group>"; };
+		61C3A26D1EC2859A00807C4B /* ResizeableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResizeableView.swift; path = Renderer/ResizeableView.swift; sourceTree = "<group>"; };
 		61D72DBA1DDB7039003CE472 /* PDFActionGoTo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFActionGoTo.swift; sourceTree = "<group>"; };
 		61D72DBC1DDB705B003CE472 /* PDFActionURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFActionURL.swift; sourceTree = "<group>"; };
 		61D72DC01DDB7C15003CE472 /* PDFTextParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFTextParser.swift; sourceTree = "<group>"; };
@@ -261,7 +261,6 @@
 			children = (
 				76DA813643EF21961CF0953E75AD135F /* CGPDFDocument.swift */,
 				BC1A9EB3AA234A93FFED5E5EC31C26C0 /* PDFBarButton.swift */,
-				61C3A26D1EC2859A00807C4B /* ResizeableView.swift */,
 				4E1B16E7B9A2A6B1300E0AE0B3DD0ED6 /* PDFDocument.swift */,
 				E49FB5E98854EBDE8CCAB4C0137D1986 /* PDFDocumentLink.swift */,
 				C363DF92B0BB7081898E123695AED3A2 /* PDFPageContent.swift */,
@@ -316,6 +315,14 @@
 			);
 			name = "Pods-UXMPDFKit_Example";
 			path = "Target Support Files/Pods-UXMPDFKit_Example";
+			sourceTree = "<group>";
+		};
+		61C3A26F1EC3C0DF00807C4B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				61C3A26D1EC2859A00807C4B /* ResizeableView.swift */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		61D72DBF1DDB7BEF003CE472 /* TextParser */ = {
@@ -390,6 +397,7 @@
 		D17F081B2041A570628ABBA6B6B55AA2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				61C3A26F1EC3C0DF00807C4B /* View */,
 				0D5534176FDA413966A2FA057AB7673C /* Annotations */,
 				0F2EF4198B8CF05B867C8F5A18697809 /* Extensions */,
 				2267295D4FF13F19ED68658643D87819 /* Form */,

@@ -298,7 +298,6 @@ class ResizableView: UIView {
     
     
     //MARK: Context Menu Methods
-    
     func toggleMenuController() {
         
         if !self.showMenuController {

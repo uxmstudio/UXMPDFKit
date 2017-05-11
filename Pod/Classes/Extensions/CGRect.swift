@@ -10,6 +10,11 @@ import Foundation
 
 extension CGRect {
     
+    /// Expands rectangle (self) to include additional point
+    ///
+    /// - parameter self: The base rectangle
+    /// - parameter point: The point to expand by
+    ///
     mutating func expandToFit(point: CGPoint) {
         
         let frame = self.containing(point: point)
@@ -19,6 +24,12 @@ extension CGRect {
         self.size.height = frame.size.height
     }
     
+    /// Creates rectangle to include additional point
+    ///
+    /// - parameter self: The base rectangle
+    /// - parameter point: The point to expand by
+    ///
+    /// - returns: A rectangle expanded to include new point
     func containing(point: CGPoint) -> CGRect {
         
         let points = [
