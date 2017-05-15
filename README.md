@@ -118,16 +118,52 @@ All annotations are stored in memory until being rendered back onto the PDF by t
 To create a new annotation type, you must extend the following protocol:
 
 ```swift
-protocol PDFAnnotation {
+public protocol PDFAnnotation {
+
+    /// The page number the annotation is located on
+    var page: Int? { get set }
+
+    /// Unique identifier to be able to select annotation by
+    var uuid: String { get }
+
+    /// Boolean representing if the annotation has been saved
+    var saved: Bool { get set }
+
+    /// Force implementations to have an init
+    init()
+
+    /// A function to return a view composed of the annotations properties
     func mutableView() -> UIView
-    func touchStarted(touch: UITouch, point:CGPoint)
-    func touchMoved(touch:UITouch, point:CGPoint)
-    func touchEnded(touch:UITouch, point:CGPoint)
-    func drawInContext(context: CGContextRef)
+
+    /// Set of handlers to pass touches to annotation
+    func touchStarted(_ touch: UITouch, point: CGPoint)
+    func touchMoved(_ touch: UITouch, point: CGPoint)
+    func touchEnded(_ touch: UITouch, point: CGPoint)
+
+    /// Method to save annotation locally
+    func save()
+    func drawInContext(_ context: CGContext)
+
+    func encode(with aCoder: NSCoder)
 }
 ```
 
 An annotation should be an object that contains its position and value, not a view. Because annotations are written onto temporary objects, they should be created, not passed by reference each time ```mutableView()``` is called. 
+
+Additionally, it is recommended that the view passed by ```mutableView()``` extend ```ResizableView``` as this allows the annotation to be moved, resized and deleted individually.
+
+In order for annotations to be able to be listed inside of the toolbar, they must also extend ```PDFAnnotationButtonable```.
+
+```swift
+public protocol PDFAnnotationButtonable: PDFAnnotation {
+
+    /// Name for UIBarButtonItem representation of annotation
+    static var name: String? { get }
+
+    /// Image for UIBarButtonItem representation of annotation 
+    static var buttonImage: UIImage? { get }
+}
+```
 
 ### Actions
 
