@@ -199,10 +199,10 @@ open class PDFViewController: UIViewController {
         
         if allowsAnnotations {
             if showingAnnotations {
-                buttons.append(annotationController.highlighterButton)
-                buttons.append(annotationController.penButton)
-                buttons.append(annotationController.textButton)
                 buttons.append(annotationController.undoButton)
+                for button in annotationController.buttons.reversed() {
+                    buttons.append(button)
+                }
             }
             
             buttons.append(PDFBarButton(

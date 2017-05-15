@@ -9,6 +9,7 @@
 import UIKit
 
 class PDFPathAnnotation: NSObject, NSCoding {
+    
     var page: Int?
     var uuid: String = UUID().uuidString
     var saved: Bool = false
@@ -37,7 +38,7 @@ class PDFPathAnnotation: NSObject, NSCoding {
     fileprivate var points: [CGPoint] = [CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero]
     fileprivate var ctr: Int = 0
     
-    override init() { super.init() }
+    override required init() { super.init() }
     
     required init(coder aDecoder: NSCoder) {
         page = aDecoder.decodeObject(forKey: "page") as? Int
@@ -94,6 +95,7 @@ class PDFPathView: ResizableView, PDFAnnotationView {
 }
 
 extension PDFPathAnnotation: PDFAnnotation {
+    
     func mutableView() -> UIView {
         view = PDFPathView(parent: self, frame: rect)
         return view
@@ -185,10 +187,18 @@ extension PDFPathAnnotation: ResizableViewDelegate {
     }
 }
 
-
-class PDFHighlighterAnnotation: PDFPathAnnotation {
+class PDFPenAnnotation: PDFPathAnnotation, PDFAnnotationButtonable {
     
-    override init() {
+    static var name: String? { return "Pen" }
+    static var buttonImage: UIImage? { return UIImage.bundledImage("pen") }
+}
+
+class PDFHighlighterAnnotation: PDFPathAnnotation, PDFAnnotationButtonable {
+    
+    static var name: String? { return "Highlighter" }
+    static var buttonImage: UIImage? { return UIImage.bundledImage("highlighter") }
+    
+    required init() {
         super.init()
         
         color = UIColor.yellow.withAlphaComponent(0.3)

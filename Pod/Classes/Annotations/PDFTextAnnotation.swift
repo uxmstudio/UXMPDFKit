@@ -9,6 +9,7 @@
 import UIKit
 
 class PDFTextAnnotation: NSObject, NSCoding {
+    
     var page: Int?
     var uuid: String = UUID().uuidString
     var saved: Bool = false
@@ -50,7 +51,7 @@ class PDFTextAnnotation: NSObject, NSCoding {
         return textView
     }
     
-    override init() { super.init() }
+    override required init() { super.init() }
     
     required init(coder aDecoder: NSCoder) {
         page = aDecoder.decodeObject(forKey: "page") as? Int
@@ -68,6 +69,7 @@ class PDFTextAnnotation: NSObject, NSCoding {
 }
 
 extension PDFTextAnnotation: PDFAnnotation {
+    
     func mutableView() -> UIView {
         return createTextView()
     }
@@ -131,6 +133,12 @@ extension PDFTextAnnotation: PDFAnnotation {
         
         UIGraphicsPopContext()
     }
+}
+
+extension PDFTextAnnotation: PDFAnnotationButtonable {
+    
+    static var name: String? { return "Text" }
+    static var buttonImage: UIImage? { return UIImage.bundledImage("text-symbol") }
 }
 
 class PDFTextAnnotationView: UITextView, PDFAnnotationView {

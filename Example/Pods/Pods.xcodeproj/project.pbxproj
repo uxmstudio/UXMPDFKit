@@ -125,7 +125,7 @@
 		B68ECDBCA8C7CBFC7A4C746BEAA00756 /* PDFAnnotationStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PDFAnnotationStore.swift; sourceTree = "<group>"; };
 		B7D9346501AFA05A330677D39DB1650F /* PDFRenderer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PDFRenderer.swift; sourceTree = "<group>"; };
 		B9875B88D900C485C9301E8616F19BC5 /* PDFPathAnnotation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PDFPathAnnotation.swift; sourceTree = "<group>"; };
-		BC1A9EB3AA234A93FFED5E5EC31C26C0 /* PDFBarButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PDFBarButton.swift; sourceTree = "<group>"; };
+		BC1A9EB3AA234A93FFED5E5EC31C26C0 /* PDFBarButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PDFBarButton.swift; path = Renderer/PDFBarButton.swift; sourceTree = "<group>"; };
 		C22425B0A3F84BE18A46849E29C823A0 /* Images.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C363DF92B0BB7081898E123695AED3A2 /* PDFPageContent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PDFPageContent.swift; sourceTree = "<group>"; };
 		C427B08E12D2A5801438BEBFC96520BD /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -260,7 +260,6 @@
 			isa = PBXGroup;
 			children = (
 				76DA813643EF21961CF0953E75AD135F /* CGPDFDocument.swift */,
-				BC1A9EB3AA234A93FFED5E5EC31C26C0 /* PDFBarButton.swift */,
 				4E1B16E7B9A2A6B1300E0AE0B3DD0ED6 /* PDFDocument.swift */,
 				E49FB5E98854EBDE8CCAB4C0137D1986 /* PDFDocumentLink.swift */,
 				C363DF92B0BB7081898E123695AED3A2 /* PDFPageContent.swift */,
@@ -320,6 +319,7 @@
 		61C3A26F1EC3C0DF00807C4B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BC1A9EB3AA234A93FFED5E5EC31C26C0 /* PDFBarButton.swift */,
 				61C3A26D1EC2859A00807C4B /* ResizeableView.swift */,
 			);
 			name = View;

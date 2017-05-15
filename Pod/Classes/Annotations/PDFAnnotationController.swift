@@ -8,13 +8,6 @@
 
 import Foundation
 
-public enum PDFAnnotationType {
-    case none
-    case pen
-    case text
-    case highlighter
-}
-
 public protocol PDFAnnotationControllerProtocol {
     func annotationWillStart(touch: UITouch) -> Int?
 }
@@ -31,7 +24,7 @@ open class PDFAnnotationController: UIViewController {
     var allPages = [PDFPageContentView]()
     
     /// Type of annotation being added
-    var annotationType: PDFAnnotationType = .none
+    var annotationType: PDFAnnotation.Type?
     
     /// Delegate reference for annotation events
     var annotationDelegate: PDFAnnotationControllerProtocol?
@@ -42,6 +35,18 @@ open class PDFAnnotationController: UIViewController {
     var currentAnnotationPage: Int? {
         return currentAnnotation?.page
     }
+    
+    var annotationTypes: [PDFAnnotation.Type] = [
+        PDFTextAnnotation.self,
+        PDFPenAnnotation.self,
+        PDFHighlighterAnnotation.self,
+        ] {
+        didSet {
+            self.loadButtons(for: self.annotationTypes)
+        }
+    }
+    
+    var buttons: [PDFBarButton] = []
     
     var currentPage: PDFPageContentView? {
         return allPages.filter({ $0.page == currentAnnotationPage }).first
@@ -60,26 +65,6 @@ open class PDFAnnotationController: UIViewController {
     }
     
     //MARK: - Bar button items
-    lazy var penButton: PDFBarButton = PDFBarButton(
-        image: UIImage.bundledImage("pen"),
-        toggled: false,
-        target: self,
-        action: #selector(PDFAnnotationController.selectedPen(_:))
-    )
-    
-    lazy var highlighterButton: PDFBarButton = PDFBarButton(
-        image: UIImage.bundledImage("highlighter"),
-        toggled: false,
-        target: self,
-        action: #selector(PDFAnnotationController.selectedHighlighter(_:))
-    )
-    
-    lazy var textButton: PDFBarButton = PDFBarButton(
-        image: UIImage.bundledImage("text-symbol"),
-        toggled: false,
-        target: self,
-        action: #selector(PDFAnnotationController.selectedText(_:))
-    )
     
     lazy var undoButton: PDFBarButton = PDFBarButton(
         image: UIImage.bundledImage("undo"),
@@ -107,6 +92,8 @@ open class PDFAnnotationController: UIViewController {
         view.isUserInteractionEnabled = annotationType != .none
         view.isOpaque = false
         view.backgroundColor = UIColor.clear
+        
+        self.loadButtons(for: self.annotationTypes)
     }
     
     //MARK: - Annotation handling
@@ -127,11 +114,11 @@ open class PDFAnnotationController: UIViewController {
         }
     }
     
-    open func startAnnotation(_ type: PDFAnnotationType) {
+    open func startAnnotation(_ type: PDFAnnotation.Type?) {
         finishAnnotation()
         annotationType = type
         
-        view.isUserInteractionEnabled = annotationType != .none
+        view.isUserInteractionEnabled = annotationType != nil
     }
     
     open func finishAnnotation() {
@@ -150,33 +137,22 @@ open class PDFAnnotationController: UIViewController {
     //MARK: - Bar button actions
     
     func unselectAll() {
-        for button in [penButton, highlighterButton, textButton] {
+        for button in self.buttons {
             button.toggle(false)
         }
     }
     
-    func selectedType(_ button: PDFBarButton, type: PDFAnnotationType) {
+    func selected(button: PDFAnnotationBarButton) {
         unselectAll()
         
-        if annotationType == type {
+        if annotationType == button.annotationType {
             finishAnnotation()
             button.toggle(false)
-        } else {
-            startAnnotation(type)
+        }
+        else {
+            startAnnotation(button.annotationType)
             button.toggle(true)
         }
-    }
-    
-    @IBAction func selectedPen(_ button: PDFBarButton) {
-        selectedType(button, type: .pen)
-    }
-    
-    @IBAction func selectedHighlighter(_ button: PDFBarButton) {
-        selectedType(button, type: .highlighter)
-    }
-    
-    @IBAction func selectedText(_ button: PDFBarButton) {
-        selectedType(button, type: .text)
     }
     
     @IBAction func selectedUndo(_ button: PDFBarButton) {
@@ -189,6 +165,22 @@ open class PDFAnnotationController: UIViewController {
         
         self.currentAnnotation = annotation
         print("new current")
+    }
+    
+    func loadButtons(for annotations: [PDFAnnotation.Type]) {
+        self.buttons = self.annotationTypes.flatMap {
+            
+            if let annotation = $0 as? PDFAnnotationButtonable.Type {
+                return PDFAnnotationBarButton(
+                    toggled: false,
+                    type: annotation,
+                    block: { (button) in
+                        guard let button = button as? PDFAnnotationBarButton else { return }
+                        self.selected(button: button)
+                })
+            }
+            return nil
+        }
     }
     
     func undo() {
@@ -266,15 +258,8 @@ open class PDFAnnotationController: UIViewController {
     }
     
     private func createNewAnnotation() {
-        switch annotationType {
-        case .pen:
-            currentAnnotation = PDFPathAnnotation()
-        case .highlighter:
-            currentAnnotation = PDFHighlighterAnnotation()
-        case .text:
-            currentAnnotation = PDFTextAnnotation()
-        case .none:
-            break
+        if let annotationType = self.annotationType {
+            currentAnnotation = annotationType.init()
         }
     }
     

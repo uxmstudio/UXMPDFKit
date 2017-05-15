@@ -33,7 +33,7 @@ protocol ResizableViewDelegate {
     func resizableViewDidSelectAction(view: ResizableView, action: String)
 }
 
-class ResizableView: UIView {
+open class ResizableView: UIView {
     
     lazy var borderView: ResizableBorderView = {
         return ResizableBorderView(frame: self.bounds.insetBy(dx: ResizableView.globalInset, dy: ResizableView.globalInset))
@@ -46,7 +46,7 @@ class ResizableView: UIView {
     var preventsPositionOutsideSuperview: Bool = true
     var showMenuController: Bool = false
     
-    override var frame: CGRect {
+    override open var frame: CGRect {
         didSet {
             self.borderView.frame = self.bounds
             self.borderView.setNeedsDisplay()
@@ -80,7 +80,7 @@ class ResizableView: UIView {
         self.setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
     }
@@ -154,7 +154,7 @@ class ResizableView: UIView {
     }
     
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         
         self.delegate?.resizableViewDidBeginEditing(view: self)
@@ -168,7 +168,7 @@ class ResizableView: UIView {
         }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         /// Call delegate method
         self.delegate?.resizableViewDidEndEditing(view: self)
@@ -176,13 +176,13 @@ class ResizableView: UIView {
         self.toggleMenuController()
     }
     
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         /// Call delegate method
         self.delegate?.resizableViewDidEndEditing(view: self)
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         guard let touch = touches.first,
             let superview = self.superview else { return }
@@ -322,7 +322,7 @@ class ResizableView: UIView {
         self.delegate?.resizableViewDidSelectAction(view: self, action: "delete")
     }
     
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+    override open func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         
         if action == #selector(menuActionDelete(_:)) {
             return true
