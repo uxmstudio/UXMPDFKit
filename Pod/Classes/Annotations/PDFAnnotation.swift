@@ -34,6 +34,8 @@ public protocol PDFAnnotation {
     func save()
     func drawInContext(_ context: CGContext)
     
+    func didEnd()
+    
     func encode(with aCoder: NSCoder)
 }
 

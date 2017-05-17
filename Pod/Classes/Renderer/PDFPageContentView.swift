@@ -145,7 +145,6 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     open func processSingleTap(_ recognizer: UITapGestureRecognizer) {
-        print("this still goes")
         if let action = contentView.processSingleTap(recognizer) as? PDFAction {
             contentDelegate?.contentView(self, didSelect: action)
         }

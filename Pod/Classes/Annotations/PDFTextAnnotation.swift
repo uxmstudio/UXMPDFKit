@@ -53,6 +53,10 @@ class PDFTextAnnotation: NSObject, NSCoding {
     
     override required init() { super.init() }
     
+    func didEnd() {
+        
+    }
+    
     required init(coder aDecoder: NSCoder) {
         page = aDecoder.decodeObject(forKey: "page") as? Int
         text = aDecoder.decodeObject(forKey: "text") as! String

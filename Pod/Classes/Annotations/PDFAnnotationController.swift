@@ -161,10 +161,9 @@ open class PDFAnnotationController: UIViewController {
         undo()
     }
     
-    func select(annotation: PDFAnnotation) {
-        
+    func select(annotation: PDFAnnotation?) {
+        self.currentAnnotation?.didEnd()
         self.currentAnnotation = annotation
-        print("new current")
     }
     
     func loadButtons(for annotations: [PDFAnnotation.Type]) {

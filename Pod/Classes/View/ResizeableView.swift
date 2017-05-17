@@ -92,12 +92,12 @@ open class ResizableView: UIView {
     }
     
     func hideEditingHandles() {
-        self.borderView.isHidden = false
+        self.borderView.isHidden = true
         self.showMenuController = false
     }
     
     func showEditingHandles() {
-        self.borderView.isHidden = true
+        self.borderView.isHidden = false
     }
     
     

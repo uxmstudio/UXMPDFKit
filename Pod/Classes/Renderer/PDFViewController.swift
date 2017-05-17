@@ -336,6 +336,7 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
         if hidesBarsOnTap {
             handleTap(recognizer)
         }
+        annotationController.select(annotation: nil)
     }
     
     public func singlePageViewerDidBeginDragging() {

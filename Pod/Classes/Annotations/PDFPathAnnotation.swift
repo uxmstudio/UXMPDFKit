@@ -54,6 +54,10 @@ class PDFPathAnnotation: NSObject, NSCoding {
         super.init()
     }
     
+    func didEnd() {
+        self.view.hideEditingHandles()
+    }
+    
     func drawRect(_ frame: CGRect) {
         self.incrementalImage?.draw(at: CGPoint.zero)
         self.color.setStroke()
