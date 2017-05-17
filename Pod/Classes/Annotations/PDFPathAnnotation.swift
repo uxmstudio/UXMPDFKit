@@ -13,6 +13,7 @@ class PDFPathAnnotation: NSObject, NSCoding {
     var page: Int?
     var uuid: String = UUID().uuidString
     var saved: Bool = false
+    var delegate: PDFAnnotationEvent?
     
     var path: UIBezierPath = UIBezierPath()
     var color: UIColor = UIColor.black {
@@ -87,6 +88,7 @@ class PDFPathView: ResizableView, PDFAnnotationView {
         
         self.frame = frame
         self.parent = parent
+        self.delegate = parent
         
         backgroundColor = UIColor.clear
         isOpaque = false
@@ -180,14 +182,16 @@ extension PDFPathAnnotation: PDFAnnotation {
 
 extension PDFPathAnnotation: ResizableViewDelegate {
     func resizableViewDidBeginEditing(view: ResizableView) {
-        //self.view.delegate?.annotationDidSelect(annotation: self)
         print("started editing")
     }
     func resizableViewDidEndEditing(view: ResizableView) {
         print("done editing")
+        self.rect = self.view.frame
     }
     func resizableViewDidSelectAction(view: ResizableView, action: String) {
         print(action)
+        
+        self.delegate?.annotation(annotation: self, selected: action)
     }
 }
 

@@ -13,6 +13,7 @@ class PDFTextAnnotation: NSObject, NSCoding {
     var page: Int?
     var uuid: String = UUID().uuidString
     var saved: Bool = false
+    var delegate: PDFAnnotationEvent?
     
     var text: String = "" {
         didSet {

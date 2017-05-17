@@ -19,6 +19,8 @@ public protocol PDFAnnotation {
     /// Boolean representing if the annotation has been saved
     var saved: Bool { get set }
     
+    var delegate: PDFAnnotationEvent? { get set }
+    
     /// Force implementations to have an init
     init()
     
@@ -49,7 +51,8 @@ public protocol PDFAnnotationButtonable: PDFAnnotation {
 }
 
 public protocol PDFAnnotationEvent {
-    func annotationDidSelect(annotation: PDFAnnotation)
+    func annotationUpdated(annotation: PDFAnnotation)
+    func annotation(annotation: PDFAnnotation, selected action: String)
 }
 
 public protocol PDFAnnotationView {

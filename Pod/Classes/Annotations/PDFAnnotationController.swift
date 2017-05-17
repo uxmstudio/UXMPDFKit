@@ -164,6 +164,7 @@ open class PDFAnnotationController: UIViewController {
     func select(annotation: PDFAnnotation?) {
         self.currentAnnotation?.didEnd()
         self.currentAnnotation = annotation
+        self.currentAnnotation?.delegate = self
     }
     
     func loadButtons(for annotations: [PDFAnnotation.Type]) {
@@ -267,6 +268,24 @@ open class PDFAnnotationController: UIViewController {
             annotations.add(annotation: currentAnnotation)
         }
         currentAnnotation = nil
+    }
+}
+
+extension PDFAnnotationController: PDFAnnotationEvent {
+    public func annotationUpdated(annotation: PDFAnnotation) {  }
+    
+    public func annotation(annotation: PDFAnnotation, selected action: String) {
+        if action == "delete" {
+            self.annotations.remove(annotation: annotation)
+            
+            /// VERY DIRTY FIX LATER
+            if let annotationPage = annotation.page,
+                let pageContentView = self.pageContentViewFor(page: annotationPage) {
+                clear(pageView: pageContentView.contentView)
+                showAnnotations(pageContentView)
+                return
+            }
+        }
     }
 }
 
