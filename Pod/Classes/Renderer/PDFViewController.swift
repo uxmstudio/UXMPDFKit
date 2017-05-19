@@ -51,8 +51,8 @@ open class PDFViewController: UIViewController {
     
     /// A reference to the page scrubber bar
     var pageScrubber: PDFPageScrubber!
-    lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
-    lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document, delegate: self)
+    private(set) open lazy var formController: PDFFormViewController = PDFFormViewController(document: self.document)
+    private(set) open lazy var annotationController: PDFAnnotationController = PDFAnnotationController(document: self.document, delegate: self)
     
     fileprivate var showingAnnotations = false
     fileprivate var showingFormFilling = true
@@ -69,6 +69,20 @@ open class PDFViewController: UIViewController {
     public init(document: PDFDocument) {
         super.init(nibName: nil, bundle: nil)
         self.document = document
+    }
+    
+    /**
+     Initializes a new reader with a given document and annotation controller
+     
+     - Parameters:
+     - document: The document to display
+     - annotationController: The controller to supervise annotations
+     
+     - Returns: An instance of the PDFViewController
+     */
+    public convenience init(document: PDFDocument, annotationController: PDFAnnotationController) {
+        self.init(document: document)
+        self.annotationController = PDFAnnotationController(document: self.document, delegate: self)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -173,7 +187,7 @@ open class PDFViewController: UIViewController {
         }
     }
     
-    fileprivate func rightBarButtons() -> [UIBarButtonItem] {
+    open func rightBarButtons() -> [UIBarButtonItem] {
         var buttons: [UIBarButtonItem] = []
         
         if allowsSharing {

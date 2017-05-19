@@ -26,17 +26,7 @@ open class PDFAnnotationController: UIViewController {
     /// Type of annotation being added
     var annotationType: PDFAnnotation.Type?
     
-    /// Delegate reference for annotation events
-    var annotationDelegate: PDFAnnotationControllerProtocol?
-    
-    /// Current annotation
-    var currentAnnotation: PDFAnnotation?
-    
-    var currentAnnotationPage: Int? {
-        return currentAnnotation?.page
-    }
-    
-    var annotationTypes: [PDFAnnotation.Type] = [
+    open var annotationTypes: [PDFAnnotation.Type] = [
         PDFTextAnnotation.self,
         PDFPenAnnotation.self,
         PDFHighlighterAnnotation.self,
@@ -46,9 +36,20 @@ open class PDFAnnotationController: UIViewController {
         }
     }
     
+    /// The buttons for the created annotation types
     var buttons: [PDFBarButton] = []
     
-    var currentPage: PDFPageContentView? {
+    /// Delegate reference for annotation events
+    var annotationDelegate: PDFAnnotationControllerProtocol?
+    
+    /// Current annotation
+    open var currentAnnotation: PDFAnnotation?
+    
+    open var currentAnnotationPage: Int? {
+        return currentAnnotation?.page
+    }
+
+    open var currentPage: PDFPageContentView? {
         return allPages.filter({ $0.page == currentAnnotationPage }).first
     }
     
@@ -73,7 +74,15 @@ open class PDFAnnotationController: UIViewController {
         action: #selector(PDFAnnotationController.selectedUndo(_:))
     )
     
-    //MARK: - Init
+    /**
+     Initializes a new annotation controller
+     
+     - Parameters:
+     - document: The document to display
+     - delegate: The delegate for the controller to relay information back on
+     
+     - Returns: An instance of the PDFAnnotationController
+     */
     public init(document: PDFDocument, delegate: PDFAnnotationControllerProtocol) {
         self.document = document
         self.annotations = document.annotations
@@ -82,6 +91,23 @@ open class PDFAnnotationController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         setupUI()
+    }
+    
+    /**
+     Initializes a new annotation controller
+     
+     - Parameters:
+     - document: The document to display
+     - delegate: The delegate for the controller to relay information back on
+     - annotationTypes: The type of annotations that should be shown
+     
+     - Returns: An instance of the PDFAnnotationController
+     */
+    public convenience init(document: PDFDocument,
+                            delegate: PDFAnnotationControllerProtocol,
+                            annotationTypes: [PDFAnnotation.Type]) {
+        self.init(document: document, delegate: delegate)
+        self.annotationTypes = annotationTypes
     }
     
     required public init?(coder aDecoder: NSCoder) {
