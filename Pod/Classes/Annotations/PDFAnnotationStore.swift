@@ -20,7 +20,7 @@ open class PDFAnnotationStore: NSObject, NSCoding {
     var annotations: [PDFAnnotation] = []
     var delegate: PDFAnnotationStoreDelegate?
     
-    func add(annotation: PDFAnnotation) {
+    open func add(annotation: PDFAnnotation) {
         annotations.append(annotation)
         self.delegate?.annotationStore(store: self, addedAnnotation: annotation)
     }
