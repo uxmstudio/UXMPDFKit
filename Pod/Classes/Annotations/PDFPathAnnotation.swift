@@ -59,8 +59,8 @@ class PDFPathAnnotation: NSObject, NSCoding {
         self.view.hideEditingHandles()
     }
     
-    func drawRect(_ frame: CGRect) {
-        self.incrementalImage?.draw(at: CGPoint.zero)
+    func drawRect(_ frame: CGRect, point: CGPoint = CGPoint.zero) {
+        self.incrementalImage?.draw(at: point)
         self.color.setStroke()
         self.path.stroke()
     }
@@ -148,8 +148,6 @@ extension PDFPathAnnotation: PDFAnnotation {
                                             y: -path.bounds.minY + inset)
         path.apply(translation)
         
-        print(self.rect)
-        print(rect)
         self.rect = rect.insetBy(dx: -1 * inset, dy: -1 * inset)
         
         drawBitmap()
@@ -176,7 +174,7 @@ extension PDFPathAnnotation: PDFAnnotation {
     
     func drawInContext(_ context: CGContext) {
         drawBitmap()
-        drawRect(rect)
+        drawRect(rect, point: rect.origin)
     }
 }
 
