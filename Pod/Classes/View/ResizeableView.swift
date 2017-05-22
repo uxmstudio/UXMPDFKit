@@ -44,7 +44,20 @@ open class ResizableView: UIView {
     var anchorPoint: ResizableViewAnchorPoint?
     var delegate: ResizableViewDelegate?
     var preventsPositionOutsideSuperview: Bool = true
-    var showMenuController: Bool = false
+    var isLocked = false {
+        didSet {
+            self.borderView.isLocked = isLocked
+        }
+    }
+    
+    var menuItems: [UIMenuItem] {
+        return [
+            UIMenuItem(
+                title: "Delete",
+                action: #selector(ResizableView.menuActionDelete(_:))
+            )
+        ]
+    }
     
     override open var frame: CGRect {
         didSet {
@@ -53,6 +66,11 @@ open class ResizableView: UIView {
         }
     }
     
+    var isEditing: Bool {
+        get {
+            return !self.borderView.isHidden
+        }
+    }
     var isResizing: Bool {
         get {
             guard let anchorPoint = self.anchorPoint else { return false }
@@ -93,11 +111,13 @@ open class ResizableView: UIView {
     
     func hideEditingHandles() {
         self.borderView.isHidden = true
-        self.showMenuController = false
+        self.isLocked = false
+        self.hideMenuController()
     }
     
     func showEditingHandles() {
         self.borderView.isHidden = false
+        self.showMenuController()
     }
     
     
@@ -157,6 +177,10 @@ open class ResizableView: UIView {
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         
+        super.touchesBegan(touches, with: event)
+        
+        if self.isLocked { return }
+    
         self.delegate?.resizableViewDidBeginEditing(view: self)
         
         self.borderView.isHidden = false
@@ -170,13 +194,19 @@ open class ResizableView: UIView {
     
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        super.touchesEnded(touches, with: event)
+        
+        if self.isLocked { return }
+        
         /// Call delegate method
         self.delegate?.resizableViewDidEndEditing(view: self)
-        
-        self.toggleMenuController()
+        super.touchesEnded(touches, with: event)
+        self.showMenuController()
     }
     
     override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        if self.isLocked { return }
         
         /// Call delegate method
         self.delegate?.resizableViewDidEndEditing(view: self)
@@ -186,6 +216,11 @@ open class ResizableView: UIView {
         
         guard let touch = touches.first,
             let superview = self.superview else { return }
+        
+        super.touchesMoved(touches, with: event)
+        self.hideMenuController()
+        
+        if self.isLocked { return }
         if self.isResizing {
             var touch = touch.location(in: superview)
             self.resize(using: &touch)
@@ -291,31 +326,22 @@ open class ResizableView: UIView {
                 newCenter.y = midPointY
             }
         }
-        self.center = newCenter;
+        self.center = newCenter
     }
     
     
-    
-    
     //MARK: Context Menu Methods
-    func toggleMenuController() {
+    func showMenuController() {
         
-        if !self.showMenuController {
-            self.becomeFirstResponder()
-            UIMenuController.shared.setTargetRect(self.frame, in: self.superview!)
-            UIMenuController.shared.menuItems = [
-                UIMenuItem(
-                    title: "Delete",
-                    action: #selector(ResizableView.menuActionDelete(_:))
-                )
-            ]
-            UIMenuController.shared.setMenuVisible(true, animated: true)
-            self.showMenuController = true
-        }
-        else {
-            self.resignFirstResponder()
-            self.showMenuController = false
-        }
+        self.becomeFirstResponder()
+        UIMenuController.shared.setTargetRect(self.frame, in: self.superview!)
+        UIMenuController.shared.menuItems = self.menuItems
+        UIMenuController.shared.setMenuVisible(true, animated: true)
+    }
+    
+    func hideMenuController() {
+        
+        self.resignFirstResponder()
     }
     
     func menuActionDelete(_ sender: Any!) {
@@ -329,14 +355,14 @@ open class ResizableView: UIView {
         }
         return false
     }
-    
-    
 }
 
 class ResizableBorderView: UIView {
     
     static let borderSize: CGFloat = 10.0
     static let handleSize: CGFloat = 10.0
+    
+    var isLocked: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -430,15 +456,18 @@ class ResizableBorderView: UIView {
         
         let allPoints = [ upperLeft, upperRight, lowerRight, lowerLeft,
                           upperMiddle, lowerMiddle, middleLeft, middleRight ]
-        for point in allPoints {
-            context.saveGState()
-            context.addEllipse(in: point)
-            context.clip()
-            let startPoint = CGPoint(x: point.midX, y: point.minY)
-            let endPoint = CGPoint(x: point.midX, y: point.maxY)
-            context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: CGGradientDrawingOptions(rawValue: 0))
-            context.restoreGState()
-            context.strokeEllipse(in: point.insetBy(dx: 1, dy: 1))
+        
+        if !isLocked {
+            for point in allPoints {
+                context.saveGState()
+                context.addEllipse(in: point)
+                context.clip()
+                let startPoint = CGPoint(x: point.midX, y: point.minY)
+                let endPoint = CGPoint(x: point.midX, y: point.maxY)
+                context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: CGGradientDrawingOptions(rawValue: 0))
+                context.restoreGState()
+                context.strokeEllipse(in: point.insetBy(dx: 1, dy: 1))
+            }
         }
         context.restoreGState()
     }

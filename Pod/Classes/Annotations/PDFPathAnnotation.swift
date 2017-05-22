@@ -181,16 +181,13 @@ extension PDFPathAnnotation: PDFAnnotation {
 }
 
 extension PDFPathAnnotation: ResizableViewDelegate {
-    func resizableViewDidBeginEditing(view: ResizableView) {
-        print("started editing")
-    }
+    func resizableViewDidBeginEditing(view: ResizableView) { }
+    
     func resizableViewDidEndEditing(view: ResizableView) {
-        print("done editing")
         self.rect = self.view.frame
     }
+    
     func resizableViewDidSelectAction(view: ResizableView, action: String) {
-        print(action)
-        
         self.delegate?.annotation(annotation: self, selected: action)
     }
 }

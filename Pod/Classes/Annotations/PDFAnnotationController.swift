@@ -149,12 +149,6 @@ open class PDFAnnotationController: UIViewController {
     
     open func finishAnnotation() {
         
-        // makes sure any textviews resign their first responder status
-        for annotation in annotations.annotations {
-            guard let annotation = annotation as? PDFTextAnnotation else { continue }
-            annotation.textView.resignFirstResponder()
-        }
-        
         annotationType = .none
         addCurrentAnnotationToStore()
         view.isUserInteractionEnabled = false
@@ -291,6 +285,7 @@ open class PDFAnnotationController: UIViewController {
     
     private func addCurrentAnnotationToStore() {
         if let currentAnnotation = currentAnnotation {
+            currentAnnotation.didEnd()
             annotations.add(annotation: currentAnnotation)
         }
         currentAnnotation = nil
