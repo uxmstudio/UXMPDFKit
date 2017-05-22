@@ -16,7 +16,7 @@ open class PDFPageScrubber: UIToolbar {
     let document: PDFDocument
     var scrubber = PDFPageScrubberTrackControl()
     
-    var scrubberDelegate: PDFPageScrubberDelegate?
+    open var scrubberDelegate: PDFPageScrubberDelegate?
     let thumbBackgroundColor = UIColor.white.withAlphaComponent(0.7)
     
     let thumbSmallGap: CGFloat = 2.0
@@ -81,7 +81,7 @@ open class PDFPageScrubber: UIToolbar {
         return pageNumberLabel
     }()
     
-    init(frame: CGRect, document: PDFDocument) {
+    public init(frame: CGRect, document: PDFDocument) {
         self.document = document
         
         super.init(frame: frame)
