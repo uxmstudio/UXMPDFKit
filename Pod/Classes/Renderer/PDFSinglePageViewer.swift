@@ -130,8 +130,7 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
         let contentFrame = CGRect(origin: CGPoint.zero, size: contentSize)
         
         let page = indexPath.row + 1
-        
-        cell.contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+
         cell.pageContentView = PDFPageContentView(frame: contentFrame, document: document!, page: page)
         cell.pageContentView?.contentDelegate = self
         
@@ -211,9 +210,6 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
             let currentlyShownIndexPath = indexPathsForVisibleItems.first ?? IndexPath(item: 0, section: 0)
             page = currentlyShownIndexPath.row + 1
         }
-        
-        print(page)
-        print(internalPage)
         
         /// If nothing has changed, dont reload
         if page == internalPage {

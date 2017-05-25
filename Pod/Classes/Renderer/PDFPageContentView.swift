@@ -52,6 +52,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         delegate = self
         isScrollEnabled = true
         clipsToBounds = true
+        
         autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -111,12 +112,17 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         
         if viewFrame.size.height < boundsSize.height {
             viewFrame.origin.y = (boundsSize.height - viewFrame.size.height) / 2.0 + contentOffset.y
-        } else {
+        }
+        else {
             viewFrame.origin.y = 0.0
         }
-        
+
         containerView.frame = viewFrame
         contentView.frame = containerView.bounds
+        
+        updateMinimumMaximumZoom()
+        
+        self.zoomReset()
     }
     
     
@@ -193,9 +199,13 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     }
     
     open func zoomReset() {
-        if zoomScale > minimumZoomScale {
-            zoomScale = minimumZoomScale
-        }
+        zoomScale = minimumZoomScale
+        
+        let offsetX = max((self.bounds.size.width - self.contentSize.width) * 0.5, 0.0)
+        let offsetY = max((self.bounds.size.height - self.contentSize.height) * 0.5, 0.0)
+        
+        containerView.center = CGPoint(x: self.contentSize.width * 0.5 + offsetX,
+                                       y: self.contentSize.height * 0.5 + offsetY)
     }
     
     //MARK: - UIScrollViewDelegate methods

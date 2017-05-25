@@ -131,17 +131,20 @@ open class PDFViewController: UIViewController {
         pageScrubber.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         pageScrubber.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
         
-        automaticallyAdjustsScrollViewInsets = false
-        
         pageScrubber.sizeToFit()
         
         reloadBarButtons()
     }
     
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        collectionView.contentInset = UIEdgeInsetsMake(topLayoutGuide.length, 0, bottomLayoutGuide.length, 0)
         collectionView.collectionViewLayout.invalidateLayout()
         
         view.layoutSubviews()
@@ -281,8 +284,8 @@ open class PDFViewController: UIViewController {
     
     /// Toggles the display of the navigation bar and scrubber bar
     func toggleBars() {
-        hideBars(state: !(navigationController?.isNavigationBarHidden ?? false))
         collectionView.collectionViewLayout.invalidateLayout()
+        hideBars(state: !(navigationController?.isNavigationBarHidden ?? false))
     }
     
     //MARK: - IBActions
