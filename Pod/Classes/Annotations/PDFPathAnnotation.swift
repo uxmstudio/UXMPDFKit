@@ -8,12 +8,12 @@
 
 import UIKit
 
-class PDFPathAnnotation: NSObject, NSCoding {
+open class PDFPathAnnotation: NSObject, NSCoding {
     
-    var page: Int?
-    var uuid: String = UUID().uuidString
-    var saved: Bool = false
-    var delegate: PDFAnnotationEvent?
+    public var page: Int?
+    public var uuid: String = UUID().uuidString
+    public var saved: Bool = false
+    public var delegate: PDFAnnotationEvent?
     
     var path: UIBezierPath = UIBezierPath()
     var color: UIColor = UIColor.black {
@@ -39,9 +39,9 @@ class PDFPathAnnotation: NSObject, NSCoding {
     fileprivate var points: [CGPoint] = [CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero, CGPoint.zero]
     fileprivate var ctr: Int = 0
     
-    override required init() { super.init() }
+    override required public init() { super.init() }
     
-    required init(coder aDecoder: NSCoder) {
+    required public init(coder aDecoder: NSCoder) {
         page = aDecoder.decodeObject(forKey: "page") as? Int
         path = aDecoder.decodeObject(forKey: "path") as! UIBezierPath
         color = aDecoder.decodeObject(forKey: "color") as! UIColor
@@ -55,7 +55,7 @@ class PDFPathAnnotation: NSObject, NSCoding {
         super.init()
     }
     
-    func didEnd() {
+    public func didEnd() {
         self.view.hideEditingHandles()
     }
     
@@ -65,7 +65,7 @@ class PDFPathAnnotation: NSObject, NSCoding {
         self.path.stroke()
     }
     
-    func encode(with aCoder: NSCoder) {
+    public func encode(with aCoder: NSCoder) {
         aCoder.encode(page, forKey: "page")
         aCoder.encode(path, forKey: "path")
         aCoder.encode(color, forKey: "color")
@@ -102,18 +102,18 @@ class PDFPathView: ResizableView, PDFAnnotationView {
 
 extension PDFPathAnnotation: PDFAnnotation {
     
-    func mutableView() -> UIView {
+    public func mutableView() -> UIView {
         view = PDFPathView(parent: self, frame: rect)
         return view
     }
     
-    func touchStarted(_ touch: UITouch, point: CGPoint) {
+    public func touchStarted(_ touch: UITouch, point: CGPoint) {
         ctr = 0
         points[0] = point
         path.move(to: points[0])
     }
     
-    func touchMoved(_ touch: UITouch, point: CGPoint) {
+    public func touchMoved(_ touch: UITouch, point: CGPoint) {
         ctr += 1
         points[ctr] = point
         if ctr == 4 {
@@ -134,13 +134,13 @@ extension PDFPathAnnotation: PDFAnnotation {
         }
     }
     
-    func touchEnded(_ touch: UITouch, point: CGPoint) {
+    public func touchEnded(_ touch: UITouch, point: CGPoint) {
         
         view.setNeedsDisplay()
         ctr = 0
     }
     
-    func save() {
+    public func save() {
         
         let rect = path.bounds
         let inset: CGFloat = 5.0
@@ -172,7 +172,7 @@ extension PDFPathAnnotation: PDFAnnotation {
         UIGraphicsEndImageContext()
     }
     
-    func drawInContext(_ context: CGContext) {
+    public func drawInContext(_ context: CGContext) {
         drawBitmap()
         drawRect(rect, point: rect.origin)
     }
@@ -190,25 +190,25 @@ extension PDFPathAnnotation: ResizableViewDelegate {
     }
 }
 
-class PDFPenAnnotation: PDFPathAnnotation, PDFAnnotationButtonable {
+open class PDFPenAnnotation: PDFPathAnnotation, PDFAnnotationButtonable {
     
-    static var name: String? { return "Pen" }
-    static var buttonImage: UIImage? { return UIImage.bundledImage("pen") }
+    public static var name: String? { return "Pen" }
+    public static var buttonImage: UIImage? { return UIImage.bundledImage("pen") }
 }
 
-class PDFHighlighterAnnotation: PDFPathAnnotation, PDFAnnotationButtonable {
+open class PDFHighlighterAnnotation: PDFPathAnnotation, PDFAnnotationButtonable {
     
-    static var name: String? { return "Highlighter" }
-    static var buttonImage: UIImage? { return UIImage.bundledImage("highlighter") }
+    public static var name: String? { return "Highlighter" }
+    public static var buttonImage: UIImage? { return UIImage.bundledImage("highlighter") }
     
-    required init() {
+    required public init() {
         super.init()
         
         color = UIColor.yellow.withAlphaComponent(0.3)
         lineWidth = 10.0
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required public init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 }

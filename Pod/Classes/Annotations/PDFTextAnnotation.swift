@@ -8,12 +8,12 @@
 
 import UIKit
 
-class PDFTextAnnotation: NSObject, NSCoding {
+open class PDFTextAnnotation: NSObject, NSCoding {
     
-    var page: Int?
-    var uuid: String = UUID().uuidString
-    var saved: Bool = false
-    var delegate: PDFAnnotationEvent?
+    public var page: Int?
+    public var uuid: String = UUID().uuidString
+    public var saved: Bool = false
+    public var delegate: PDFAnnotationEvent?
     
     var text: String = "" {
         didSet {
@@ -37,22 +37,22 @@ class PDFTextAnnotation: NSObject, NSCoding {
     
     fileprivate var isEditing: Bool = false
     
-    override required init() { super.init() }
+    override required public init() { super.init() }
     
-    func didEnd() {
+    public func didEnd() {
         self.view.hideEditingHandles()
         self.view.textView.resignFirstResponder()
         self.view.textView.isUserInteractionEnabled = false
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required public init(coder aDecoder: NSCoder) {
         page = aDecoder.decodeObject(forKey: "page") as? Int
         text = aDecoder.decodeObject(forKey: "text") as! String
         rect = aDecoder.decodeCGRect(forKey: "rect")
         font = aDecoder.decodeObject(forKey: "font") as! UIFont
     }
     
-    func encode(with aCoder: NSCoder) {
+    public func encode(with aCoder: NSCoder) {
         aCoder.encode(page, forKey: "page")
         aCoder.encode(text, forKey: "text")
         aCoder.encode(rect, forKey: "rect")
@@ -62,31 +62,31 @@ class PDFTextAnnotation: NSObject, NSCoding {
 
 extension PDFTextAnnotation: PDFAnnotation {
     
-    func mutableView() -> UIView {
+    public func mutableView() -> UIView {
         view = PDFTextAnnotationView(parent: self)
         return view
     }
     
-    func touchStarted(_ touch: UITouch, point: CGPoint) {
+    public func touchStarted(_ touch: UITouch, point: CGPoint) {
         if rect == CGRect.zero {
             rect = CGRect(origin: point, size: CGSize(width: 150, height: 48))
         }
         self.view.touchesBegan([touch], with: nil)
     }
     
-    func touchMoved(_ touch: UITouch, point: CGPoint) {
+    public func touchMoved(_ touch: UITouch, point: CGPoint) {
         self.view.touchesMoved([touch], with: nil)
     }
     
-    func touchEnded(_ touch: UITouch, point: CGPoint) {
+    public func touchEnded(_ touch: UITouch, point: CGPoint) {
         self.view.touchesEnded([touch], with: nil)
     }
     
-    func save() {
+    public func save() {
         self.saved = true
     }
     
-    func drawInContext(_ context: CGContext) {
+    public func drawInContext(_ context: CGContext) {
         UIGraphicsPushContext(context)
         context.setAlpha(1.0)
         
@@ -123,12 +123,12 @@ extension PDFTextAnnotation: ResizableViewDelegate {
 
 extension PDFTextAnnotation: PDFAnnotationButtonable {
     
-    static var name: String? { return "Text" }
-    static var buttonImage: UIImage? { return UIImage.bundledImage("text-symbol") }
+    public static var name: String? { return "Text" }
+    public static var buttonImage: UIImage? { return UIImage.bundledImage("text-symbol") }
 }
 
 extension PDFTextAnnotation: UITextViewDelegate {
-    func textViewDidChange(_ textView: UITextView) {
+    public func textViewDidChange(_ textView: UITextView) {
         textView.sizeToFit()
         
         var width: CGFloat = 150.0
@@ -146,7 +146,7 @@ extension PDFTextAnnotation: UITextViewDelegate {
         }
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
+    public func textViewDidEndEditing(_ textView: UITextView) {
         textView.isUserInteractionEnabled = false
     }
 }
