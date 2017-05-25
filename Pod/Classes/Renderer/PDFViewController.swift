@@ -24,8 +24,13 @@ open class PDFViewController: UIViewController {
     /// A boolean value that determines if a PDF should have fillable form elements
     open var allowsFormFilling: Bool = true
     
-    /// A boolean value that determines if annotations are allowed
-    open var allowsAnnotations: Bool = true
+    /// An array that determines which annotation types are allowed
+    open var allowedAnnotations: [annotationTypes] = [.highligher, .pen, .text]
+    
+    //  An enum of annotation types used in allowedAnnotations 
+    public enum annotationTypes: Int {
+        case highligher, pen, text
+    }
     
     /// A boolean value that determines if sharing should be allowed
     open var allowsSharing: Bool = true
@@ -197,11 +202,17 @@ open class PDFViewController: UIViewController {
         )
         
         
-        if allowsAnnotations {
+        if allowedAnnotations.count > 0 {
             if showingAnnotations {
-                buttons.append(annotationController.highlighterButton)
-                buttons.append(annotationController.penButton)
-                buttons.append(annotationController.textButton)
+                if allowedAnnotations.contains(.highligher) {
+                    buttons.append(annotationController.highlighterButton)
+                }
+                if allowedAnnotations.contains(.pen) {
+                    buttons.append(annotationController.penButton)
+                }
+                if allowedAnnotations.contains(.text) {
+                    buttons.append(annotationController.textButton)
+                }
                 buttons.append(annotationController.undoButton)
             }
             
@@ -312,7 +323,7 @@ extension PDFViewController: PDFSinglePageViewerDelegate {
         if allowsFormFilling {
             formController.showForm(content)
         }
-        if allowsAnnotations {
+        if allowedAnnotations.count > 0 {
             annotationController.showAnnotations(content)
         }
     }
