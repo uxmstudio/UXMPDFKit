@@ -66,6 +66,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         zoomScale = minimumZoomScale
         tag = page
         
+        self.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: &PDFPageContentViewContext)
         
         NotificationCenter.default.addObserver(
             self,
@@ -96,6 +97,8 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
     deinit {
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
+        
+        self.removeObserver(self, forKeyPath: "frame")
     }
     
     override open func layoutSubviews() {
@@ -119,35 +122,18 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
 
         containerView.frame = viewFrame
         contentView.frame = containerView.bounds
-        
-        updateMinimumMaximumZoom()
-        
-        self.zoomReset()
     }
     
-    
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard context == &PDFPageContentViewContext else {
+        
+        guard context == &PDFPageContentViewContext,
+            let keyPath = keyPath, keyPath == "frame",
+            self == (object as? PDFPageContentView) else {
             return
         }
-        
-        guard let keyPath = keyPath , keyPath == "frame" else {
-            return
-        }
-        
-        guard self == (object as? PDFPageContentView) else {
-            return
-        }
-        
-        let oldMinimumZoomScale = minimumZoomScale
         
         updateMinimumMaximumZoom()
-        
-        if zoomScale == oldMinimumZoomScale || zoomScale < minimumZoomScale {
-            zoomScale = minimumZoomScale
-        } else if (zoomScale > maximumZoomScale) {
-            zoomScale = maximumZoomScale
-        }
+        self.zoomReset()
     }
     
     open func processSingleTap(_ recognizer: UITapGestureRecognizer) {
