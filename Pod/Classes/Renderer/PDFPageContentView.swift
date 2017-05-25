@@ -12,6 +12,7 @@ public protocol PDFPageContentViewDelegate {
     func contentView(_ contentView: PDFPageContentView, didSelect action: PDFAction)
     func contentView(_ contentView: PDFPageContentView, didSelect annotation: PDFAnnotationView)
     func contentView(_ contentView: PDFPageContentView, tapped recognizer: UITapGestureRecognizer)
+    func contentView(_ contentView: PDFPageContentView, doubleTapped recognizer: UITapGestureRecognizer)
 }
 
 open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
@@ -92,6 +93,16 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         singleTapRecognizer.numberOfTapsRequired = 1
         singleTapRecognizer.cancelsTouchesInView = false
         self.addGestureRecognizer(singleTapRecognizer)
+
+        let doubleTapRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(PDFPageContentView.processDoubleTap(_:))
+        )
+        doubleTapRecognizer.numberOfTouchesRequired = 1
+        doubleTapRecognizer.numberOfTapsRequired = 2
+        doubleTapRecognizer.cancelsTouchesInView = false
+        singleTapRecognizer.require(toFail: singleTapRecognizer)
+        self.addGestureRecognizer(doubleTapRecognizer)
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -150,6 +161,10 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         else {
             contentDelegate?.contentView(self, tapped: recognizer)
         }
+    }
+
+    open func processDoubleTap(_ recognizer: UITapGestureRecognizer) {
+        contentDelegate?.contentView(self, doubleTapped: recognizer)
     }
 
     open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
