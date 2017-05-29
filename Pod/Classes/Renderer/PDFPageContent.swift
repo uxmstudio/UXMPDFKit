@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal class PDFPageContent: UIView {
+open class PDFPageContent: UIView {
     
     private let pdfDocRef: CGPDFDocument
     private let pdfPageRef: CGPDFPage?
@@ -23,7 +23,7 @@ internal class PDFPageContent: UIView {
     var cropBoxRect: CGRect
     var viewRect: CGRect = CGRect.zero
     
-    override class var layerClass : AnyClass {
+    override open class var layerClass : AnyClass {
         return PDFPageTileLayer.self
     }
     
@@ -95,11 +95,11 @@ internal class PDFPageContent: UIView {
         self.init(pdfDocument: document, page: page, password: document.password)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func removeFromSuperview() {
+    override open func removeFromSuperview() {
         layer.delegate = nil
         super.removeFromSuperview()
     }
@@ -230,7 +230,7 @@ internal class PDFPageContent: UIView {
     }
     
     //MARK: - CATiledLayer Delegate Methods
-    override func draw(_ layer: CALayer, in ctx: CGContext) {
+    override open func draw(_ layer: CALayer, in ctx: CGContext) {
         guard let pdfPageRef = pdfPageRef else { return }
         ctx.setFillColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         ctx.fill(ctx.boundingBoxOfClipPath)
