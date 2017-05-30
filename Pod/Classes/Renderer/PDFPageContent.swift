@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class PDFPageContent: UIView {
+public class PDFPageContent: UIView {
     
     private let pdfDocRef: CGPDFDocument
     private let pdfPageRef: CGPDFPage?
@@ -23,7 +23,7 @@ open class PDFPageContent: UIView {
     var cropBoxRect: CGRect
     var viewRect: CGRect = CGRect.zero
     
-    override open class var layerClass : AnyClass {
+    override public class var layerClass : AnyClass {
         return PDFPageTileLayer.self
     }
     
@@ -99,7 +99,7 @@ open class PDFPageContent: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override open func removeFromSuperview() {
+    override public func removeFromSuperview() {
         layer.delegate = nil
         super.removeFromSuperview()
     }
