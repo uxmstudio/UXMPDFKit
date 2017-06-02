@@ -18,6 +18,13 @@ public protocol PDFSinglePageViewerDelegate {
     func singlePageViewerDidEndDragging()
 }
 
+open class PDFSinglePageFlowLayout: UICollectionViewFlowLayout {
+    
+    open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return true
+    }
+}
+
 open class PDFSinglePageViewer: UICollectionView {
 
     open var singlePageDelegate: PDFSinglePageViewerDelegate?
@@ -31,7 +38,7 @@ open class PDFSinglePageViewer: UICollectionView {
     }
 
     private static var flowLayout: UICollectionViewFlowLayout {
-        let layout = UICollectionViewFlowLayout()
+        let layout = PDFSinglePageFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets.zero
         layout.minimumLineSpacing = 0.0
@@ -131,7 +138,6 @@ extension PDFSinglePageViewer: UICollectionViewDataSource {
 
         let page = indexPath.row + 1
 
-        cell.contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         cell.pageContentView = PDFPageContentView(frame: contentFrame, document: document!, page: page)
         cell.pageContentView?.contentDelegate = self
 
