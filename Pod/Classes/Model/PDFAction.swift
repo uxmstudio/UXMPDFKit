@@ -92,7 +92,7 @@ open class PDFAction {
             if CGPDFArrayGetDictionary(destinationArray!, 0, &pageDictionaryFromDestArray) {
                 
                 let pageCount = documentReference.numberOfPages
-                for pageNumber in 1..<pageCount {
+                for pageNumber in 1...pageCount {
                     
                     let pageRef: CGPDFPage = documentReference.page(at: pageNumber)!
                     let pageDictionaryFromPage: CGPDFDictionaryRef = pageRef.dictionary!
