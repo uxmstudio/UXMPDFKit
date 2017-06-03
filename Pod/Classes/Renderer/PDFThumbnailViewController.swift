@@ -26,7 +26,7 @@ open class PDFThumbnailViewController: UIViewController {
         return layout
     }
     
-    var delegate: PDFThumbnailViewControllerDelegate?
+    public var delegate: PDFThumbnailViewControllerDelegate?
 
     public init(document: PDFDocument) {
         super.init(nibName: nil, bundle: nil)
