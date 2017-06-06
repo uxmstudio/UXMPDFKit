@@ -194,13 +194,6 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
     }
 
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        switch scrollDirection {
-        case .horizontal:
-            internalPage = Int((scrollView.contentOffset.x + scrollView.frame.width) / scrollView.frame.width)
-        case .vertical:
-            let currentlyShownIndexPath = indexPathsForVisibleItems.first ?? IndexPath(item: 0, section: 0)
-            internalPage = currentlyShownIndexPath.row + 1
-        }
         didDisplayPage(scrollView)
     }
 
@@ -218,13 +211,12 @@ extension PDFSinglePageViewer: UIScrollViewDelegate {
             page = currentlyShownIndexPath.row + 1
         }
 
-        print(page)
-        print(internalPage)
-
         /// If nothing has changed, dont reload
         if page == internalPage {
             return
         }
+        
+        internalPage = page
 
         singlePageDelegate?.singlePageViewer(self, didDisplayPage: page)
 
