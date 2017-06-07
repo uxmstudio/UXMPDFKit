@@ -129,6 +129,8 @@ public protocol PDFAnnotation {
     /// Boolean representing if the annotation has been saved
     var saved: Bool { get set }
 
+    var delegate: PDFAnnotationEvent? { get set }
+
     /// Force implementations to have an init
     init()
 
@@ -143,6 +145,8 @@ public protocol PDFAnnotation {
     /// Method to save annotation locally
     func save()
     func drawInContext(_ context: CGContext)
+
+    func didEnd()
 
     func encode(with aCoder: NSCoder)
 }
