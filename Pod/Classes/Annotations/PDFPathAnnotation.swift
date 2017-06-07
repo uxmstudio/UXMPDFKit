@@ -16,18 +16,22 @@ open class PDFPathAnnotation: NSObject, NSCoding {
     public var delegate: PDFAnnotationEvent?
     
     var path: UIBezierPath = UIBezierPath()
-    var color: UIColor = UIColor.black {
+    
+    /// The color for the stroke to be
+    public var color: UIColor = UIColor.black {
         didSet {
             color.setStroke()
             path.stroke()
         }
     }
-    var fill: Bool = false
-    var lineWidth: CGFloat = 3.0 {
+    
+    /// The linewidth of the stroke
+    public var lineWidth: CGFloat = 3.0 {
         didSet {
             path.lineWidth = lineWidth
         }
     }
+    var fill: Bool = false
     var rect: CGRect = CGRect(x: 0, y: 0, width: 1000, height: 1000) {
         didSet {
             view.frame = rect

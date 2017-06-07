@@ -4,9 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.7.1](https://github.com/uxmstudio/UXMPDFKit/releases/tag/0.7.1)
+
+### Updated
+- Fixed accessibility of path color, stroke width and undo functionality
+
+
+---
+
 ## [0.7.0](https://github.com/uxmstudio/UXMPDFKit/releases/tag/0.7.0)
 
-#### Added
+### Added
 - Resizeable and moveable annotations
 
 ### Fixed
@@ -18,35 +26,35 @@ All notable changes to this project will be documented in this file.
 
 ## [0.6.4](https://github.com/uxmstudio/UXMPDFKit/releases/tag/0.6.4)
 
-#### Added
+### Added
 - Adds issue template
 
-#### Fixed
+### Fixed
 - Stops assuming annotations store will be initialized
 
 ---
 
 ## [0.6.3](https://github.com/uxmstudio/UXMPDFKit/releases/tag/0.6.3)
 
-#### Fixed
+### Fixed
 - Issue causing undoing of annotations to not work
 
 ---
 
 ## [0.6.2](https://github.com/uxmstudio/UXMPDFKit/releases/tag/0.6.2)
 
-#### Fixed
+### Fixed
 - Excessive memory footprint 
 
 ---
 
 ## [0.6.1](https://github.com/uxmstudio/UXMPDFKit/releases/tag/0.6.1)
 
-#### Added
+### Added
 - Updates to support annotations as individual objects
 - Annotation rendering to thumbnails
 
-#### Fixed
+### Fixed
 - Bug causing last page of form to not render correctly
 - Bug where leaving a document would lose last annotation
 - Bug causing annotations to be loaded multiple times
@@ -55,5 +63,5 @@ All notable changes to this project will be documented in this file.
 
 ## [0.6.0](https://github.com/uxmstudio/UXMPDFKit/releases/tag/0.6.0)
 
-#### Added
+### Added
 - New UI for annotations

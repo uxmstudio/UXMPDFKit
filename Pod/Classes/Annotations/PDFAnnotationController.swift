@@ -203,7 +203,7 @@ open class PDFAnnotationController: UIViewController {
         }
     }
     
-    func undo() {
+    public func undo() {
         
         if let annotation = annotations.undo() {
             if let annotationPage = annotation.page,
