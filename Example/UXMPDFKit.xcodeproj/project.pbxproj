@@ -15,6 +15,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		614D2EE31C8C8A9A00A856CD /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 614D2EE21C8C8A9A00A856CD /* sample.pdf */; };
 		616B61061CF7395100B743A7 /* sample2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 616B61051CF7395100B743A7 /* sample2.pdf */; };
+		619D94B91EE7B5FA0009538F /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = 619D94B81EE7B5FA0009538F /* CHANGELOG.md */; };
 		61CBF9411D86EB7F00282554 /* sample3.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 61CBF9401D86EB7F00282554 /* sample3.pdf */; };
 		61D3B3771CDE9C1600E7C3A6 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B3761CDE9C1600E7C3A6 /* ExampleViewController.swift */; };
 /* End PBXBuildFile section */
@@ -33,6 +34,7 @@
 		611BF2C21D08B78100F863A4 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		614D2EE21C8C8A9A00A856CD /* sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample.pdf; sourceTree = "<group>"; };
 		616B61051CF7395100B743A7 /* sample2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample2.pdf; sourceTree = "<group>"; };
+		619D94B81EE7B5FA0009538F /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		61C453CC1E5758B500A7BC7B /* ISSUE_TEMPLATE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ISSUE_TEMPLATE.md; sourceTree = "<group>"; };
 		61CBF9401D86EB7F00282554 /* sample3.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample3.pdf; sourceTree = "<group>"; };
 		61D3B3761CDE9C1600E7C3A6 /* ExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 			children = (
 				2796C7F95FF0FCF4538111B7 /* UXMPDFKit.podspec */,
 				21803DAC4DC99E3892836720 /* README.md */,
+				619D94B81EE7B5FA0009538F /* CHANGELOG.md */,
 				61C453CC1E5758B500A7BC7B /* ISSUE_TEMPLATE.md */,
 				E9B04CB08B51CFCD484BF776 /* LICENSE */,
 				611BF2C21D08B78100F863A4 /* Package.swift */,
@@ -257,6 +260,7 @@
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				61D3B3771CDE9C1600E7C3A6 /* ExampleViewController.swift in Sources */,
+				619D94B91EE7B5FA0009538F /* CHANGELOG.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
