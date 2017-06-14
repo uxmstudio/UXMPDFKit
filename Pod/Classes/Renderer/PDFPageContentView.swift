@@ -97,7 +97,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         doubleTapRecognizer.numberOfTouchesRequired = 1
         doubleTapRecognizer.numberOfTapsRequired = 2
         doubleTapRecognizer.cancelsTouchesInView = false
-        singleTapRecognizer.require(toFail: singleTapRecognizer)
+        singleTapRecognizer.require(toFail: doubleTapRecognizer)
         self.addGestureRecognizer(doubleTapRecognizer)
     }
 
