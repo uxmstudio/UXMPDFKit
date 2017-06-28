@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "UXMPDFKit"
-  s.version          = "0.7.1"
+  s.version          = "0.7.2"
   s.summary          = "A fully functioning PDF reader written completely in Swift"
 
   s.homepage         = "https://github.com/uxmstudio/UXMPDFKit"
