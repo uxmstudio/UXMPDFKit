@@ -17,6 +17,9 @@ open class PDFViewController: UIViewController {
     /// A boolean value that determines if the scrubber bar should be visible
     open var showsScrubber: Bool = true {
         didSet {
+            guard isViewLoaded else {
+                return
+            }
             pageScrubber.isHidden = !showsScrubber
         }
     }
