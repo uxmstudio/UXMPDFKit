@@ -237,7 +237,7 @@ open class PDFViewController: UIViewController {
         return buttons
     }
     
-    func toggleAnnotations(_ button: PDFBarButton) {
+    @objc func toggleAnnotations(_ button: PDFBarButton) {
         showingAnnotations = !showingAnnotations
         reloadBarButtons()
     }
@@ -261,7 +261,7 @@ open class PDFViewController: UIViewController {
         present(activityVC, animated: true, completion: nil)
     }
     
-    func showThumbnailView() {
+    @objc func showThumbnailView() {
         let vc = PDFThumbnailViewController(document: document)
         vc.delegate = self
         let nvc = UINavigationController(rootViewController: vc)
@@ -296,11 +296,11 @@ open class PDFViewController: UIViewController {
         self.toggleBars()
     }
     
-    func shareDocument() {
+    @objc func shareDocument() {
         self.shareBarButtonAction()
     }
     
-    func dismissModal() {
+    @objc func dismissModal() {
         dismiss(animated: true, completion: nil)
     }
 }

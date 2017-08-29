@@ -120,13 +120,13 @@ open class PDFFormTextField: PDFFormField {
         
         /// UGLY
         (text as NSString!).draw(in: frame, withAttributes: [
-            NSFontAttributeName: font
+            NSAttributedStringKey.font: font
             ])
     }
 }
 
 extension PDFFormTextField: UITextFieldDelegate {
-    func textChanged() {
+    @objc func textChanged() {
         value = text as AnyObject?
         delegate?.formFieldValueChanged(self)
     }

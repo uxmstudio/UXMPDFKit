@@ -61,7 +61,7 @@ open class PDFFormSignatureField: PDFFormField {
         }
     }
     
-    func addSignature() {
+    @objc func addSignature() {
         
         let vc = PDFFormSignatureViewController()
         vc.delegate = self

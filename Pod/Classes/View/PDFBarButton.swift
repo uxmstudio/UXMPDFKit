@@ -57,7 +57,7 @@ open class PDFBarButton: UIBarButtonItem {
         }
     }
     
-    func tapped() {
+    @objc func tapped() {
         let _ = self.target?.perform(self.action, with: self)
         self.block?(self)
     }

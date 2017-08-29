@@ -147,7 +147,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         self.zoomReset()
     }
 
-    open func processSingleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc open func processSingleTap(_ recognizer: UITapGestureRecognizer) {
         if let action = contentView.processSingleTap(recognizer) as? PDFAction {
             contentDelegate?.contentView(self, didSelect: action)
         }
@@ -159,7 +159,7 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         }
     }
 
-    open func processDoubleTap(_ recognizer: UITapGestureRecognizer) {
+    @objc open func processDoubleTap(_ recognizer: UITapGestureRecognizer) {
         contentDelegate?.contentView(self, doubleTapped: recognizer)
     }
 
@@ -218,11 +218,11 @@ open class PDFPageContentView: UIScrollView, UIScrollViewDelegate {
         viewDidZoom?(scrollView.zoomScale)
     }
 
-    func keyboardWillShowNotification(_ notification: Notification) {
+    @objc func keyboardWillShowNotification(_ notification: Notification) {
         updateBottomLayoutConstraintWithNotification(notification, show: true)
     }
 
-    func keyboardWillHideNotification(_ notification: Notification) {
+    @objc func keyboardWillHideNotification(_ notification: Notification) {
         updateBottomLayoutConstraintWithNotification(notification, show: false)
     }
 

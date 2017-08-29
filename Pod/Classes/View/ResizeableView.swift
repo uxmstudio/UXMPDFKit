@@ -344,7 +344,7 @@ open class ResizableView: UIView {
         self.resignFirstResponder()
     }
     
-    func menuActionDelete(_ sender: Any!) {
+    @objc func menuActionDelete(_ sender: Any!) {
         self.delegate?.resizableViewDidSelectAction(view: self, action: "delete")
     }
     

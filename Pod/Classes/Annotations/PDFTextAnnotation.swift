@@ -94,13 +94,13 @@ extension PDFTextAnnotation: PDFAnnotation {
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paragraphStyle.alignment = NSTextAlignment.left
         
-        let attributes: [String:AnyObject] = [
-            NSFontAttributeName: font,
-            NSForegroundColorAttributeName: UIColor.black,
-            NSParagraphStyleAttributeName: paragraphStyle
+        let attributes: [NSAttributedStringKey:AnyObject] = [
+            NSAttributedStringKey.font: font,
+            NSAttributedStringKey.foregroundColor: UIColor.black,
+            NSAttributedStringKey.paragraphStyle: paragraphStyle
         ]
         
-        let size = nsText.size(attributes: attributes)
+        let size = nsText.size(withAttributes: attributes)
         let textRect = CGRect(origin: rect.origin, size: size)
         
         nsText.draw(in: textRect, withAttributes: attributes)
@@ -209,7 +209,7 @@ class PDFTextAnnotationView: ResizableView, PDFAnnotationView {
         self.addSubview(textView)
     }
     
-    func menuActionEdit(_ sender: Any!) {
+    @objc func menuActionEdit(_ sender: Any!) {
         self.delegate?.resizableViewDidSelectAction(view: self, action: "edit")
         
         self.isLocked = true
