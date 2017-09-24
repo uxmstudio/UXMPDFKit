@@ -11,13 +11,13 @@ import UXMPDFKit
 
 class ViewController: UIViewController {
     
-    @IBOutlet var collectionView:PDFSinglePageViewer!
+    @IBOutlet var collectionView:UXMSinglePageViewer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let url = Bundle.main.path(forResource: "sample", ofType: "pdf")!
-        let document = try! PDFDocument(filePath: url, password: "")
+        let document = try! UXMPDFDocument(filePath: url, password: "")
         
         self.collectionView.document = document
     }
