@@ -11,6 +11,9 @@ import SafariServices
 
 open class PDFViewController: UIViewController {
     
+    /// A boolean value that determines whether show and use only pen tool
+    open var signatureMode: Bool = false
+    
     /// A boolean value that determines whether the navigation bar and scrubber bar hide on screen tap
     open var hidesBarsOnTap: Bool = true
     
@@ -194,6 +197,18 @@ open class PDFViewController: UIViewController {
     }
     
     open func rightBarButtons() -> [UIBarButtonItem] {
+        if (signatureMode) {
+            var buttons = self.navigationItem.rightBarButtonItems!
+            
+            // undo button
+            buttons.append(annotationController.undoButton)
+            
+            // draw button
+            buttons.append(annotationController.buttons[1]);
+            
+            return buttons
+        }
+        
         var buttons: [UIBarButtonItem] = []
         
         if allowsSharing {
@@ -240,6 +255,16 @@ open class PDFViewController: UIViewController {
     func toggleAnnotations(_ button: PDFBarButton) {
         showingAnnotations = !showingAnnotations
         reloadBarButtons()
+    }
+    
+    open func savePdfFile() -> URL {
+        self.annotationController.finishAnnotation()
+        let renderer = PDFRenderController(document: document, controllers: [
+            annotationController,
+            formController
+            ])
+        let pdf = renderer.renderOntoPDF()
+        return pdf;
     }
     
     func showActivitySheet() {
