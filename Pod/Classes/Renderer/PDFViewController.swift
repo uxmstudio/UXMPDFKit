@@ -198,7 +198,7 @@ open class PDFViewController: UIViewController {
     
     open func rightBarButtons() -> [UIBarButtonItem] {
         if (signatureMode) {
-            var buttons = self.navigationItem.rightBarButtonItems!
+            var buttons = self.navigationItem.rightBarButtonItems ?? []
             
             // undo button
             buttons.append(annotationController.undoButton)
