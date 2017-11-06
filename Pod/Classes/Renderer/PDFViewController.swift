@@ -203,8 +203,18 @@ open class PDFViewController: UIViewController {
             // undo button
             buttons.append(annotationController.undoButton)
             
-            // draw button
-            buttons.append(annotationController.buttons[1]);
+            // find the draw button (hopefully you added that thing huh?)
+            if let penButton = annotationController.buttons.filter({ (button: PDFBarButton) -> Bool in
+                if let annotationButton = button as? PDFAnnotationBarButton {
+                    return annotationButton.annotationType == PDFPenAnnotation.self
+                }
+                return false
+            }).first {
+                buttons.append(penButton);
+            }
+            else {
+                assert(false, "Used 'signatureMode' of true, but did NOT provide the PDFPenAnnotationBarButton as an annotation! No Sign button for you!")
+            }
             
             return buttons
         }
