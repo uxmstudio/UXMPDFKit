@@ -52,6 +52,14 @@ open class PDFViewController: UIViewController {
     /// The default action brings up a UIActivityViewController
     open lazy var shareBarButtonAction: () -> () = { self.showActivitySheet() }
     
+    /// A closure that defines what happens on viewWillDisappear.
+    /// The default is to assign the annotations out of the annotationController into
+    /// the document, then call document.save()
+    open lazy var autoSaveAction: (PDFDocument, PDFAnnotationController) -> () = { document, annotationController in
+        document.annotations = annotationController.annotations
+        document.save()
+    }
+    
     /// A reference to the collection view handling page presentation
     var collectionView: PDFSinglePageViewer!
     
@@ -160,8 +168,7 @@ open class PDFViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         self.annotationController.finishAnnotation()
-        self.document.annotations = self.annotationController.annotations
-        self.document.save()
+        autoSaveAction(self.document, self.annotationController)
     }
     
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
