@@ -17,7 +17,7 @@ public protocol PDFAnnotationStoreDelegate {
 
 open class PDFAnnotationStore: NSObject, NSCoding {
 
-    var annotations: [PDFAnnotation] = []
+    private (set) open var annotations: [PDFAnnotation] = []
     var delegate: PDFAnnotationStoreDelegate?
 
 

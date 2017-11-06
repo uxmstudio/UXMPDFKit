@@ -18,7 +18,7 @@ open class PDFAnnotationController: UIViewController {
     var document: PDFDocument!
     
     /// Store containing all annotations for document
-    var annotations = PDFAnnotationStore()
+    private (set) open var annotations = PDFAnnotationStore()
     
     /// References to pages within view
     var allPages = [PDFPageContentView]()
