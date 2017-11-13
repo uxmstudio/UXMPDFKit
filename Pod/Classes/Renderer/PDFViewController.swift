@@ -39,6 +39,8 @@ open class PDFViewController: UIViewController {
     /// A boolean value that determines if view controller is displayed as modal
     open var isPresentingInModal: Bool = false
     
+    open var modalDoneButtonTouched: (() -> ())?
+    
     /// The scroll direction of the reader
     open var scrollDirection: UICollectionViewScrollDirection = .horizontal
     
@@ -83,6 +85,9 @@ open class PDFViewController: UIViewController {
     public init(document: PDFDocument) {
         super.init(nibName: nil, bundle: nil)
         self.document = document
+        self.modalDoneButtonTouched = { [unowned self] in
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     /**
@@ -343,7 +348,7 @@ open class PDFViewController: UIViewController {
     }
     
     func dismissModal() {
-        dismiss(animated: true, completion: nil)
+        modalDoneButtonTouched?()
     }
 }
 
