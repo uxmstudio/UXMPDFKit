@@ -45,6 +45,12 @@ open class PDFViewController: UIViewController {
     /// A reference to the share button
     var shareBarButtonItem: UIBarButtonItem?
     
+    /// The share button icon
+    open lazy var shareBarButtonIcon: UIImage? = UIImage.bundledImage("share")
+
+    /// The thumbs button icon
+    open lazy var thumbsBarButtonIcon: UIImage? = UIImage.bundledImage("thumbs")
+
     /// A closure that defines an action to take upon selecting the share button.
     /// The default action brings up a UIActivityViewController
     open lazy var shareBarButtonAction: () -> () = { self.showActivitySheet() }
@@ -197,24 +203,13 @@ open class PDFViewController: UIViewController {
         var buttons: [UIBarButtonItem] = []
         
         if allowsSharing {
-
-            let shareFormBarButtonItem = PDFBarButton(
-                image: UIImage.bundledImage("share"),
-                toggled: false,
-                target: self,
-                action: #selector(PDFViewController.shareDocument)
-            )
+            let shareFormBarButtonItem = buildShareFormBarButtonItem()
             buttons.append(shareFormBarButtonItem)
             self.shareBarButtonItem = shareFormBarButtonItem
         }
         
-        buttons.append(PDFBarButton(
-            image: UIImage.bundledImage("thumbs"),
-            toggled: false,
-            target: self,
-            action: #selector(PDFViewController.showThumbnailView)
-            )
-        )
+        let thumbsBarButtonItem = buildThumbsBarButtonItem()
+        buttons.append(thumbsBarButtonItem)
         
         
         if allowsAnnotations {
@@ -235,6 +230,28 @@ open class PDFViewController: UIViewController {
         }
         
         return buttons
+    }
+    
+    private func buildShareFormBarButtonItem() -> PDFBarButton {
+        let shareFormBarButtonItem = PDFBarButton(
+            image: shareBarButtonIcon,
+            toggled: false,
+            target: self,
+            action: #selector(PDFViewController.shareDocument)
+        )
+        
+        return shareFormBarButtonItem
+    }
+    
+    private func buildThumbsBarButtonItem() -> PDFBarButton {
+        let thumbsBarButtonItem = PDFBarButton(
+            image: thumbsBarButtonIcon,
+            toggled: false,
+            target: self,
+            action: #selector(PDFViewController.showThumbnailView)
+        )
+        
+        return thumbsBarButtonItem
     }
     
     func toggleAnnotations(_ button: PDFBarButton) {
