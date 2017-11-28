@@ -197,24 +197,13 @@ open class PDFViewController: UIViewController {
         var buttons: [UIBarButtonItem] = []
         
         if allowsSharing {
-
-            let shareFormBarButtonItem = PDFBarButton(
-                image: UIImage.bundledImage("share"),
-                toggled: false,
-                target: self,
-                action: #selector(PDFViewController.shareDocument)
-            )
+            let shareFormBarButtonItem = buildShareFormBarButtonItem()
             buttons.append(shareFormBarButtonItem)
             self.shareBarButtonItem = shareFormBarButtonItem
         }
         
-        buttons.append(PDFBarButton(
-            image: UIImage.bundledImage("thumbs"),
-            toggled: false,
-            target: self,
-            action: #selector(PDFViewController.showThumbnailView)
-            )
-        )
+        let thumbsBarButtonItem = buildThumbsBarButtonItem()
+        buttons.append(thumbsBarButtonItem)
         
         
         if allowsAnnotations {
@@ -235,6 +224,28 @@ open class PDFViewController: UIViewController {
         }
         
         return buttons
+    }
+    
+    private func buildShareFormBarButtonItem() -> PDFBarButton {
+        let shareFormBarButtonItem = PDFBarButton(
+            image: UIImage.bundledImage("share"),
+            toggled: false,
+            target: self,
+            action: #selector(PDFViewController.shareDocument)
+        )
+        
+        return shareFormBarButtonItem
+    }
+    
+    private func buildThumbsBarButtonItem() -> PDFBarButton {
+        let thumbsBarButtonItem = PDFBarButton(
+            image: UIImage.bundledImage("thumbs"),
+            toggled: false,
+            target: self,
+            action: #selector(PDFViewController.showThumbnailView)
+        )
+        
+        return thumbsBarButtonItem
     }
     
     func toggleAnnotations(_ button: PDFBarButton) {
