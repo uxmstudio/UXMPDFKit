@@ -45,6 +45,12 @@ open class PDFViewController: UIViewController {
     /// A reference to the share button
     var shareBarButtonItem: UIBarButtonItem?
     
+    /// The share button icon
+    open lazy var shareBarButtonIcon: UIImage? = UIImage.bundledImage("share")
+
+    /// The thumbs button icon
+    open lazy var thumbsBarButtonIcon: UIImage? = UIImage.bundledImage("thumbs")
+
     /// A closure that defines an action to take upon selecting the share button.
     /// The default action brings up a UIActivityViewController
     open lazy var shareBarButtonAction: () -> () = { self.showActivitySheet() }
@@ -228,7 +234,7 @@ open class PDFViewController: UIViewController {
     
     private func buildShareFormBarButtonItem() -> PDFBarButton {
         let shareFormBarButtonItem = PDFBarButton(
-            image: UIImage.bundledImage("share"),
+            image: shareBarButtonIcon,
             toggled: false,
             target: self,
             action: #selector(PDFViewController.shareDocument)
@@ -239,7 +245,7 @@ open class PDFViewController: UIViewController {
     
     private func buildThumbsBarButtonItem() -> PDFBarButton {
         let thumbsBarButtonItem = PDFBarButton(
-            image: UIImage.bundledImage("thumbs"),
+            image: thumbsBarButtonIcon,
             toggled: false,
             target: self,
             action: #selector(PDFViewController.showThumbnailView)
