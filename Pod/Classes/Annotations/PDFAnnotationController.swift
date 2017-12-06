@@ -176,9 +176,15 @@ open class PDFAnnotationController: UIViewController {
     }
     
     @IBAction func selectedUndo(_ button: PDFBarButton) {
+        //keep track of what kind of annotation we're adding
+        let currentAnnotationType = annotationType
         
+        //finish and undo it
         finishAnnotation()
         undo()
+        
+        //then start a new annotation of the same type
+        startAnnotation(currentAnnotationType)
     }
     
     func select(annotation: PDFAnnotation?) {
