@@ -119,7 +119,8 @@ open class PDFAnnotationController: UIViewController {
         view.isOpaque = false
         view.backgroundColor = UIColor.clear
         
-        self.loadButtons(for: self.annotationTypes)
+        loadButtons(for: self.annotationTypes)
+        undoButton.isEnabled = (annotations.annotations.count > 0)
     }
     
     //MARK: - Annotation handling
@@ -145,13 +146,16 @@ open class PDFAnnotationController: UIViewController {
         annotationType = type
         
         view.isUserInteractionEnabled = annotationType != nil
+        undoButton.isEnabled = annotationType != nil
     }
     
     open func finishAnnotation() {
         
         annotationType = .none
         addCurrentAnnotationToStore()
+
         view.isUserInteractionEnabled = false
+        undoButton.isEnabled = (annotations.annotations.count > 0)
     }
     
     //MARK: - Bar button actions
