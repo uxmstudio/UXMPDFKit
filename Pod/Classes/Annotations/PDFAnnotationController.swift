@@ -146,7 +146,7 @@ open class PDFAnnotationController: UIViewController {
         annotationType = type
         
         view.isUserInteractionEnabled = annotationType != nil
-        undoButton.isEnabled = annotationType != nil
+        undoButton.isEnabled = (annotationType != nil || annotations.annotations.count > 0)
     }
     
     open func finishAnnotation() {
