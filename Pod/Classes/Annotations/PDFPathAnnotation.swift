@@ -65,6 +65,7 @@ open class PDFPathAnnotation: NSObject, NSCoding {
     
     func drawRect(_ frame: CGRect, point: CGPoint = CGPoint.zero) {
         self.incrementalImage?.draw(at: point)
+        self.path.lineWidth = self.lineWidth
         self.color.setStroke()
         self.path.stroke()
     }
