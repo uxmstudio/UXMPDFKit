@@ -22,8 +22,10 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
     open var page: Int
     open var contentDelegate: UXMPageContentViewDelegate?
     open var viewDidZoom: ((CGFloat) -> Void)?
-    fileprivate var PDFPageContentViewContext = 0
     fileprivate var previousScale: CGFloat = 1.0
+
+    // KVO
+    public private(set) var frameObservation: NSKeyValueObservation?
 
     let bottomKeyboardPadding: CGFloat = 20.0
 
@@ -67,19 +69,9 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
         zoomScale = minimumZoomScale
         tag = page
 
-        self.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: &PDFPageContentViewContext)
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(UXMPageContentView.keyboardWillShowNotification(_:)),
-            name: .UIKeyboardWillShow,
-            object: nil)
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(UXMPageContentView.keyboardWillHideNotification(_:)),
-            name: .UIKeyboardWillHide,
-            object: nil
-        )
+        frameObservation = observe(\UXMPageContentView.frame, changeHandler: handleFrameChange)
+        NotificationCenter.default.addObserver(forName: .UIKeyboardWillShow, object: nil, queue: .main, using: keyboardWillShowNotification)
+        NotificationCenter.default.addObserver(forName: .UIKeyboardWillHide, object: nil, queue: .main, using: keyboardWillHideNotification)
 
         let singleTapRecognizer = UITapGestureRecognizer(
             target: self,
@@ -109,7 +101,7 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
 
-        self.removeObserver(self, forKeyPath: "frame")
+        frameObservation?.invalidate()
     }
 
     override open func layoutSubviews() {
@@ -135,16 +127,9 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
         contentView.frame = containerView.bounds
     }
 
-    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-
-        guard context == &PDFPageContentViewContext,
-            let keyPath = keyPath, keyPath == "frame",
-            self == (object as? UXMPageContentView) else {
-            return
-        }
-
-        updateMinimumMaximumZoom()
-        self.zoomReset()
+    open func handleFrameChange(sender: UXMPageContentView, change: NSKeyValueObservedChange<CGRect>) {
+        sender.updateMinimumMaximumZoom()
+        sender.zoomReset()
     }
 
     @objc open func processSingleTap(_ recognizer: UITapGestureRecognizer) {
@@ -218,11 +203,11 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
         viewDidZoom?(scrollView.zoomScale)
     }
 
-    @objc func keyboardWillShowNotification(_ notification: Notification) {
+    func keyboardWillShowNotification(_ notification: Notification) {
         updateBottomLayoutConstraintWithNotification(notification, show: true)
     }
 
-    @objc func keyboardWillHideNotification(_ notification: Notification) {
+    func keyboardWillHideNotification(_ notification: Notification) {
         updateBottomLayoutConstraintWithNotification(notification, show: false)
     }
 

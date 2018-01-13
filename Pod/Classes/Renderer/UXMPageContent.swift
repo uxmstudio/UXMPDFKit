@@ -138,15 +138,11 @@ public class UXMPageContent: UIView {
         CGPDFArrayGetNumber(annotationRectArray!, 3, &upperRightY)
         
         if lowerLeftX > upperRightX {
-            let t = lowerLeftX
-            lowerLeftX = upperRightX
-            upperRightX = t
+            (lowerLeftX, upperRightX) = (upperRightX, lowerLeftX)
         }
         
         if lowerLeftY > upperRightY {
-            let t = lowerLeftY
-            lowerLeftY = upperRightY
-            upperRightY = t
+            (lowerLeftY, upperRightY) = (upperRightY, lowerLeftY)
         }
         
         lowerLeftX -= pageOffsetX
