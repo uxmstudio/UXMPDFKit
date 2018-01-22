@@ -1,6 +1,6 @@
-![UXM Token Field](https://uxmstudio.com/public/images/uxmpdfkit.png)
+![UXM Token Field](https://avatars3.githubusercontent.com/u/13734873?s=400&v=4)
 
-[![CI Status](http://img.shields.io/travis/uxmstudio/UXMPDFKit.svg?style=flat)](https://travis-ci.org/uxmstudio/UXMPDFKit)
+[![CI Status](http://img.shields.io/travis/uxmstudio/UXMPDFKit.svg?style=flat)](https://travis-ci.org/diegostamigni/UXMPDFKit)
 [![Version](https://img.shields.io/cocoapods/v/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 ![Swift](https://img.shields.io/badge/%20in-swift%203.0-orange.svg)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
