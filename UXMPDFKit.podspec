@@ -8,14 +8,14 @@
 
 Pod::Spec.new do |s|
   s.name             = "UXMPDFKit"
-  s.version          = "0.7.2"
+  s.version          = "0.7.3"
   s.summary          = "A fully functioning PDF reader written completely in Swift"
 
-  s.homepage         = "https://github.com/uxmstudio/UXMPDFKit"
+  s.homepage         = "https://github.com/diegostamigni/UXMPDFKit"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "Chris Anderson" => "chris@uxmstudio.com" }
-  s.source           = { :git => "https://github.com/uxmstudio/UXMPDFKit.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/diegostamigni/UXMPDFKit.git", :tag => s.version.to_s }
 
   s.requires_arc = true
 

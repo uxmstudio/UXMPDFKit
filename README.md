@@ -9,8 +9,8 @@
 
 ## Requirements
 - iOS 9 or above
-- Xcode 8 or above
-- Swift 3.0
+- Xcode 9 or above
+- Swift 4.0
 
 ## Note
 
@@ -156,10 +156,10 @@ An annotation should be an object that contains its position and value, not a vi
 
 Additionally, it is recommended that the view passed by ```mutableView()``` extend ```ResizableView``` as this allows the annotation to be moved, resized and deleted individually.
 
-In order for annotations to be able to be listed inside of the toolbar, they must also extend ```PDFAnnotationButtonable```.
+In order for annotations to be able to be listed inside of the toolbar, they must also extend ```UXMPDFAnnotationButtonable```.
 
 ```swift
-public protocol PDFAnnotationButtonable: PDFAnnotation {
+public protocol UXMPDFAnnotationButtonable: UXMPDFAnnotation {
 
     /// Name for UIBarButtonItem representation of annotation
     static var name: String? { get }
@@ -182,13 +182,13 @@ Currently supported actions:
 - [ ] Javascript
 - [ ] Rich Media
 
-Tapped actions are passed to your view controller by the PDFSinglePageViewer in its ```contentDelegate```
+Tapped actions are passed to your view controller by the UXMPDFSinglePageViewer in its ```contentDelegate```
 
 ### Renderer 
 In order to perform write operations back onto a PDF in an efficient format, a renderer is used. Each type of form, annotation, etc that needs to be rendered back onto the PDF should extend the following protocol:
 
 ```swift
-protocol PDFRenderer {
+protocol UXMRenderer {
     func render(page: Int, context:CGContext, bounds: CGRect)
 }
 ```
@@ -196,7 +196,7 @@ protocol PDFRenderer {
 Controllers or objects that extend this protocol can then be passed to the PDFRenderer to be written onto a temporary document or saved permanently onto the document.
 
 ```swift
-let renderer = PDFRenderController(document: self.document, controllers: [
+let renderer = UXMPDFRenderController(document: self.document, controllers: [
     self.annotationController,
     self.formController
 ])
