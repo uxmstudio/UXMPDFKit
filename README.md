@@ -1,8 +1,8 @@
 ![UXM Token Field](https://avatars3.githubusercontent.com/u/13734873?s=400&v=4)
 
-[![CI Status](http://img.shields.io/travis/uxmstudio/UXMPDFKit.svg?style=flat)](https://travis-ci.org/diegostamigni/UXMPDFKit)
+[![CI Status](http://img.shields.io/travis/uxmstudio/UXMPDFKit.svg?style=flat)](https://travis-ci.org/diegostamigni/UXMPDFKit.svg?branch=master)
 [![Version](https://img.shields.io/cocoapods/v/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
-![Swift](https://img.shields.io/badge/%20in-swift%203.0-orange.svg)
+![Swift](https://img.shields.io/badge/%20in-swift%204.0-orange.svg)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 [![Platform](https://img.shields.io/cocoapods/p/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
@@ -129,7 +129,7 @@ public protocol PDFAnnotation {
     /// Boolean representing if the annotation has been saved
     var saved: Bool { get set }
 
-    var delegate: PDFAnnotationEvent? { get set }
+    weak var delegate: UXMPDFAnnotationEvent? { get set }
 
     /// Force implementations to have an init
     init()
