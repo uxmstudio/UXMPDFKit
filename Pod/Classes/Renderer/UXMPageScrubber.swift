@@ -23,7 +23,7 @@ open class UXMPageScrubber: UIToolbar {
     let thumbSmallWidth: CGFloat = 22.0
     let thumbSmallHeight: CGFloat = 28.0
     let thumbLargeWidth: CGFloat = 32.0
-    let thumbLargeHeight: CGFloat = 42.0
+    let thumbLargeHeight: CGFloat = 36.0
     
     let pageNumberWidth: CGFloat = 96.0
     let pageNumberHeight: CGFloat = 30.0
@@ -292,8 +292,11 @@ open class UXMPageScrubber: UIToolbar {
         return page + 1
     }
     
-    @objc func scrubberTouchDown(_ scrubber: UXMPageScrubberTrackControl) {
-        let page = scrubberPageNumber(scrubber)
+    func refreshScrubber(_ scrubber: UXMPageScrubberTrackControl? = nil) {
+        let innerScrubber = scrubber != nil ? scrubber : self.scrubber
+        guard innerScrubber != nil else { return }
+        
+        let page = scrubberPageNumber(self.scrubber)
         
         if page != document.currentPage {
             updatePageNumberText(page)
@@ -301,7 +304,12 @@ open class UXMPageScrubber: UIToolbar {
             
             restartTrackTimer()
         }
-        scrubber.tag = page
+        
+        innerScrubber!.tag = page
+    }
+    
+    @objc func scrubberTouchDown(_ scrubber: UXMPageScrubberTrackControl) {
+        refreshScrubber(scrubber)
     }
     
     @objc func scrubberTouchUp(_ scrubber: UXMPageScrubberTrackControl) {

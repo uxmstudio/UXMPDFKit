@@ -9,9 +9,7 @@
 import UIKit
 import SafariServices
 
-open class UXMPDFViewController: UIViewController {
-    private let kScrubberDefaulHeight: CGFloat = 44
-    
+open class UXMPDFViewController: UIViewController {    
     /// A boolean value that determines whether show and use only pen tool
     open var signatureMode: Bool = false
     
@@ -68,13 +66,12 @@ open class UXMPDFViewController: UIViewController {
     
     /// A reference to the page scrubber bar
     var pageScrubber: UXMPageScrubber!
+    
     private(set) open lazy var formController: UXMFormViewController = UXMFormViewController(document: self.document)
     private(set) open lazy var annotationController: UXMAnnotationController = UXMAnnotationController(document: self.document, delegate: self)
     
     fileprivate var showingAnnotations = false
     fileprivate var showingFormFilling = true
-    
-    fileprivate var currentPageScrubberConstraint: NSLayoutConstraint?
     
     /**
      Initializes a new reader with a given document
@@ -112,8 +109,8 @@ open class UXMPDFViewController: UIViewController {
     
     override open func viewDidLoad() {
         super.viewDidLoad()
-        
-        pageScrubber = UXMPageScrubber(frame: CGRect(x: 0, y: view.frame.size.height - bottomLayoutGuide.length, width: view.frame.size.width, height: calculateBottomScrubberHeight()), document: document)
+
+        pageScrubber = UXMPageScrubber(frame: CGRect(x: 0, y: view.frame.size.height - bottomLayoutGuide.length, width: view.frame.size.width, height: 44), document: document)
         pageScrubber.scrubberDelegate = self
         pageScrubber.translatesAutoresizingMaskIntoConstraints = false
         
@@ -147,11 +144,15 @@ open class UXMPDFViewController: UIViewController {
         collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        pageScrubber.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            pageScrubber.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        }else {
+            pageScrubber.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
+        
         pageScrubber.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         pageScrubber.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        pageScrubber.heightAnchor.constraint(equalToConstant: calculateBottomScrubberHeight()).isActive = true
-        
+        pageScrubber.heightAnchor.constraint(equalToConstant: 44).isActive = true
         pageScrubber.sizeToFit()
         
         reloadBarButtons()
@@ -358,28 +359,7 @@ open class UXMPDFViewController: UIViewController {
     }
     
     @objc private func orientationDidChange(_ notification: Notification? = nil) {
-        guard self.pageScrubber != nil else { return }
-        let height = calculateBottomScrubberHeight()
-        
-        if self.currentPageScrubberConstraint != nil {
-            self.currentPageScrubberConstraint!.constant = calculateBottomScrubberHeight()
-        } else {
-            self.currentPageScrubberConstraint = self.pageScrubber.heightAnchor.constraint(equalToConstant: height)
-            self.currentPageScrubberConstraint!.isActive = true
-        }
-    }
-    
-    private func calculateBottomScrubberHeight() -> CGFloat {
-        switch UIApplication.shared.statusBarOrientation {
-        case .portrait:
-            return kScrubberDefaulHeight + UIScreen.main.topSafeAreaInset
-            
-        case .portraitUpsideDown:
-            return kScrubberDefaulHeight + UIScreen.main.bottomSafeAreaInset
-            
-        default:
-            return kScrubberDefaulHeight
-        }
+        self.pageScrubber.refreshScrubber()
     }
 }
 

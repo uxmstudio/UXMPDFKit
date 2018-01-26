@@ -200,7 +200,7 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
     }
 
     open func zoomReset() {
-        zoomScale = minimumZoomScale
+        zoomScale = minimumZoomScale == CGFloat.infinity ? 0 : minimumZoomScale
 
         let offsetX = max((self.bounds.size.width - self.contentSize.width) * 0.5, 0.0)
         let offsetY = max((self.bounds.size.height - self.contentSize.height) * 0.5, 0.0)
