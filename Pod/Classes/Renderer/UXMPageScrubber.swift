@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol UXMPageScrubberDelegate {
+public protocol UXMPageScrubberDelegate : class {
     func scrubber(_ scrubber: UXMPageScrubber, selectedPage: Int)
 }
 
@@ -16,7 +16,7 @@ open class UXMPageScrubber: UIToolbar {
     let document: UXMPDFDocument
     var scrubber = UXMPageScrubberTrackControl()
     
-    open var scrubberDelegate: UXMPageScrubberDelegate?
+    open weak var scrubberDelegate: UXMPageScrubberDelegate?
     let thumbBackgroundColor = UIColor.white.withAlphaComponent(0.7)
     
     let thumbSmallGap: CGFloat = 2.0
@@ -133,8 +133,8 @@ open class UXMPageScrubber: UIToolbar {
         controlRect.size.width = controlWidth
         
         let widthDelta = containerView.bounds.size.width - controlWidth
-        let x = Int(widthDelta / 2.0)
-        controlRect.origin.x = CGFloat(x)
+        let x = CGFloat(widthDelta / 2.0)
+        controlRect.origin.x = x
         scrubber.frame = controlRect
         
         if pageThumbView == nil {

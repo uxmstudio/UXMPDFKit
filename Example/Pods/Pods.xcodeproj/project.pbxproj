@@ -21,6 +21,8 @@
 		37C1CD56A692371828740DFCEE4A9128 /* UXMPDFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C998B073AF0AE6121E63EFF482E2E251 /* UXMPDFViewController.swift */; };
 		38629AF01DDA548700DF2B43 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38629AEF1DDA548700DF2B43 /* UIColor.swift */; };
 		38629AF21DDA55DF00DF2B43 /* UXMToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38629AF11DDA55DF00DF2B43 /* UXMToggleButton.swift */; };
+		407215BD201B34B40099F92B /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407215BC201B34B40099F92B /* UIView.swift */; };
+		407215C0201B4EBC0099F92B /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407215BF201B4EBC0099F92B /* UIScreen.swift */; };
 		4226B8E079C7A46273F41F374F2D54EB /* UXMDocumentLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49FB5E98854EBDE8CCAB4C0137D1986 /* UXMDocumentLink.swift */; };
 		4431B8FC918BE6C9C21DCC72EDA860E6 /* Pods-UXMPDFKit_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 73B9DE7CB16631F30FAE38D53282A2FE /* Pods-UXMPDFKit_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4B1F57EBF4BECAEC47EEF57BD3CA1AD7 /* UXMAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FD1010A27EE6442B7768D3B955DBF9 /* UXMAction.swift */; };
@@ -89,6 +91,8 @@
 		38629AF11DDA55DF00DF2B43 /* UXMToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UXMToggleButton.swift; sourceTree = "<group>"; };
 		38A6B7046D88F318BCDF67B75969CABF /* UXMPDFKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UXMPDFKit-umbrella.h"; sourceTree = "<group>"; };
 		3CC32D4C69A270C7F52DFE49BEE6E162 /* UXMPDFKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UXMPDFKit-dummy.m"; sourceTree = "<group>"; };
+		407215BC201B34B40099F92B /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		407215BF201B4EBC0099F92B /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
 		43266A476FB5C6ADDCCBECEB16E9D513 /* UXMPageScrubberThumb.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPageScrubberThumb.swift; sourceTree = "<group>"; };
 		46276AA25C0911175B06F6F426E499D5 /* UXMAnnotation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMAnnotation.swift; sourceTree = "<group>"; };
 		4E1B16E7B9A2A6B1300E0AE0B3DD0ED6 /* UXMPDFDocument.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPDFDocument.swift; sourceTree = "<group>"; };
@@ -219,6 +223,8 @@
 				612E00401E424EBF00C42D3E /* CGRect.swift */,
 				38629AEF1DDA548700DF2B43 /* UIColor.swift */,
 				610688711E3A4F9900A85AF0 /* UIViewController.swift */,
+				407215BC201B34B40099F92B /* UIView.swift */,
+				407215BF201B4EBC0099F92B /* UIScreen.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -584,11 +590,13 @@
 				F9C1E676BBEAC0A22212CD00437C1073 /* UXMFormTextField.swift in Sources */,
 				1A6C84063FC233E27AEA75D7300DFD96 /* UXMFormViewController.swift in Sources */,
 				61C3A26E1EC2859A00807C4B /* ResizeableView.swift in Sources */,
+				407215BD201B34B40099F92B /* UIView.swift in Sources */,
 				CC2919A41AAA5F6BCC83D700E574345F /* UXMObjectParser.swift in Sources */,
 				CE63E30770B2CDD35ED208AF2A284F5B /* UXMPageContent.swift in Sources */,
 				F77D80C31A9B9DBED9D3A258932F9922 /* UXMPageContentView.swift in Sources */,
 				B6610EC0BB6FC688BE01E6A0CEDAC1E8 /* UXMPageScrubber.swift in Sources */,
 				026FEED112A93B09A02BE58F8F025312 /* UXMPageScrubberThumb.swift in Sources */,
+				407215C0201B4EBC0099F92B /* UIScreen.swift in Sources */,
 				E2EE8D087924795726295ABA80B0079F /* UXMPageScrubberTrackControl.swift in Sources */,
 				38629AF01DDA548700DF2B43 /* UIColor.swift in Sources */,
 				C02189E300C9F94935CFF78ECD34CA3B /* UXMPageTileLayer.swift in Sources */,

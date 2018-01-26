@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol UXMSinglePageViewerDelegate {
+public protocol UXMSinglePageViewerDelegate : class {
     func singlePageViewer(_ collectionView: UXMSinglePageViewer, didDisplayPage page: Int)
     func singlePageViewer(_ collectionView: UXMSinglePageViewer, loadedContent content: UXMPageContentView)
     func singlePageViewer(_ collectionView: UXMSinglePageViewer, selected action: UXMAction)
@@ -27,7 +27,7 @@ open class UXMSinglePageFlowLayout: UICollectionViewFlowLayout {
 
 open class UXMSinglePageViewer: UICollectionView {
 
-    open var singlePageDelegate: UXMSinglePageViewerDelegate?
+    open weak var singlePageDelegate: UXMSinglePageViewerDelegate?
     open var document: UXMPDFDocument?
 
     var internalPage: Int = 0

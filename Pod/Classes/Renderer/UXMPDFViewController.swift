@@ -10,6 +10,7 @@ import UIKit
 import SafariServices
 
 open class UXMPDFViewController: UIViewController {
+    private let kScrubberDefaulHeight: CGFloat = 44
     
     /// A boolean value that determines whether show and use only pen tool
     open var signatureMode: Bool = false
@@ -73,6 +74,7 @@ open class UXMPDFViewController: UIViewController {
     fileprivate var showingAnnotations = false
     fileprivate var showingFormFilling = true
     
+    fileprivate var currentPageScrubberConstraint: NSLayoutConstraint?
     
     /**
      Initializes a new reader with a given document
@@ -111,7 +113,7 @@ open class UXMPDFViewController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         
-        pageScrubber = UXMPageScrubber(frame: CGRect(x: 0, y: view.frame.size.height - bottomLayoutGuide.length, width: view.frame.size.width, height: 44.0), document: document)
+        pageScrubber = UXMPageScrubber(frame: CGRect(x: 0, y: view.frame.size.height - bottomLayoutGuide.length, width: view.frame.size.width, height: calculateBottomScrubberHeight()), document: document)
         pageScrubber.scrubberDelegate = self
         pageScrubber.translatesAutoresizingMaskIntoConstraints = false
         
@@ -148,7 +150,7 @@ open class UXMPDFViewController: UIViewController {
         pageScrubber.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         pageScrubber.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         pageScrubber.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        pageScrubber.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
+        pageScrubber.heightAnchor.constraint(equalToConstant: calculateBottomScrubberHeight()).isActive = true
         
         pageScrubber.sizeToFit()
         
@@ -157,6 +159,8 @@ open class UXMPDFViewController: UIViewController {
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange(_:)), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
         collectionView.collectionViewLayout.invalidateLayout()
     }
@@ -171,6 +175,8 @@ open class UXMPDFViewController: UIViewController {
     
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
         
         self.annotationController.finishAnnotation()
         autoSaveAction(self.document, self.annotationController)
@@ -349,6 +355,31 @@ open class UXMPDFViewController: UIViewController {
     
     @objc func dismissModal() {
         modalDoneButtonTouched?()
+    }
+    
+    @objc private func orientationDidChange(_ notification: Notification? = nil) {
+        guard self.pageScrubber != nil else { return }
+        let height = calculateBottomScrubberHeight()
+        
+        if self.currentPageScrubberConstraint != nil {
+            self.currentPageScrubberConstraint!.constant = calculateBottomScrubberHeight()
+        } else {
+            self.currentPageScrubberConstraint = self.pageScrubber.heightAnchor.constraint(equalToConstant: height)
+            self.currentPageScrubberConstraint!.isActive = true
+        }
+    }
+    
+    private func calculateBottomScrubberHeight() -> CGFloat {
+        switch UIApplication.shared.statusBarOrientation {
+        case .portrait:
+            return kScrubberDefaulHeight + UIScreen.main.topSafeAreaInset
+            
+        case .portraitUpsideDown:
+            return kScrubberDefaulHeight + UIScreen.main.bottomSafeAreaInset
+            
+        default:
+            return kScrubberDefaulHeight
+        }
     }
 }
 

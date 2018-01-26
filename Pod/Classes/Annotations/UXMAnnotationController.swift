@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol UXMAnnotationControllerProtocol {
+public protocol UXMAnnotationControllerProtocol : class {
     func annotationWillStart(touch: UITouch) -> Int?
 }
 
@@ -40,7 +40,7 @@ open class UXMAnnotationController: UIViewController {
     var buttons: [UXMBarButton] = []
     
     /// Delegate reference for annotation events
-    var annotationDelegate: UXMAnnotationControllerProtocol?
+    weak var annotationDelegate: UXMAnnotationControllerProtocol?
     
     /// Current annotation
     open var currentAnnotation: UXMAnnotation?

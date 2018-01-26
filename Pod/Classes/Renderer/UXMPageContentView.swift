@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol UXMPageContentViewDelegate {
+public protocol UXMPageContentViewDelegate : class {
     func contentView(_ contentView: UXMPageContentView, didSelect action: UXMAction)
     func contentView(_ contentView: UXMPageContentView, didSelect annotation: UXMPDFAnnotationView)
     func contentView(_ contentView: UXMPageContentView, tapped recognizer: UITapGestureRecognizer)
@@ -20,7 +20,7 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
     let containerView: UIView
 
     open var page: Int
-    open var contentDelegate: UXMPageContentViewDelegate?
+    open weak var contentDelegate: UXMPageContentViewDelegate?
     open var viewDidZoom: ((CGFloat) -> Void)?
     fileprivate var PDFPageContentViewContext = 0
     fileprivate var previousScale: CGFloat = 1.0
