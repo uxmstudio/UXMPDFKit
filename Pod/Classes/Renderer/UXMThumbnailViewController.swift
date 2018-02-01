@@ -17,16 +17,17 @@ open class UXMThumbnailViewController: UIViewController {
     var document: UXMPDFDocument!
     
     var collectionView: UICollectionView!
+    
+    public weak var delegate: UXMThumbnailViewControllerDelegate?
+    
     private var flowLayout: UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsetsMake(20, 20, 20, 20)
-        layout.minimumLineSpacing = 0.0
+        layout.minimumLineSpacing = 20.0
         layout.minimumInteritemSpacing = 0.0
         return layout
     }
-    
-    public weak var delegate: UXMThumbnailViewControllerDelegate?
 
     public init(document: UXMPDFDocument) {
         super.init(nibName: nil, bundle: nil)
