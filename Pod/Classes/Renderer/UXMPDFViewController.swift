@@ -9,7 +9,14 @@
 import UIKit
 import SafariServices
 
-open class UXMPDFViewController: UIViewController {    
+public protocol UXMPDFViewControllerDelegate : class {
+    func editingDidEnd(_ document: UXMPDFDocument)
+}
+
+open class UXMPDFViewController: UIViewController {
+    /// Delegate reference for editing events
+    open weak var delegate: UXMPDFViewControllerDelegate? = nil
+    
     /// A boolean value that determines whether show and use only pen tool
     open var signatureMode: Bool = false
     
@@ -59,6 +66,8 @@ open class UXMPDFViewController: UIViewController {
     open lazy var autoSaveAction: (UXMPDFDocument, UXMAnnotationController) -> () = { document, annotationController in
         document.annotations = annotationController.annotations
         document.save()
+        
+        self.delegate?.editingDidEnd(document)
     }
     
     /// A reference to the collection view handling page presentation
@@ -367,10 +376,10 @@ extension UXMPDFViewController: UXMAnnotationControllerProtocol {
     public func annotationWillStart(touch: UITouch) -> Int? {
         let tapPoint = touch.location(in: collectionView)
         guard let pageIndex = collectionView.indexPathForItem(at: tapPoint)?.row else { return nil }
-        return pageIndex + 1
+        let index = pageIndex + 1
+        return index
     }
 }
-
 
 extension UXMPDFViewController: UXMPageScrubberDelegate {
     public func scrubber(_ scrubber: UXMPageScrubber, selectedPage: Int) {
