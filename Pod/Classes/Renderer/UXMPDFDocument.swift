@@ -228,10 +228,19 @@ open class UXMPDFDocument: NSObject, NSCoding {
     }
     
     open func save() {
+        guard let filePath = fileUrl?.path else { return }
         
-        //TODO: Better solution to support NSData
-        if let filePath = fileUrl?.path {
-            let _ = self.archiveWithFileAtPath(filePath)
+        // TODO: Better solution to support NSData
+        let _ = self.archiveWithFileAtPath(filePath)
+    }
+    
+    open func clearEncodedAnnotations() {
+        guard let filePath = fileUrl?.path else { return }
+        
+        let archiveFilePath = UXMPDFDocument.archiveFilePathForFile(path: filePath)
+        
+        if FileManager.default.fileExists(atPath: archiveFilePath) {
+            try? FileManager.default.removeItem(atPath: archiveFilePath)
         }
     }
     

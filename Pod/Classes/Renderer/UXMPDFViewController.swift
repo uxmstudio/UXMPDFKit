@@ -299,14 +299,20 @@ open class UXMPDFViewController: UIViewController {
         reloadBarButtons()
     }
     
-    open func savePdfFile() -> URL {
+    open func savePdfFile(_ clearEncodedAnnotations: Bool = false) -> URL {
         self.annotationController.finishAnnotation()
         let renderer = UXMRenderController(document: document, controllers: [
             annotationController,
             formController
         ])
+        
         let pdf = renderer.renderOntoPDF()
-        return pdf;
+        
+        if clearEncodedAnnotations {
+            document.clearEncodedAnnotations()
+        }
+        
+        return pdf
     }
     
     func showActivitySheet() {
