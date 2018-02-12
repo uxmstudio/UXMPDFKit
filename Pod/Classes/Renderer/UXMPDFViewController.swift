@@ -67,7 +67,9 @@ open class UXMPDFViewController: UIViewController {
         document.annotations = annotationController.annotations
         document.save()
         
-        self.delegate?.editingDidEnd(document)
+        if self.edited {
+            self.delegate?.editingDidEnd(document)
+        }
     }
     
     /// A reference to the collection view handling page presentation
@@ -81,6 +83,8 @@ open class UXMPDFViewController: UIViewController {
     
     fileprivate var showingAnnotations = false
     fileprivate var showingFormFilling = true
+    
+    fileprivate var edited = false
     
     /**
      Initializes a new reader with a given document
@@ -374,6 +378,8 @@ open class UXMPDFViewController: UIViewController {
 
 extension UXMPDFViewController: UXMAnnotationControllerProtocol {
     public func annotationWillStart(touch: UITouch) -> Int? {
+        self.edited = true
+        
         let tapPoint = touch.location(in: collectionView)
         guard let pageIndex = collectionView.indexPathForItem(at: tapPoint)?.row else { return nil }
         let index = pageIndex + 1

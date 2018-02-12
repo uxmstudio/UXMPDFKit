@@ -85,7 +85,7 @@ open class UXMPDFDocument: NSObject, NSCoding {
         
         try self.loadDocument()
         
-        self.save()
+        // self.save()
     }
     
     public init(fileData: NSData, password: String? = nil) throws {
