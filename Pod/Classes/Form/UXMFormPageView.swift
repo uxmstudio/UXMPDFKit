@@ -82,7 +82,7 @@ open class UXMFormPageView: UIView {
     var fieldViews: [UXMFormField] = []
     var zoomScale: CGFloat = 1.0
 
-    var activeWidgetAnnotationView: UXMFormTextField?
+    var activeWidgetAnnotationView: UXMFormField?
 
     var tapGestureRecognizer: UITapGestureRecognizer?
     

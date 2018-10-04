@@ -200,16 +200,16 @@ open class UXMPDFDocument: NSObject, NSCoding {
         return ProcessInfo.processInfo.globallyUniqueString
     }
     
-    open static func documentsPath() -> String {
+    public static func documentsPath() -> String {
         return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     }
     
-    open static func applicationPath() -> String {
+    public static func applicationPath() -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         return (paths.first! as NSString).deletingLastPathComponent
     }
     
-    open static func applicationSupportPath() -> String {
+    public static func applicationSupportPath() -> String {
         let fileManager = FileManager()
         let pathURL = try! fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         return pathURL.path
