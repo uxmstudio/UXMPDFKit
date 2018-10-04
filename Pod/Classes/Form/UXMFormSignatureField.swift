@@ -133,6 +133,13 @@ class UXMFormSignatureViewController: UIViewController {
     self.signatureView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
   }
 
+  override func viewWillDisappear(_ animated: Bool) {
+    if (self.isMovingFromParentViewController) {
+      let value = UIInterfaceOrientation.portrait.rawValue
+      UIDevice.current.setValue(value, forKey: "orientation")
+    }
+  }
+
   @IBAction func tappedDone() {
 
     self.delegate?.completedSignatureDrawing(field: self.signatureView)
