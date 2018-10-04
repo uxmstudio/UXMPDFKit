@@ -123,6 +123,10 @@ open class UXMFormTextField: UXMFormField {
             NSAttributedStringKey.font: font
             ])
     }
+
+  func resign() {
+    textEntryBox.resignFirstResponder()
+  }
 }
 
 extension UXMFormTextField: UITextFieldDelegate {

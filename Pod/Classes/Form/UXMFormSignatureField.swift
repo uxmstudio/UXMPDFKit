@@ -96,6 +96,9 @@ protocol UXMFormSignatureDelegate: class {
 
 class UXMFormSignatureViewController: UIViewController {
 
+  // Allow View to rotate disregarding current app orientation restrictions
+  @objc func canRotate() -> Void {}
+
   var signatureView = UXMFormFieldSignatureCaptureView()
   weak var delegate: UXMFormSignatureDelegate?
 

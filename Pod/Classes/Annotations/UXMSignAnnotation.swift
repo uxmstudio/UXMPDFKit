@@ -79,22 +79,9 @@ extension UXMSignAnnotation: UXMAnnotation {
 
   public func drawInContext(_ context: CGContext) {
     UIGraphicsPushContext(context)
-    context.setAlpha(1.0)
-//
-//    let nsText = self.text as NSString
-//    let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-//    paragraphStyle.alignment = NSTextAlignment.left
-//
-//    let attributes: [NSAttributedStringKey: AnyObject] = [
-//      NSAttributedStringKey.font: font,
-//      NSAttributedStringKey.foregroundColor: UIColor.black,
-//      NSAttributedStringKey.paragraphStyle: paragraphStyle
-//    ]
-//
+
     guard let size = self.image?.size else { return }
     let imageRect = CGRect(origin: rect.origin, size: size)
-//
-//    nsText.draw(in: textRect, withAttributes: attributes)
 
     guard let cgImage = self.image?.cgImage else { return }
     // Draw our CGImage in the context of our PDFAnnotation bounds
