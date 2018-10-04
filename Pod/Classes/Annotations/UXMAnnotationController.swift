@@ -298,6 +298,7 @@ open class UXMAnnotationController: UIViewController {
     private func createNewAnnotation() {
         if let annotationType = self.annotationType {
             currentAnnotation = annotationType.init()
+            currentAnnotation?.delegate = self
         }
     }
     
@@ -315,8 +316,8 @@ extension UXMAnnotationController: UXMPDFAnnotationEvent {
     
     public func annotation(annotation: UXMAnnotation, selected action: String) {
         if action == "delete" {
-            self.annotations.remove(annotation: annotation)
-            
+          self.annotations.remove(annotation: annotation)
+
             /// VERY DIRTY FIX LATER
             if let annotationPage = annotation.page,
                 let pageContentView = self.pageContentViewFor(page: annotationPage) {
