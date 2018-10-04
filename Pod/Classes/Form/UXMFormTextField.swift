@@ -124,9 +124,9 @@ open class UXMFormTextField: UXMFormField {
             ])
     }
 
-  func resign() {
-    textEntryBox.resignFirstResponder()
-  }
+    override func resign() {
+      textEntryBox.resignFirstResponder()
+    }
 }
 
 extension UXMFormTextField: UITextFieldDelegate {
@@ -137,12 +137,22 @@ extension UXMFormTextField: UITextFieldDelegate {
     
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         delegate?.formFieldEntered(self)
+        self.parent?.activeWidgetAnnotationView = self
+    }
+
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+        self.parent?.activeWidgetAnnotationView = nil
     }
 }
 
 extension UXMFormTextField: UITextViewDelegate {
     public func textViewDidBeginEditing(_ textView: UITextView) {
         delegate?.formFieldEntered(self)
+        self.parent?.activeWidgetAnnotationView = self
+    }
+
+    public func textViewDidEndEditing(_ textView: UITextView) {
+        self.parent?.activeWidgetAnnotationView = nil;
     }
     
     public func textViewDidChange(_ textView: UITextView) {
