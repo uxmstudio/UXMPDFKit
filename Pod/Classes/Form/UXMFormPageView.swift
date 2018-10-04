@@ -81,6 +81,10 @@ open class UXMFormPageView: UIView {
     var fields: [UXMFormFieldObject]
     var fieldViews: [UXMFormField] = []
     var zoomScale: CGFloat = 1.0
+
+    var activeWidgetAnnotationView: UXMFormField?
+
+    var tapGestureRecognizer: UITapGestureRecognizer?
     
     let cropBox: CGRect
     let boundingBox: CGRect
@@ -92,6 +96,9 @@ open class UXMFormPageView: UIView {
         self.boundingBox = boundingBox
         self.fields = fields
         super.init(frame: frame)
+
+        self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
+        self.addGestureRecognizer(tapGestureRecognizer!)
         
         for field in fields {
             guard let fieldView = field.createFormField() else { continue }
@@ -128,4 +135,26 @@ open class UXMFormPageView: UIView {
             field.renderInContext(context)
         }
     }
+}
+
+extension UXMFormPageView: UIGestureRecognizerDelegate {
+
+  public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    return true
+  }
+
+  public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+    if (activeWidgetAnnotationView == nil) { return false }
+    let rect = activeWidgetAnnotationView?.frame
+    if(!(rect?.contains(touch.location(in: self)))!) {
+      if (activeWidgetAnnotationView?.isKind(of: UITextView.self))! {
+        activeWidgetAnnotationView?.resignFirstResponder()
+      } else {
+//        [_activeWidgetAnnotationView resign];
+      }
+    }
+
+    return false
+  }
+
 }
