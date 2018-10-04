@@ -82,7 +82,7 @@ open class UXMFormPageView: UIView {
     var fieldViews: [UXMFormField] = []
     var zoomScale: CGFloat = 1.0
 
-    var activeWidgetAnnotationView: UXMFormField?
+    var activeWidgetAnnotationView: UXMFormTextField?
 
     var tapGestureRecognizer: UITapGestureRecognizer?
     
@@ -98,10 +98,12 @@ open class UXMFormPageView: UIView {
         super.init(frame: frame)
 
         self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
+        self.tapGestureRecognizer?.delegate = self
         self.addGestureRecognizer(tapGestureRecognizer!)
         
         for field in fields {
             guard let fieldView = field.createFormField() else { continue }
+            fieldView.parent = self
             addSubview(fieldView)
             adjustFrame(fieldView)
             fieldViews.append(fieldView)
@@ -150,7 +152,7 @@ extension UXMFormPageView: UIGestureRecognizerDelegate {
       if (activeWidgetAnnotationView?.isKind(of: UITextView.self))! {
         activeWidgetAnnotationView?.resignFirstResponder()
       } else {
-//        [_activeWidgetAnnotationView resign];
+        activeWidgetAnnotationView?.resign()
       }
     }
 
