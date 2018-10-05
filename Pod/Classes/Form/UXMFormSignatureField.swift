@@ -136,6 +136,7 @@ class UXMFormSignatureViewController: UIViewController {
   override func viewWillDisappear(_ animated: Bool) {
       let value = UIInterfaceOrientation.portrait.rawValue
       UIDevice.current.setValue(value, forKey: "orientation")
+      UINavigationController.attemptRotationToDeviceOrientation()
   }
 
   @IBAction func tappedDone() {
