@@ -94,10 +94,10 @@ extension UXMTextAnnotation: UXMAnnotation {
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paragraphStyle.alignment = NSTextAlignment.left
         
-        let attributes: [NSAttributedStringKey:AnyObject] = [
-            NSAttributedStringKey.font: font,
-            NSAttributedStringKey.foregroundColor: UIColor.black,
-            NSAttributedStringKey.paragraphStyle: paragraphStyle
+        let attributes: [NSAttributedString.Key:AnyObject] = [
+            NSAttributedString.Key.font: font,
+            NSAttributedString.Key.foregroundColor: UIColor.black,
+            NSAttributedString.Key.paragraphStyle: paragraphStyle
         ]
         
         let size = nsText.size(withAttributes: attributes)

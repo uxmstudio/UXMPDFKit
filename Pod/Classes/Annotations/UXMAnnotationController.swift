@@ -137,7 +137,7 @@ open class UXMAnnotationController: UIViewController {
         for annotation in annotationsForPage {
             let view = annotation.mutableView()
             contentView.contentView.addSubview(view)
-            contentView.contentView.bringSubview(toFront: view)
+            contentView.contentView.bringSubviewToFront(view)
         }
     }
     
@@ -198,7 +198,7 @@ open class UXMAnnotationController: UIViewController {
     }
     
     func loadButtons(for annotations: [UXMAnnotation.Type]) {
-        self.buttons = self.annotationTypes.flatMap {
+        self.buttons = self.annotationTypes.compactMap {
             
             if let annotation = $0 as? UXMPDFAnnotationButtonable.Type {
                 return PDFAnnotationBarButton(

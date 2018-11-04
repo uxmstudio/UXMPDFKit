@@ -59,7 +59,7 @@ open class UXMFormTextField: UXMFormField {
                 textView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 textView.delegate = self
                 textView.isScrollEnabled = true
-                textView.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4)
+                textView.textContainerInset = UIEdgeInsets.init(top: 4, left: 4, bottom: 4, right: 4)
                 let fontSize = fontSizeForRect(frame) < 13.0 ? fontSizeForRect(frame) : 13.0
                 textView.font = UIFont.systemFont(ofSize: fontSize)
             }
@@ -119,8 +119,8 @@ open class UXMFormTextField: UXMFormField {
         }
         
         /// UGLY
-        (text as NSString!).draw(in: frame, withAttributes: [
-            NSAttributedStringKey.font: font
+        (text as NSString).draw(in: frame, withAttributes: [
+            NSAttributedString.Key.font: font
             ])
     }
 }

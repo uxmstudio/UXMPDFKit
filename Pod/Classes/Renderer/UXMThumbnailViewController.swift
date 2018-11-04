@@ -23,7 +23,7 @@ open class UXMThumbnailViewController: UIViewController {
     private var flowLayout: UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsetsMake(20, 20, 20, 20)
+        layout.sectionInset = UIEdgeInsets.init(top: 20, left: 20, bottom: 20, right: 20)
         layout.minimumLineSpacing = 20.0
         layout.minimumInteritemSpacing = 0.0
         return layout

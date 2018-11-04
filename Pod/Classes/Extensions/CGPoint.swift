@@ -19,8 +19,8 @@ extension CGPoint {
     func rect(from point: CGPoint) -> CGRect {
         return CGRect(x: min(self.x, point.x),
                       y: min(self.y, point.y),
-                      width: fabs(self.x - point.x),
-                      height: fabs(self.y - point.y))
+                      width: abs(self.x - point.x),
+                      height: abs(self.y - point.y))
     }
     
     /// Get the distance between two points

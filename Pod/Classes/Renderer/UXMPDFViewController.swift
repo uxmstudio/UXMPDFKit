@@ -48,7 +48,7 @@ open class UXMPDFViewController: UIViewController {
     open var modalDoneButtonTouched: (() -> ())?
     
     /// The scroll direction of the reader
-    open var scrollDirection: UICollectionViewScrollDirection = .horizontal
+    open var scrollDirection: UICollectionView.ScrollDirection = .horizontal
     
     /// A reference to the document that is being displayed
     var document: UXMPDFDocument!
@@ -174,7 +174,7 @@ open class UXMPDFViewController: UIViewController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange(_:)), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
         
         collectionView.collectionViewLayout.invalidateLayout()
     }
@@ -199,12 +199,14 @@ open class UXMPDFViewController: UIViewController {
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
-        coordinator.animate(alongsideTransition: { (context) in
-            self.collectionView.contentInset = UIEdgeInsetsMake(self.topLayoutGuide.length, 0, self.bottomLayoutGuide.length, 0)
-            self.collectionView.collectionViewLayout.invalidateLayout()
-            self.pageScrubber.sizeToFit()
-        }, completion: { (context) in
-            self.collectionView.displayPage(self.document.currentPage, animated: false)
+        coordinator.animate(alongsideTransition: { [weak self] (context) in
+            guard let zelf = self else { return }
+            zelf.collectionView.contentInset = UIEdgeInsets(top: zelf.topLayoutGuide.length, left: 0, bottom: zelf.bottomLayoutGuide.length, right: 0)
+            zelf.collectionView.collectionViewLayout.invalidateLayout()
+            zelf.pageScrubber.sizeToFit()
+        }, completion: { [weak self] (context) in
+            guard let zelf = self else { return }
+            zelf.collectionView.displayPage(zelf.document.currentPage, animated: false)
         })
     }
     

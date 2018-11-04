@@ -70,7 +70,7 @@ open class UXMPageScrubber: UIToolbar {
         let pageNumberLabel = UILabel(frame: textRect)
         
         pageNumberLabel.autoresizesSubviews = false
-        pageNumberLabel.autoresizingMask = UIViewAutoresizing()
+        pageNumberLabel.autoresizingMask = UIView.AutoresizingMask()
         pageNumberLabel.textAlignment = .center
         pageNumberLabel.backgroundColor = UIColor.clear
         pageNumberLabel.textColor = UIColor.darkText

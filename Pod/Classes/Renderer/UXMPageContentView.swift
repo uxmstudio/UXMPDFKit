@@ -72,12 +72,12 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(UXMPageContentView.keyboardWillShowNotification(_:)),
-            name: .UIKeyboardWillShow,
+            name: UIResponder.keyboardWillShowNotification,
             object: nil)
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(UXMPageContentView.keyboardWillHideNotification(_:)),
-            name: .UIKeyboardWillHide,
+            name: UIResponder.keyboardWillHideNotification,
             object: nil
         )
 
@@ -106,8 +106,8 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
 
         self.removeObserver(self, forKeyPath: "frame")
     }
@@ -229,7 +229,7 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
     func updateBottomLayoutConstraintWithNotification(_ notification: Notification, show:Bool) {
         let userInfo = (notification as NSNotification).userInfo!
 
-        let keyboardEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardEndFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let convertedKeyboardEndFrame = self.convert(keyboardEndFrame, from: self.window)
 
         let height: CGFloat
@@ -239,7 +239,7 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
             height = 0
         }
 
-        contentInset = UIEdgeInsetsMake(0, 0, height, 0)
+        contentInset = UIEdgeInsets.init(top: 0, left: 0, bottom: height, right: 0)
     }
 
 
