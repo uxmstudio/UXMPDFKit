@@ -39,6 +39,7 @@
 		61D72DC11DDB7C15003CE472 /* UXMTextParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D72DC01DDB7C15003CE472 /* UXMTextParser.swift */; };
 		6CBA8437445A566C49E81E0FA15F8B89 /* Pods-UXMPDFKit_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = EF5680F0C21DEB74F7B47666298F36DB /* Pods-UXMPDFKit_Example-dummy.m */; };
 		75332EB7DF07634FEBA4DB30AED834DE /* UXMBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1A9EB3AA234A93FFED5E5EC31C26C0 /* UXMBarButton.swift */; };
+		755CCF35216562850025C7CB /* UXMSignAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755CCF34216562850025C7CB /* UXMSignAnnotation.swift */; };
 		75EBCC5DA128D1197EE38C0D71ED2E61 /* UXMSinglePageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33BD08506077733D10565FD32AAE01D /* UXMSinglePageViewer.swift */; };
 		A541F16F605856534EE1CB630D115E97 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
 		AEBCD8510D17EB5BB1AF97C56DA3E0A4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
@@ -111,6 +112,7 @@
 		6EC48780BD915E4D5ACCE82C88A1AB13 /* UXMFormField.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMFormField.swift; sourceTree = "<group>"; };
 		73B9DE7CB16631F30FAE38D53282A2FE /* Pods-UXMPDFKit_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-UXMPDFKit_Example-umbrella.h"; sourceTree = "<group>"; };
 		75574BE886F738F3093CE3A2F50EDEC8 /* Pods-UXMPDFKit_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-UXMPDFKit_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		755CCF34216562850025C7CB /* UXMSignAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UXMSignAnnotation.swift; sourceTree = "<group>"; };
 		76DA813643EF21961CF0953E75AD135F /* CGPDFDocument.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CGPDFDocument.swift; sourceTree = "<group>"; };
 		7F0671AD3DB0F8A78F7FA1753FD4D804 /* UXMDictionary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMDictionary.swift; sourceTree = "<group>"; };
 		84EF34252AF2C6686B91CF82C433AF97 /* Pods-UXMPDFKit_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-UXMPDFKit_Example-resources.sh"; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 				B68ECDBCA8C7CBFC7A4C746BEAA00756 /* UXMAnnotationStore.swift */,
 				B9875B88D900C485C9301E8616F19BC5 /* UXMPathAnnotation.swift */,
 				36255D8C8E8839365B8EB3FF153756B5 /* UXMTextAnnotation.swift */,
+				755CCF34216562850025C7CB /* UXMSignAnnotation.swift */,
 			);
 			path = Annotations;
 			sourceTree = "<group>";
@@ -595,6 +598,7 @@
 				CE63E30770B2CDD35ED208AF2A284F5B /* UXMPageContent.swift in Sources */,
 				F77D80C31A9B9DBED9D3A258932F9922 /* UXMPageContentView.swift in Sources */,
 				B6610EC0BB6FC688BE01E6A0CEDAC1E8 /* UXMPageScrubber.swift in Sources */,
+				755CCF35216562850025C7CB /* UXMSignAnnotation.swift in Sources */,
 				026FEED112A93B09A02BE58F8F025312 /* UXMPageScrubberThumb.swift in Sources */,
 				407215C0201B4EBC0099F92B /* UIScreen.swift in Sources */,
 				E2EE8D087924795726295ABA80B0079F /* UXMPageScrubberTrackControl.swift in Sources */,
