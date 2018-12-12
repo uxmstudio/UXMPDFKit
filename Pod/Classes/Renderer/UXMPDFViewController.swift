@@ -21,7 +21,7 @@ open class UXMPDFViewController: UIViewController {
     open var signatureMode: Bool = false
     
     /// A boolean value that determines whether the navigation bar and scrubber bar hide on screen tap
-    open var hidesBarsOnTap: Bool = true
+    open var hidesBarsOnTap: Bool = false
     
     /// A boolean value that determines if the scrubber bar should be visible
     open var showsScrubber: Bool = true {
@@ -360,16 +360,7 @@ open class UXMPDFViewController: UIViewController {
         }
     }
     
-    /// Toggles the display of the navigation bar and scrubber bar
-    func toggleBars() {
-        collectionView.collectionViewLayout.invalidateLayout()
-        hideBars(state: !(navigationController?.isNavigationBarHidden ?? false))
-    }
-    
     //MARK: - IBActions
-    func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
-        self.toggleBars()
-    }
     
     @objc func shareDocument() {
         self.shareBarButtonAction()
@@ -434,14 +425,12 @@ extension UXMPDFViewController: UXMSinglePageViewerDelegate {
     }
     
     public func singlePageViewer(_ collectionView: UXMSinglePageViewer, tapped recognizer: UITapGestureRecognizer) {
-        if hidesBarsOnTap {
-            handleTap(recognizer)
-        }
         annotationController.select(annotation: nil)
     }
     
     public func singlePageViewerDidBeginDragging() {
-        self.hideBars(state: true)
+      // Do not hide navbar
+        self.hideBars(state: false)
     }
     
     public func singlePageViewerDidEndDragging() { }

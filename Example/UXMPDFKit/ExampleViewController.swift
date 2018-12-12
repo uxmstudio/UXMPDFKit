@@ -20,7 +20,8 @@ class ExampleViewController: UIViewController {
         pdf.annotationController.annotationTypes = [
             PDFHighlighterAnnotation.self,
             PDFPenAnnotation.self,
-            UXMTextAnnotation.self
+            UXMTextAnnotation.self,
+            UXMSignAnnotation.self,
         ]
         
         self.navigationController?.pushViewController(pdf, animated: true)

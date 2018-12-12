@@ -155,6 +155,7 @@ extension UXMFormFieldObject: UXMFormViewDelegate {
 open class UXMFormField: UIView {
     var zoomScale: CGFloat = 1.0
     var options: [AnyObject] = []
+    var parent: UXMFormPageView?
     var baseFrame: CGRect
     var value: AnyObject? {
         didSet {
@@ -211,5 +212,14 @@ open class UXMFormField: UIView {
     
     func renderInContext(_ context: CGContext) {
         
+    }
+
+    func resign() {}
+
+    deinit {
+      if (parent?.activeWidgetAnnotationView == self) {
+        self.resign()
+        parent?.activeWidgetAnnotationView = nil;
+      }
     }
 }

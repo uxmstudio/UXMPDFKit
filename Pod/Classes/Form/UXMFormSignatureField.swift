@@ -27,7 +27,7 @@ open class UXMFormSignatureField: UXMFormField {
         return button
     }()
     
-    lazy fileprivate var signImage:UIImageView = {
+  lazy fileprivate var signImage: UIImageView = {
         var image = UIImageView(frame: CGRect(
             x: 0,
             y: -self.signatureExtraPadding,
@@ -90,12 +90,15 @@ extension UXMFormSignatureField: UXMFormSignatureDelegate {
     }
 }
 
-protocol UXMFormSignatureDelegate : class {
+protocol UXMFormSignatureDelegate: class {
     func completedSignatureDrawing(field: UXMFormFieldSignatureCaptureView)
 }
 
 class UXMFormSignatureViewController: UIViewController {
     
+  // Allow View to rotate disregarding current app orientation restrictions
+  @objc func canRotate() -> Void {}
+
     var signatureView = UXMFormFieldSignatureCaptureView()
     weak var delegate: UXMFormSignatureDelegate?
     
@@ -106,7 +109,7 @@ class UXMFormSignatureViewController: UIViewController {
         action: #selector(UXMFormSignatureViewController.tappedDone)
     )
     
-    lazy fileprivate var clearButton:UIBarButtonItem = UIBarButtonItem(
+  lazy fileprivate var clearButton: UIBarButtonItem = UIBarButtonItem(
         title: "Clear",
         style: .plain,
         target: self,
@@ -129,6 +132,12 @@ class UXMFormSignatureViewController: UIViewController {
         
         self.signatureView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
     }
+
+  override func viewWillDisappear(_ animated: Bool) {
+      let value = UIInterfaceOrientation.portrait.rawValue
+      UIDevice.current.setValue(value, forKey: "orientation")
+      UINavigationController.attemptRotationToDeviceOrientation()
+  }
 
     @IBAction func tappedDone() {
         
@@ -218,7 +227,7 @@ class UXMFormFieldSignatureCaptureView: UIView {
             ctr += 1
             pts[ctr] = touchPoint
             if (ctr == 4) {
-                pts[3] = CGPoint(x: (pts[2].x + pts[4].x)/2.0, y: (pts[2].y + pts[4].y)/2.0)
+        pts[3] = CGPoint(x: (pts[2].x + pts[4].x) / 2.0, y: (pts[2].y + pts[4].y) / 2.0)
                 path.move(to: pts[0])
                 path.addCurve(to: pts[3], controlPoint1: pts[1], controlPoint2: pts[2])
                 
@@ -235,8 +244,8 @@ class UXMFormFieldSignatureCaptureView: UIView {
     override func touchesEnded(_ touches: Set <UITouch>, with event: UIEvent?) {
         if ctr == 0 {
             let touchPoint = pts[0]
-            path.move(to: CGPoint(x: touchPoint.x-1.0,y: touchPoint.y))
-            path.addLine(to: CGPoint(x: touchPoint.x+1.0,y: touchPoint.y))
+      path.move(to: CGPoint(x: touchPoint.x - 1.0, y: touchPoint.y))
+      path.addLine(to: CGPoint(x: touchPoint.x + 1.0, y: touchPoint.y))
             setNeedsDisplay()
         } else {
             ctr = 0
@@ -266,10 +275,10 @@ class UXMFormFieldSignatureCaptureView: UIView {
     }
     
     func getSignatureCropped(scale: CGFloat = 1) -> UIImage? {
-        guard let fullRender = getSignature(scale:scale) else {
+    guard let fullRender = getSignature(scale: scale) else {
             return nil
         }
-        let bounds = scaleRect(path.bounds.insetBy(dx: -strokeWidth/2, dy: -strokeWidth/2), byFactor: scale)
+    let bounds = scaleRect(path.bounds.insetBy(dx: -strokeWidth / 2, dy: -strokeWidth / 2), byFactor: scale)
         guard let imageRef = fullRender.cgImage?.cropping(to: bounds) else {
             return nil
         }
@@ -283,5 +292,31 @@ class UXMFormFieldSignatureCaptureView: UIView {
         scaledRect.size.width *= factor
         scaledRect.size.height *= factor
         return scaledRect
+  }
+
+  // Saves the Signature as a Vector PDF Data blob
+  public func getPDFSignature() -> Data {
+
+    let mutableData = CFDataCreateMutable(nil, 0)
+
+    guard let dataConsumer = CGDataConsumer.init(data: mutableData!) else { fatalError() }
+
+    var rect = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+
+    guard let pdfContext = CGContext(consumer: dataConsumer, mediaBox: &rect, nil) else { fatalError() }
+
+    pdfContext.beginPDFPage(nil)
+    pdfContext.translateBy(x: 0, y: frame.height)
+    pdfContext.scaleBy(x: 1, y: -1)
+    pdfContext.addPath(path.cgPath)
+    pdfContext.setStrokeColor(strokeColor.cgColor)
+    pdfContext.strokePath()
+    pdfContext.saveGState()
+    pdfContext.endPDFPage()
+    pdfContext.closePDF()
+
+    let data = mutableData! as Data
+
+    return data
     }
 }

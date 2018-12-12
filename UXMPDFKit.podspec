@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "UXMPDFKit"
-  s.version          = "0.7.8"
+  s.version          = "0.8.3"
   s.summary          = "A fully functioning PDF reader written completely in Swift"
 
   s.homepage         = "https://github.com/diegostamigni/UXMPDFKit"
@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/diegostamigni/UXMPDFKit.git", :tag => s.version.to_s }
 
   s.requires_arc = true
+  s.swift_version = '4.2'
 
   s.ios.deployment_target = '9.0'
   s.ios.source_files = 'Pod/Classes/**/*'
