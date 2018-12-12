@@ -1,15 +1,15 @@
 {
   "name": "UXMPDFKit",
-  "version": "0.5.1",
+  "version": "0.8.3",
   "summary": "A fully functioning PDF reader written completely in Swift",
-  "homepage": "https://github.com/uxmstudio/UXMPDFKit",
+  "homepage": "https://github.com/diegostamigni/UXMPDFKit",
   "license": "MIT",
   "authors": {
     "Chris Anderson": "chris@uxmstudio.com"
   },
   "source": {
-    "git": "https://github.com/uxmstudio/UXMPDFKit.git",
-    "tag": "0.5.1"
+    "git": "https://github.com/diegostamigni/UXMPDFKit.git",
+    "tag": "0.8.3"
   },
   "requires_arc": true,
   "platforms": {

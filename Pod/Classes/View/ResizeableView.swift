@@ -27,7 +27,7 @@ struct CGPointResizableViewAnchorPointPair {
     var anchorPoint: ResizableViewAnchorPoint
 }
 
-protocol ResizableViewDelegate {
+protocol ResizableViewDelegate : class {
     func resizableViewDidBeginEditing(view: ResizableView)
     func resizableViewDidEndEditing(view: ResizableView)
     func resizableViewDidSelectAction(view: ResizableView, action: String)
@@ -42,7 +42,7 @@ open class ResizableView: UIView {
     var minWidth: CGFloat = 48.0
     var minHeight: CGFloat = 48.0
     var anchorPoint: ResizableViewAnchorPoint?
-    var delegate: ResizableViewDelegate?
+    weak var delegate: ResizableViewDelegate?
     var preventsPositionOutsideSuperview: Bool = true
     var isLocked = false {
         didSet {
@@ -344,7 +344,7 @@ open class ResizableView: UIView {
         self.resignFirstResponder()
     }
     
-    func menuActionDelete(_ sender: Any!) {
+    @objc func menuActionDelete(_ sender: Any!) {
         self.delegate?.resizableViewDidSelectAction(view: self, action: "delete")
     }
     
