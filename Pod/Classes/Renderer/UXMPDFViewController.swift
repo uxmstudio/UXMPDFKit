@@ -51,7 +51,13 @@ open class UXMPDFViewController: UIViewController {
     open var scrollDirection: UICollectionView.ScrollDirection = .horizontal
     
     /// A reference to the document that is being displayed
-    var document: UXMPDFDocument!
+    open var document: UXMPDFDocument! {
+        didSet {
+            if self.isViewLoaded {
+                self.setupUI()
+            }
+        }
+    }
     
     /// A reference to the share button
     var shareBarButtonItem: UIBarButtonItem?
@@ -122,7 +128,14 @@ open class UXMPDFViewController: UIViewController {
     
     override open func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        if self.document != nil {
+            self.setupUI()
+        }
+    }
+    
+    fileprivate func setupUI() {
+        
         pageScrubber = UXMPageScrubber(frame: CGRect(x: 0, y: view.frame.size.height - bottomLayoutGuide.length, width: view.frame.size.width, height: 44), document: document)
         pageScrubber.scrubberDelegate = self
         pageScrubber.translatesAutoresizingMaskIntoConstraints = false
@@ -143,11 +156,6 @@ open class UXMPDFViewController: UIViewController {
             pageScrubber.isHidden = true
         }
         
-        self.setupUI()
-        collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
-    }
-    
-    fileprivate func setupUI() {
         view.addSubview(collectionView)
         view.addSubview(pageScrubber)
         view.addSubview(annotationController.view)
@@ -169,6 +177,8 @@ open class UXMPDFViewController: UIViewController {
         pageScrubber.sizeToFit()
         
         reloadBarButtons()
+        
+        collectionView.reloadItems(at: [IndexPath(row: 0, section: 0)])
     }
     
     open override func viewWillAppear(_ animated: Bool) {
@@ -176,13 +186,17 @@ open class UXMPDFViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
         
-        collectionView.collectionViewLayout.invalidateLayout()
+        if self.document != nil {
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
     
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        collectionView.collectionViewLayout.invalidateLayout()
+        if self.document != nil {
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
         
         view.layoutSubviews()
     }
@@ -192,8 +206,10 @@ open class UXMPDFViewController: UIViewController {
         
         NotificationCenter.default.removeObserver(self)
         
-        self.annotationController.finishAnnotation()
-        autoSaveAction(self.document, self.annotationController)
+        if self.document != nil {
+            self.annotationController.finishAnnotation()
+            autoSaveAction(self.document, self.annotationController)
+        }
     }
     
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
