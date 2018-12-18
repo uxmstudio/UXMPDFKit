@@ -158,7 +158,12 @@ extension UXMSinglePageViewer: UICollectionViewDelegateFlowLayout {
         switch scrollDirection {
         case .horizontal:
             var size = bounds.size
-            let contentInsetHeight = contentInset.bottom + contentInset.top + 1
+            let contentInsetHeight: CGFloat
+            if #available(iOS 11.0, *) {
+                contentInsetHeight = adjustedContentInset.bottom + adjustedContentInset.top + 1
+            } else {
+                contentInsetHeight = contentInset.bottom + contentInset.top + 1
+            }
             size.height -= contentInsetHeight
             return size
         case .vertical:
