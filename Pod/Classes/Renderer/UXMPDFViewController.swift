@@ -239,10 +239,7 @@ open class UXMPDFViewController: UIViewController {
         navigationItem.rightBarButtonItems = rightBarButtons()
         
         if isPresentingInModal {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Done",
-                                                               style: .plain,
-                                                               target: self,
-                                                               action: #selector(UXMPDFViewController.dismissModal))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(UXMPDFViewController.dismissModal))
         }
     }
     
