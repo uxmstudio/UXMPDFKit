@@ -13,27 +13,15 @@ internal class UXMThumbnailView: UIView {
     
     override init(frame: CGRect) {
         imageView = UIImageView()
-        imageView.autoresizesSubviews = false
-        imageView.isUserInteractionEnabled = false
-        imageView.autoresizingMask = UIView.AutoresizingMask()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         imageView.contentMode = .scaleAspectFit
         
         super.init(frame: frame)
 
-        imageView.frame = frame
+        imageView.frame = self.bounds
         addSubview(imageView)
         
-        autoresizesSubviews = false
         isUserInteractionEnabled = false
-        contentMode = .redraw
-        autoresizingMask = UIView.AutoresizingMask()
-        backgroundColor = UIColor.clear
-        
-        var constraints = NSLayoutConstraint.constraints(withVisualFormat: "H:[image]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": self, "image": imageView ])
-        constraints.append(contentsOf: NSLayoutConstraint.constraints(withVisualFormat: "V:[image]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": self, "image": imageView ]))
-        
-        addConstraints(constraints)
     }
     
     required init?(coder aDecoder: NSCoder) {
