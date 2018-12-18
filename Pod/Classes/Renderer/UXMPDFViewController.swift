@@ -30,6 +30,7 @@ open class UXMPDFViewController: UIViewController {
                 return
             }
             pageScrubber.isHidden = !showsScrubber
+            collectionView.contentInset.bottom = showsScrubber ? pageScrubber.frame.size.height : 0.0
         }
     }
     
@@ -151,6 +152,7 @@ open class UXMPDFViewController: UIViewController {
         case .horizontal:
             collectionView.isPagingEnabled = true
             pageScrubber.isHidden = !showsScrubber
+            collectionView.contentInset.bottom = showsScrubber ? pageScrubber.frame.size.height : 0.0
         case .vertical:
             collectionView.isPagingEnabled = false
             pageScrubber.isHidden = true
