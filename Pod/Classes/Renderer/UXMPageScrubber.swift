@@ -211,7 +211,34 @@ open class UXMPageScrubber: UIToolbar {
 
             pageNumberLabel.text = "\(page) of \(pages)"
             pageNumberLabel.tag = page
+            
+            scheduleIfNeededHidePageNumberText()
         }
+    }
+    
+    // Interval <= 0.0: page numer not automatically hidden
+    open var autoHidePageNumberTimeInterval = 0.0 {
+        didSet {
+            scheduleIfNeededHidePageNumberText()
+        }
+    }
+    
+    var autoHidePageNumberTimer: Timer?
+    
+    func scheduleIfNeededHidePageNumberText() {
+        autoHidePageNumberTimer?.invalidate()
+        if autoHidePageNumberTimeInterval > 0.0 {
+            UIView.animate(withDuration: 0.25, animations: {
+                self.pageNumberView.alpha = 1.0
+            })
+            autoHidePageNumberTimer = Timer.scheduledTimer(timeInterval: autoHidePageNumberTimeInterval, target: self, selector: #selector(hidePageNumberText), userInfo: nil, repeats: false)
+        }
+    }
+    
+    @objc func hidePageNumberText() {
+        UIView.animate(withDuration: 0.25, animations: {
+            self.pageNumberView.alpha = 0.0
+        })
     }
     
     func updatePageThumbView(_ page: Int) {
