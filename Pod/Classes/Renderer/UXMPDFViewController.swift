@@ -83,7 +83,7 @@ open class UXMPDFViewController: UIViewController {
     var collectionView: UXMSinglePageViewer!
     
     /// A reference to the page scrubber bar
-    var pageScrubber: UXMPageScrubber!
+    open var pageScrubber: UXMPageScrubber!
     
     private(set) open lazy var formController: UXMFormViewController = UXMFormViewController(document: self.document)
     private(set) open lazy var annotationController: UXMAnnotationController = UXMAnnotationController(document: self.document, delegate: self)
