@@ -39,7 +39,7 @@ open class UXMPageScrubber: UIToolbar {
     lazy var containerView: UIView = {
         let containerWidth = UIScreen.main.bounds.size.width
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: containerWidth - self.pageNumberSpace * 2, height: 44.0))
-        containerView.autoresizesSubviews = false
+        containerView.autoresizesSubviews = true
         containerView.isUserInteractionEnabled = false
         containerView.contentMode = .redraw
         containerView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
@@ -70,7 +70,6 @@ open class UXMPageScrubber: UIToolbar {
         let pageNumberLabel = UILabel(frame: textRect)
         
         pageNumberLabel.autoresizesSubviews = false
-        pageNumberLabel.autoresizingMask = UIView.AutoresizingMask()
         pageNumberLabel.textAlignment = .center
         pageNumberLabel.backgroundColor = UIColor.clear
         pageNumberLabel.textColor = UIColor.darkText
@@ -94,7 +93,6 @@ open class UXMPageScrubber: UIToolbar {
         let pageNumberToolbar = UIToolbar(frame: pageNumberView.bounds.insetBy(dx: -2, dy: -2))
         pageNumberView.addSubview(pageNumberToolbar)
         pageNumberView.addSubview(pageNumberLabel)
-
         containerView.addSubview(pageNumberView)
         
         scrubber = UXMPageScrubberTrackControl(frame: containerView.bounds)
@@ -115,8 +113,6 @@ open class UXMPageScrubber: UIToolbar {
     
     
     open override func layoutSubviews() {
-        let containerWidth = UIScreen.main.bounds.size.width
-        containerView.frame = CGRect(x: 0, y: 0, width: containerWidth - pageNumberSpace * 2, height: 44.0)
         
         super.layoutSubviews()
         
