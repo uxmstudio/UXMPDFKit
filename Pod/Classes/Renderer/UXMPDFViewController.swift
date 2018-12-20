@@ -70,8 +70,8 @@ open class UXMPDFViewController: UIViewController {
     /// A closure that defines what happens on viewWillDisappear.
     /// The default is to assign the annotations out of the annotationController into
     /// the document, then call document.save()
-    open lazy var autoSaveAction: (UXMPDFDocument, UXMAnnotationController) -> () = { document, annotationController in
-        document.annotations = annotationController.annotations
+    open lazy var autoSaveAction: ((UXMPDFDocument, UXMAnnotationController) -> ())? = { document, annotationController in
+        document.annotationsStore = annotationController.annotationsStore
         document.save()
         
         if self.edited {
@@ -214,7 +214,7 @@ open class UXMPDFViewController: UIViewController {
         
         if self.document != nil {
             self.annotationController.finishAnnotation()
-            autoSaveAction(self.document, self.annotationController)
+            autoSaveAction?(self.document, self.annotationController)
         }
     }
     
