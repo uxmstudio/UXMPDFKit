@@ -50,13 +50,21 @@ open class UXMRenderController {
         return URL(fileURLWithPath: tempPath)
     }
     
-    open func save(_ url: URL) -> Bool {
+    open func save(_ url: URL? = nil) -> Bool {
+        guard let url = url ?? document.fileUrl else {
+            return false
+        }
         let tempUrl = self.renderOntoPDF()
         let fileManger = FileManager.default
         do {
-            try fileManger.copyItem(at: tempUrl, to: url)
+            if fileManger.fileExists(atPath: url.path) {
+                _ = try fileManger.replaceItemAt(url, withItemAt: tempUrl)
+            } else {
+                try fileManger.copyItem(at: tempUrl, to: url)
+            }
+        } catch {
+            return false
         }
-        catch _ { return false }
         return true
     }
 }
