@@ -320,19 +320,22 @@ open class UXMPDFViewController: UIViewController {
         reloadBarButtons()
     }
     
-    open func savePdfFile(_ clearEncodedAnnotations: Bool = false) -> URL {
+    open func saveToPDFFile(overwriteOriginal: Bool = false) -> URL? {
         self.annotationController.finishAnnotation()
         let renderer = UXMRenderController(document: document, controllers: [
             annotationController,
             formController
         ])
         
-        let pdf = renderer.renderOntoPDF()
-        
-        if clearEncodedAnnotations {
-            document.clearEncodedAnnotations()
+        if overwriteOriginal {
+            if renderer.save() {
+                document.clearEncodedAnnotations()
+                return document.fileUrl
+            }
+            return nil
         }
         
+        let pdf = renderer.renderOntoPDF()
         return pdf
     }
     
