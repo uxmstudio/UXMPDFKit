@@ -337,6 +337,7 @@ open class UXMPDFViewController: UIViewController {
     }
     
     func showActivitySheet() {
+        self.annotationController.finishAnnotation()
         let renderer = UXMRenderController(document: document, controllers: [
             annotationController,
             formController
