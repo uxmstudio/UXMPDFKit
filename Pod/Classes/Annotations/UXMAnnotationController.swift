@@ -18,7 +18,7 @@ open class UXMAnnotationController: UIViewController {
     var document: UXMPDFDocument!
     
     /// Store containing all annotations for document
-    var annotations = UXMAnnotationStore()
+    open var annotationsStore = UXMAnnotationStore()
     
     /// References to pages within view
     var allPages = [UXMPageContentView]()
@@ -85,7 +85,7 @@ open class UXMAnnotationController: UIViewController {
      */
     public init(document: UXMPDFDocument, delegate: UXMAnnotationControllerProtocol) {
         self.document = document
-        self.annotations = document.annotations
+        self.annotationsStore = document.annotationsStore
         self.annotationDelegate = delegate
         
         super.init(nibName: nil, bundle: nil)
@@ -120,7 +120,7 @@ open class UXMAnnotationController: UIViewController {
         view.backgroundColor = UIColor.clear
         
         loadButtons(for: self.annotationTypes)
-        undoButton.isEnabled = (annotations.annotations.count > 0)
+        undoButton.isEnabled = (annotationsStore.hasAnnotations)
     }
     
     //MARK: - Annotation handling
@@ -132,7 +132,7 @@ open class UXMAnnotationController: UIViewController {
         }
         allPages.append(contentView)
         
-        let annotationsForPage = annotations.annotations(page: page)
+        let annotationsForPage = annotationsStore.annotations(page: page)
         
         for annotation in annotationsForPage {
             let view = annotation.mutableView()
@@ -215,7 +215,7 @@ open class UXMAnnotationController: UIViewController {
     
     public func undo() {
         
-        if let annotation = annotations.undo() {
+        if let annotation = annotationsStore.undo() {
             if let annotationPage = annotation.page,
                 let pageContentView = self.pageContentViewFor(page: annotationPage) {
                 clear(pageView: pageContentView.contentView)
@@ -227,7 +227,7 @@ open class UXMAnnotationController: UIViewController {
     
     func deleteCurrent() {
         if let currentAnnotation = self.currentAnnotation {
-            self.annotations.remove(annotation: currentAnnotation)
+            self.annotationsStore.remove(annotation: currentAnnotation)
         }
     }
     
@@ -305,7 +305,7 @@ open class UXMAnnotationController: UIViewController {
     private func addCurrentAnnotationToStore() {
         if let currentAnnotation = currentAnnotation {
             currentAnnotation.didEnd()
-            annotations.add(annotation: currentAnnotation)
+            annotationsStore.add(annotation: currentAnnotation)
         }
         currentAnnotation = nil
     }
@@ -316,7 +316,7 @@ extension UXMAnnotationController: UXMPDFAnnotationEvent {
     
     public func annotation(annotation: UXMAnnotation, selected action: String) {
         if action == "delete" {
-          self.annotations.remove(annotation: annotation)
+          self.annotationsStore.remove(annotation: annotation)
 
             /// VERY DIRTY FIX LATER
             if let annotationPage = annotation.page,
@@ -331,6 +331,6 @@ extension UXMAnnotationController: UXMPDFAnnotationEvent {
 
 extension UXMAnnotationController: UXMRenderer {
     public func render(_ page: Int, context: CGContext, bounds: CGRect) {
-        annotations.renderInContext(context, size: bounds, page: page)
+        annotationsStore.renderInContext(context, size: bounds, page: page)
     }
 }

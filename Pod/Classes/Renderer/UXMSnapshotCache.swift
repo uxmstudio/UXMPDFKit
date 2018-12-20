@@ -126,7 +126,7 @@ fileprivate class UXMSnapshotRenderer: Operation {
         context.translateBy(x: 0.0, y: pageRect.size.height / scale)
         context.scaleBy(x: 1.0, y: -1.0)
         
-        self.snapshot.document.annotations.renderInContext(context,
+        self.snapshot.document.annotationsStore.renderInContext(context,
                                                            size: pageRect,
                                                            page: self.snapshot.page)
         

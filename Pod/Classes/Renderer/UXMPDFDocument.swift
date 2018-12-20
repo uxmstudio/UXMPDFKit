@@ -34,8 +34,8 @@ open class UXMPDFDocument: NSObject, NSCoding {
     open var creationDate: Date?
     open var version: Float = 0.0
     
-    /// Document annotations
-    open var annotations: UXMAnnotationStore = UXMAnnotationStore()
+    /// Document annotations store
+    open var annotationsStore: UXMAnnotationStore = UXMAnnotationStore()
     
     public static func from(filePath: String, password: String? = nil) throws -> UXMPDFDocument? {
         if let document = try UXMPDFDocument.unarchiveDocument(filePath: filePath, password: password) {
@@ -65,10 +65,10 @@ open class UXMPDFDocument: NSObject, NSCoding {
         self.bookmarks = aDecoder.decodeObject(forKey: "bookmarks") as! NSMutableIndexSet
         self.lastOpen = aDecoder.decodeObject(forKey: "lastOpen") as? Date
         if let annotations = aDecoder.decodeObject(forKey: "annotations") as? UXMAnnotationStore {
-            self.annotations = annotations
+            self.annotationsStore = annotations
         }
         else {
-            self.annotations = UXMAnnotationStore()
+            self.annotationsStore = UXMAnnotationStore()
         }
         
         super.init()
@@ -278,6 +278,6 @@ open class UXMPDFDocument: NSObject, NSCoding {
         aCoder.encode(self.currentPage, forKey: "currentPage")
         aCoder.encode(self.bookmarks, forKey: "bookmarks")
         aCoder.encode(self.lastOpen, forKey: "lastOpen")
-        aCoder.encode(self.annotations, forKey: "annotations")
+        aCoder.encode(self.annotationsStore, forKey: "annotations")
     }
 }
