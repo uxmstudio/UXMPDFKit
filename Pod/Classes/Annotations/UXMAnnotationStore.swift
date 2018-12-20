@@ -20,6 +20,10 @@ open class UXMAnnotationStore: NSObject, NSCoding {
     private (set) open var annotations: [UXMAnnotation] = []
     weak var delegate: UXMAnnotationStoreDelegate?
 
+    open var hasAnnotations: Bool {
+        return annotations.count > 0
+    }
+    
     func add(annotation: UXMAnnotation) {
         annotations.append(annotation)
         self.delegate?.annotationStore(store: self, addedAnnotation: annotation)

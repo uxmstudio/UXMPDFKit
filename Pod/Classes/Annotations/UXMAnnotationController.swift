@@ -146,7 +146,7 @@ open class UXMAnnotationController: UIViewController {
         annotationType = type
         
         view.isUserInteractionEnabled = annotationType != nil
-        undoButton.isEnabled = (annotationType != nil || annotations.annotations.count > 0)
+        undoButton.isEnabled = (annotationType != nil || annotationsStore.hasAnnotations)
     }
     
     open func finishAnnotation() {
@@ -155,7 +155,7 @@ open class UXMAnnotationController: UIViewController {
         addCurrentAnnotationToStore()
 
         view.isUserInteractionEnabled = false
-        undoButton.isEnabled = (annotations.annotations.count > 0)
+        undoButton.isEnabled = (annotationsStore.hasAnnotations)
     }
     
     //MARK: - Bar button actions
