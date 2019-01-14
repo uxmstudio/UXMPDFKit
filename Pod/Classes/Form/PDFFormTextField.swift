@@ -59,7 +59,7 @@ open class PDFFormTextField: PDFFormField {
                 textView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 textView.delegate = self
                 textView.isScrollEnabled = true
-                textView.textContainerInset = UIEdgeInsetsMake(4, 4, 4, 4)
+                textView.textContainerInset = UIEdgeInsets.init(top: 4, left: 4, bottom: 4, right: 4)
                 let fontSize = fontSizeForRect(frame) < 13.0 ? fontSizeForRect(frame) : 13.0
                 textView.font = UIFont.systemFont(ofSize: fontSize)
             }
@@ -119,14 +119,14 @@ open class PDFFormTextField: PDFFormField {
         }
         
         /// UGLY
-        (text as NSString!).draw(in: frame, withAttributes: [
-            NSFontAttributeName: font
-            ])
+        (text as NSString).draw(in: frame, withAttributes: convertToOptionalNSAttributedStringKeyDictionary([
+            convertFromNSAttributedStringKey(NSAttributedString.Key.font): font
+            ]))
     }
 }
 
 extension PDFFormTextField: UITextFieldDelegate {
-    func textChanged() {
+    @objc func textChanged() {
         value = text as AnyObject?
         delegate?.formFieldValueChanged(self)
     }
@@ -152,4 +152,15 @@ extension PDFFormTextField: UITextViewDelegate {
         delegate?.formFieldValueChanged(self)
         return false
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
 }

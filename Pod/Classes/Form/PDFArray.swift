@@ -163,7 +163,7 @@ internal class PDFArray: PDFObject {
 
 extension PDFArray: NSCopying {
     func copy(with zone: NSZone?) -> Any {
-        return type(of: self).init(arrayRef: arr)
+        return Swift.type(of: self).init(arrayRef: arr)
     }
 }
 

@@ -55,8 +55,8 @@ extension CGRect {
         return CGRect(
             x: minX,
             y: minY,
-            width: fabs(maxX - minX),
-            height: fabs(maxY - minY)
+            width: abs(maxX - minX),
+            height: abs(maxY - minY)
         )
     }
 }

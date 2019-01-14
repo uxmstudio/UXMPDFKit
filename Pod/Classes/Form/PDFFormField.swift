@@ -32,7 +32,7 @@ open class PDFFormFieldObject {
         
         let flags: [PDFFormFlag]
         if let flagsObj = dict["Ff"] as? NSNumber {
-            flags = self.determineFlags(UInt(flagsObj))
+            flags = self.determineFlags(UInt(truncating: flagsObj))
         }
         else {
             flags = []

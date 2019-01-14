@@ -66,7 +66,7 @@ open class PDFFormButtonField: PDFFormField {
         addSubview(button)
     }
 
-    func buttonPressed() {
+    @objc func buttonPressed() {
         value = (isSelected ? "" : exportValue) as AnyObject?
         delegate?.formFieldValueChanged(self)
     }
@@ -91,7 +91,7 @@ open class PDFFormButtonField: PDFFormField {
         frame.origin.x += self.frame.origin.x
         frame.origin.y += self.frame.origin.y
 
-        let state = isSelected ? UIControlState.selected : UIControlState.normal
+        let state = isSelected ? UIControl.State.selected : UIControl.State.normal
         var title: NSString = ""
         let titleColor = button.titleColor(for: state) ?? UIColor.black
         let font: UIFont = button.titleLabel!.font
@@ -106,13 +106,24 @@ open class PDFFormButtonField: PDFFormField {
         paragraphStyle.alignment = NSTextAlignment.center
 
         let attributes: [String:AnyObject] = [
-            NSFontAttributeName: font,
-            NSForegroundColorAttributeName: titleColor,
-            NSParagraphStyleAttributeName: paragraphStyle
+            convertFromNSAttributedStringKey(NSAttributedString.Key.font): font,
+            convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): titleColor,
+            convertFromNSAttributedStringKey(NSAttributedString.Key.paragraphStyle): paragraphStyle
         ]
 
-        title.draw(in: frame, withAttributes: attributes)
+        title.draw(in: frame, withAttributes: convertToOptionalNSAttributedStringKeyDictionary(attributes))
 
         UIGraphicsPopContext()
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

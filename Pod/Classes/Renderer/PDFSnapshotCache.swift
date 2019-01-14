@@ -65,7 +65,7 @@ open class PDFQueue {
         renderQueue.addOperation(thumbRender)
     }
     
-    open static func fetchPage(_ document: PDFDocument, page: Int, size: CGSize, completion:((PDFSnapshot) -> Void)?) {
+    public static func fetchPage(_ document: PDFDocument, page: Int, size: CGSize, completion:((PDFSnapshot) -> Void)?) {
         self.sharedQueue.fetchPage(document, page: page, size: size, completion:completion)
     }
 }

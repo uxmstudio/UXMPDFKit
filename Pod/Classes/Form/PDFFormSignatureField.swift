@@ -17,10 +17,10 @@ open class PDFFormSignatureField: PDFFormField {
     
     lazy fileprivate var signButton: UIButton = {
         var button = UIButton(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
-        button.setTitle("Tap To Sign", for: UIControlState())
+        button.setTitle("Tap To Sign", for: UIControl.State())
         button.tintColor = UIColor.black
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
-        button.setTitleColor(UIColor.black, for: UIControlState())
+        button.setTitleColor(UIColor.black, for: UIControl.State())
         button.addTarget(self, action: #selector(PDFFormSignatureField.addSignature), for: .touchUpInside)
         button.isUserInteractionEnabled = true
         button.isExclusiveTouch = true
@@ -48,7 +48,7 @@ open class PDFFormSignatureField: PDFFormField {
         addSubview(signImage)
         addSubview(signButton)
         
-        bringSubview(toFront: signButton)
+        bringSubviewToFront(signButton)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -61,7 +61,7 @@ open class PDFFormSignatureField: PDFFormField {
         }
     }
     
-    func addSignature() {
+    @objc func addSignature() {
         
         let vc = PDFFormSignatureViewController()
         vc.delegate = self

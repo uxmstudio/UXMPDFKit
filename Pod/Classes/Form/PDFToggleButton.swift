@@ -28,7 +28,7 @@ class PDFToggleButton: UIButton {
         titleLabel?.font = UIFont(name: "ZapfDingbatsITC", size: 10)
     }
 
-    func buttonTapped() {
+    @objc func buttonTapped() {
         self.isSelected = !self.isSelected
     }
 }

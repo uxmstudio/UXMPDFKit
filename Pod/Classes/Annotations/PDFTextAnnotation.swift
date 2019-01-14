@@ -95,15 +95,15 @@ extension PDFTextAnnotation: PDFAnnotation {
         paragraphStyle.alignment = NSTextAlignment.left
         
         let attributes: [String:AnyObject] = [
-            NSFontAttributeName: font,
-            NSForegroundColorAttributeName: UIColor.black,
-            NSParagraphStyleAttributeName: paragraphStyle
+            convertFromNSAttributedStringKey(NSAttributedString.Key.font): font,
+            convertFromNSAttributedStringKey(NSAttributedString.Key.foregroundColor): UIColor.black,
+            convertFromNSAttributedStringKey(NSAttributedString.Key.paragraphStyle): paragraphStyle
         ]
         
-        let size = nsText.size(attributes: attributes)
+        let size = nsText.size(withAttributes: convertToOptionalNSAttributedStringKeyDictionary(attributes))
         let textRect = CGRect(origin: rect.origin, size: size)
         
-        nsText.draw(in: textRect, withAttributes: attributes)
+        nsText.draw(in: textRect, withAttributes: convertToOptionalNSAttributedStringKeyDictionary(attributes))
         
         UIGraphicsPopContext()
     }
@@ -209,7 +209,7 @@ class PDFTextAnnotationView: ResizableView, PDFAnnotationView {
         self.addSubview(textView)
     }
     
-    func menuActionEdit(_ sender: Any!) {
+    @objc func menuActionEdit(_ sender: Any!) {
         self.delegate?.resizableViewDidSelectAction(view: self, action: "edit")
         
         self.isLocked = true
@@ -224,4 +224,15 @@ class PDFTextAnnotationView: ResizableView, PDFAnnotationView {
         }
         return super.canPerformAction(action, withSender: sender)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }
