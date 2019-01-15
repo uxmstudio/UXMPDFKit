@@ -25,9 +25,13 @@ open class PDFRenderController {
         let documentRef = document.documentRef
         let pages = document.pageCount
         let title = document.fileUrl?.lastPathComponent ?? "annotated.pdf"
+        let documentInfo = {() -> Dictionary<CFString, String>? in
+            guard let password = document.password else { return nil }
+            return [kCGPDFContextUserPassword: password, kCGPDFContextOwnerPassword: password]
+        }()
         let tempPath = NSTemporaryDirectory() + title
         
-        UIGraphicsBeginPDFContextToFile(tempPath, CGRect.zero, nil)
+        UIGraphicsBeginPDFContextToFile(tempPath, CGRect.zero, documentInfo)
         for i in 1...pages {
             let page = documentRef?.page(at: i)
             let bounds = document.boundsForPDFPage(i)
