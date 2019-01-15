@@ -55,6 +55,9 @@ open class UXMRenderController {
             return false
         }
         let tempUrl = self.renderOntoPDF()
+        if url == tempUrl {
+            return true
+        }
         let fileManger = FileManager.default
         do {
             if fileManger.fileExists(atPath: url.path) {
