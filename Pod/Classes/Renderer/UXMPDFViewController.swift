@@ -204,7 +204,7 @@ open class UXMPDFViewController: UIViewController {
             collectionView.collectionViewLayout.invalidateLayout()
         }
         
-        view.setNeedsLayout()
+        view.layoutSubviews()
     }
     
     open override func viewWillDisappear(_ animated: Bool) {
