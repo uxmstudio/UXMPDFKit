@@ -11,7 +11,7 @@ import UIKit
 open class UXMBarButton: UIBarButtonItem {
     fileprivate let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
     fileprivate var toggled = false
-    fileprivate lazy var defaultTint = UIColor.blue
+    public static var defaultTint = UIColor.blue
     fileprivate var block: ((UXMBarButton) -> ())?
     
     override open var tintColor: UIColor? {
@@ -31,7 +31,6 @@ open class UXMBarButton: UIBarButtonItem {
         self.init()
         
         customView = button
-        defaultTint = button.tintColor
         
         toggle(toggled)
         
@@ -47,7 +46,7 @@ open class UXMBarButton: UIBarButtonItem {
         toggled = state
         if toggled {
             button.tintColor = UIColor.white
-            button.layer.backgroundColor = (tintColor ?? defaultTint).cgColor
+            button.layer.backgroundColor = (tintColor ?? UXMBarButton.defaultTint).cgColor
             button.layer.cornerRadius = 4.0
         }
         else {
