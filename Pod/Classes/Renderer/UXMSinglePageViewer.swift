@@ -32,7 +32,7 @@ open class UXMSinglePageViewer: UICollectionView {
 
     var internalPage: Int = 0
 
-    var scrollDirection: UICollectionViewScrollDirection {
+    var scrollDirection: UICollectionView.ScrollDirection {
         let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
         return flowLayout.scrollDirection
     }

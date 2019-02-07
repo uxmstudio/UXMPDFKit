@@ -86,7 +86,7 @@ public class UXMPageContent: UIView {
         autoresizesSubviews = false
         isUserInteractionEnabled = true
         contentMode = .redraw
-        autoresizingMask = UIViewAutoresizing()
+        autoresizingMask = UIView.AutoresizingMask()
         backgroundColor = UIColor.clear
         
         buildAnnotationLinksList()
@@ -121,7 +121,7 @@ public class UXMPageContent: UIView {
             highlight.autoresizesSubviews = false
             highlight.isUserInteractionEnabled = false
             highlight.contentMode = .redraw
-            highlight.autoresizingMask = UIViewAutoresizing()
+            highlight.autoresizingMask = UIView.AutoresizingMask()
             highlight.backgroundColor = color
             
             addSubview(highlight)

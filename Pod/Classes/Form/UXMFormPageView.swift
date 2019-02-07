@@ -60,7 +60,7 @@ open class UXMFormPage: NSObject {
         contentView.viewDidZoom = { scale in
             formView.updateWithZoom(scale)
         }
-        contentView.sendSubview(toBack: formView)
+        contentView.sendSubviewToBack(formView)
     }
     
     func createFormField(_ dict: UXMDictionary) {

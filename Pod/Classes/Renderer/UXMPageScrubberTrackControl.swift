@@ -17,7 +17,7 @@ internal class UXMPageScrubberTrackControl: UIControl {
         autoresizesSubviews = false
         isUserInteractionEnabled = true
         contentMode = .redraw
-        autoresizingMask = UIViewAutoresizing()
+        autoresizingMask = UIView.AutoresizingMask()
         backgroundColor = UIColor.clear
         isExclusiveTouch = true
     }
