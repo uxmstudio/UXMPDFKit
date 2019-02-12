@@ -58,12 +58,12 @@ open class UXMRenderController {
         if url == tempUrl {
             return true
         }
-        let fileManger = FileManager.default
+        let fileManager = FileManager.default
         do {
-            if fileManger.fileExists(atPath: url.path) {
-                _ = try fileManger.replaceItemAt(url, withItemAt: tempUrl)
+            if fileManager.fileExists(atPath: url.path) {
+                _ = try fileManager.replaceItemAt(url, withItemAt: tempUrl)
             } else {
-                try fileManger.copyItem(at: tempUrl, to: url)
+                try fileManager.copyItem(at: tempUrl, to: url)
             }
         } catch {
             return false
