@@ -1,16 +1,16 @@
-![UXM Token Field](https://uxmstudio.com/public/images/uxmpdfkit.png)
+![UXM Token Field](https://avatars3.githubusercontent.com/u/13734873?s=400&v=4)
 
-[![CI Status](http://img.shields.io/travis/uxmstudio/UXMPDFKit.svg?style=flat)](https://travis-ci.org/uxmstudio/UXMPDFKit)
+[![CI Status](http://img.shields.io/travis/uxmstudio/UXMPDFKit.svg?style=flat)](https://travis-ci.org/diegostamigni/UXMPDFKit.svg?branch=master)
 [![Version](https://img.shields.io/cocoapods/v/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
-![Swift](https://img.shields.io/badge/%20in-swift%203.0-orange.svg)
+![Swift](https://img.shields.io/badge/%20in-swift%204.2-orange.svg)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 [![Platform](https://img.shields.io/cocoapods/p/UXMPDFKit.svg?style=flat)](http://cocoapods.org/pods/UXMPDFKit)
 
 ## Requirements
 - iOS 9 or above
-- Xcode 8 or above
-- Swift 3.0
+- Xcode 10 or above
+- Swift 4.2
 
 ## Note
 
@@ -25,11 +25,6 @@ it, simply add the following line to your Podfile:
 
 ```ruby
 pod "UXMPDFKit"
-```
-
-If you wish to use the Swift 2.3 version, use the following instead:
-```ruby
-pod "UXMPDFKit", "~> 0.3.0"
 ```
 
 ### Carthage
@@ -129,7 +124,7 @@ public protocol PDFAnnotation {
     /// Boolean representing if the annotation has been saved
     var saved: Bool { get set }
 
-    var delegate: PDFAnnotationEvent? { get set }
+    weak var delegate: UXMPDFAnnotationEvent? { get set }
 
     /// Force implementations to have an init
     init()
@@ -156,10 +151,10 @@ An annotation should be an object that contains its position and value, not a vi
 
 Additionally, it is recommended that the view passed by ```mutableView()``` extend ```ResizableView``` as this allows the annotation to be moved, resized and deleted individually.
 
-In order for annotations to be able to be listed inside of the toolbar, they must also extend ```PDFAnnotationButtonable```.
+In order for annotations to be able to be listed inside of the toolbar, they must also extend ```UXMPDFAnnotationButtonable```.
 
 ```swift
-public protocol PDFAnnotationButtonable: PDFAnnotation {
+public protocol UXMPDFAnnotationButtonable: UXMPDFAnnotation {
 
     /// Name for UIBarButtonItem representation of annotation
     static var name: String? { get }
@@ -182,13 +177,13 @@ Currently supported actions:
 - [ ] Javascript
 - [ ] Rich Media
 
-Tapped actions are passed to your view controller by the PDFSinglePageViewer in its ```contentDelegate```
+Tapped actions are passed to your view controller by the UXMPDFSinglePageViewer in its ```contentDelegate```
 
 ### Renderer 
 In order to perform write operations back onto a PDF in an efficient format, a renderer is used. Each type of form, annotation, etc that needs to be rendered back onto the PDF should extend the following protocol:
 
 ```swift
-protocol PDFRenderer {
+protocol UXMRenderer {
     func render(page: Int, context:CGContext, bounds: CGRect)
 }
 ```
@@ -196,7 +191,7 @@ protocol PDFRenderer {
 Controllers or objects that extend this protocol can then be passed to the PDFRenderer to be written onto a temporary document or saved permanently onto the document.
 
 ```swift
-let renderer = PDFRenderController(document: self.document, controllers: [
+let renderer = UXMPDFRenderController(document: self.document, controllers: [
     self.annotationController,
     self.formController
 ])
