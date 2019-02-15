@@ -102,7 +102,7 @@ fileprivate class UXMSnapshotRenderer: Operation {
     
     func renderPDF(_ size: CGSize) -> UIImage? {
         let documentRef = self.snapshot.document.documentRef
-        guard let page = documentRef?.page(at: self.snapshot.page) else { return nil }
+        guard let page = documentRef?.page(at: self.snapshot.page), size.width > 0, size.height > 0 else { return nil }
         
         var pageRect = page.getBoxRect(.mediaBox)
         let scale = min(size.width / pageRect.size.width, size.height / pageRect.size.height)
