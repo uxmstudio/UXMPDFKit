@@ -79,15 +79,12 @@ open class UXMSinglePageViewer: UICollectionView {
         }
     }
 
-    open func indexForPage(_ page: Int) -> Int {
-        let currentPage = page - 1
-        if currentPage <= 0 {
-            return 0
-        } else if let pageCount = document?.pageCount, currentPage > pageCount {
-            return pageCount - 1
-        } else {
-            return currentPage
-        }
+    open func indexForPage(_ page: Int) -> Int? {
+        guard let document = document, document.pageCount > 0 else { return nil }
+        var currentPage = page - 1
+        currentPage = max(currentPage, 0)
+        currentPage = min(currentPage, document.pageCount - 1)
+        return currentPage
     }
 
     open func displayPage(_ page: Int, animated: Bool) {
