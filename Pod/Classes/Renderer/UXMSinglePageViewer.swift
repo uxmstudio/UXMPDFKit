@@ -88,7 +88,7 @@ open class UXMSinglePageViewer: UICollectionView {
     }
 
     open func displayPage(_ page: Int, animated: Bool) {
-        let currentPage = indexForPage(page)
+        guard let currentPage = indexForPage(page) else { return }
         let indexPath = IndexPath(item: currentPage, section: 0)
         switch scrollDirection {
         case .horizontal:
@@ -99,8 +99,7 @@ open class UXMSinglePageViewer: UICollectionView {
     }
 
     open func getPageContent(_ page: Int) -> UXMPageContentView? {
-        if document == nil { return nil }
-        let currentPage = indexForPage(page)
+        guard let currentPage = indexForPage(page) else { return nil }
         if let cell = self.collectionView(self, cellForItemAt: IndexPath(item: currentPage, section: 0)) as? UXMSinglePageCell,
             let pageContentView = cell.pageContentView {
             return pageContentView
