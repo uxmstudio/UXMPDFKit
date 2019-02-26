@@ -135,13 +135,13 @@ open class UXMPDFViewController: UIViewController {
     
     fileprivate func setupUI() {
         
-        guard self.isViewLoaded && self.document != nil else { return }
+        guard self.isViewLoaded, let document = self.document, document.pageCount > 0 else { return }
         
-        pageScrubber = UXMPageScrubber(frame: CGRect(x: 0, y: view.frame.size.height - bottomLayoutGuide.length, width: view.frame.size.width, height: 44), document: document!)
+        pageScrubber = UXMPageScrubber(frame: CGRect(x: 0, y: view.frame.size.height - bottomLayoutGuide.length, width: view.frame.size.width, height: 44), document: document)
         pageScrubber!.scrubberDelegate = self
         pageScrubber!.translatesAutoresizingMaskIntoConstraints = false
         
-        collectionView = UXMSinglePageViewer(frame: view.bounds, document: document!)
+        collectionView = UXMSinglePageViewer(frame: view.bounds, document: document)
         collectionView!.translatesAutoresizingMaskIntoConstraints = false
         collectionView!.singlePageDelegate = self
         
