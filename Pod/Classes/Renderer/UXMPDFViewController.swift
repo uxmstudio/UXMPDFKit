@@ -443,8 +443,8 @@ extension UXMPDFViewController: UXMSinglePageViewerDelegate {
     }
     
     public func singlePageViewer(_ collectionView: UXMSinglePageViewer, selected action: UXMAction) {
-        if let action = action as? UXMActionURL {
-            let svc = SFSafariViewController(url: action.url as URL)
+        if let action = action as? UXMActionURL, let scheme = action.url.scheme?.lowercased(), (scheme == "http" || scheme == "https") {
+            let svc = SFSafariViewController(url: action.url)
             present(svc, animated: true, completion: nil)
         } else if let action = action as? UXMActionGoTo {
             collectionView.displayPage(action.pageIndex, animated: true)
