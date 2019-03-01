@@ -28,21 +28,23 @@ open class UXMRenderController {
         let tempPath = NSTemporaryDirectory() + title
         
         UIGraphicsBeginPDFContextToFile(tempPath, CGRect.zero, nil)
-        for i in 1...pages {
-            let page = documentRef?.page(at: i)
-            let bounds = document.boundsForPDFPage(i)
-            
-            guard let context = UIGraphicsGetCurrentContext() else { continue }
-            UIGraphicsBeginPDFPageWithInfo(bounds, nil)
-            context.translateBy(x: 0, y: bounds.size.height)
-            context.scaleBy(x: 1.0, y: -1.0)
-            context.drawPDFPage (page!)
-            
-            context.scaleBy(x: 1.0, y: -1.0)
-            context.translateBy(x: 0, y: -bounds.size.height)
-            
-            for controller in renderControllers {
-                controller.render(i, context:context, bounds:bounds)
+        if pages > 0 {
+            for i in 1...pages {
+                let page = documentRef?.page(at: i)
+                let bounds = document.boundsForPDFPage(i)
+                
+                guard let context = UIGraphicsGetCurrentContext() else { continue }
+                UIGraphicsBeginPDFPageWithInfo(bounds, nil)
+                context.translateBy(x: 0, y: bounds.size.height)
+                context.scaleBy(x: 1.0, y: -1.0)
+                context.drawPDFPage (page!)
+                
+                context.scaleBy(x: 1.0, y: -1.0)
+                context.translateBy(x: 0, y: -bounds.size.height)
+                
+                for controller in renderControllers {
+                    controller.render(i, context:context, bounds:bounds)
+                }
             }
         }
         UIGraphicsEndPDFContext()
