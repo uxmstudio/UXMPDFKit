@@ -137,7 +137,7 @@ open class UXMAnnotationController: UIViewController {
         for annotation in annotationsForPage {
             let view = annotation.mutableView()
             contentView.contentView.addSubview(view)
-            contentView.contentView.bringSubviewToFront(view)
+          contentView.contentView.bringSubviewToFront(view)
         }
     }
     

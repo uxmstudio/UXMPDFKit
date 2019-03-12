@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 47;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -90,19 +90,16 @@
 		14C266FC2EAD496C9FE4B3E2FAA95AF7 /* UXMTextParser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMTextParser.swift; sourceTree = "<group>"; };
 		183A7AD20AE707F4AB2CA962BB18F6ED /* UXMFormTextField.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMFormTextField.swift; sourceTree = "<group>"; };
 		1C824D3E4F019CAE35CB2A53885A0277 /* UIImage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
-
-		20D8649056F4D7C05EC8ABDB094F2732 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		20D8649056F4D7C05EC8ABDB094F2732 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		23A8611284D21ACC1BD481BB5C9AF9A3 /* Pods-UXMPDFKit_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-UXMPDFKit_Example.modulemap"; sourceTree = "<group>"; };
 		23BB80F9C96E1587A610604408D7B5FA /* Pods-UXMPDFKit_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-UXMPDFKit_Example-resources.sh"; sourceTree = "<group>"; };
-		258062D802CC9966192960524F8776B8 /* UXMPDFKit.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = UXMPDFKit.bundle; path = "UXMPDFKit-UXMPDFKit.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
+		258062D802CC9966192960524F8776B8 /* UXMPDFKit.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UXMPDFKit.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		27545BFEDACB21C6B2CE0B1478D10021 /* UXMPageScrubber.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPageScrubber.swift; sourceTree = "<group>"; };
 		27ACB82136688CFC5591D625711E55A0 /* UXMPDFKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UXMPDFKit-dummy.m"; sourceTree = "<group>"; };
 		28252A47AB79EEAFE8D11E8512669322 /* Images.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Pod/Assets/Images.xcassets; sourceTree = "<group>"; };
 		2DFC25E9894854FCCEEB5EE34ACE7F17 /* UXMPageTileLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPageTileLayer.swift; sourceTree = "<group>"; };
 		36B56BCE64FA401C7A97FE7FA069A6C4 /* Pods-UXMPDFKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-UXMPDFKit_Example.release.xcconfig"; sourceTree = "<group>"; };
-
-		3D125B5781FF16A5E7D88293D9A4FCD6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-
+		3D125B5781FF16A5E7D88293D9A4FCD6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4235186082E46EC22F742656E1CBBB4A /* UXMPDFKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UXMPDFKit-prefix.pch"; sourceTree = "<group>"; };
 		485D802F0468A120C898CFDAF4BAC736 /* UXMPDFViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPDFViewController.swift; sourceTree = "<group>"; };
 		4B632CE0979E34E84DD43118DF67C77C /* ResourceBundle-UXMPDFKit-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-UXMPDFKit-Info.plist"; sourceTree = "<group>"; };
@@ -115,14 +112,13 @@
 		67CD0163D513FCBDE08B50DC6A5B1C3B /* UXMObjectParser.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMObjectParser.swift; sourceTree = "<group>"; };
 		68304DA41B0554D507A712F3AF1D64FE /* Pods-UXMPDFKit_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-UXMPDFKit_Example-dummy.m"; sourceTree = "<group>"; };
 		6C59B2E20AA0381F05C7C5864BB2CAFD /* UXMSinglePageCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMSinglePageCell.swift; sourceTree = "<group>"; };
-		6FBCB643D5357FD8C8504802F4ADE38D /* UXMPDFKit.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = UXMPDFKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		6FBCB643D5357FD8C8504802F4ADE38D /* UXMPDFKit.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = UXMPDFKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		70C3AE2202AFAC854F879DDBD06E8CE5 /* UXMThumbnailViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMThumbnailViewController.swift; sourceTree = "<group>"; };
 		73015568BD9C35CDB6B53C9733D91087 /* UXMPDFKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UXMPDFKit-umbrella.h"; sourceTree = "<group>"; };
 		74BAD51EE893E2622F893C3C45CD9727 /* UXMPageScrubberThumb.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPageScrubberThumb.swift; sourceTree = "<group>"; };
 		78DAD1A3227E5660016A538546AFA10D /* UXMActionGoTo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMActionGoTo.swift; sourceTree = "<group>"; };
 		7C8356BA466A8C36BD5B3F24AF6F18CF /* Pods-UXMPDFKit_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-UXMPDFKit_Example-umbrella.h"; sourceTree = "<group>"; };
-
-		89E6CA2F27E8278F2CA1A97CB229F0DD /* Pods_UXMPDFKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_UXMPDFKit_Example.framework; path = "Pods-UXMPDFKit_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89E6CA2F27E8278F2CA1A97CB229F0DD /* Pods_UXMPDFKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UXMPDFKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A072B262F250DC33E58F330C76A6EB1 /* UXMAnnotation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMAnnotation.swift; sourceTree = "<group>"; };
 		8A2EB90F81636C9412556E372330BE19 /* UXMPageContent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPageContent.swift; sourceTree = "<group>"; };
 		8A96E61F5149566B121A108A04D4BFF8 /* UXMDocumentLink.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMDocumentLink.swift; sourceTree = "<group>"; };
@@ -131,9 +127,7 @@
 		8DC90269E85835634780EFF2602B222D /* UXMBarButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMBarButton.swift; sourceTree = "<group>"; };
 		8F7E79AA1610E74F4E0D96E7BEB2EC74 /* UXMPageContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPageContentView.swift; sourceTree = "<group>"; };
 		90D900B436BC24DE19DDDD0D89EA9E92 /* CGPDFDocument.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CGPDFDocument.swift; sourceTree = "<group>"; };
-
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9FF5E526C9B0388E4ECB9D70406A46B1 /* UXMDictionary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMDictionary.swift; sourceTree = "<group>"; };
 		A3A3ADEEDA29EFEF6E2C1BB18B2E5AF7 /* ResizeableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ResizeableView.swift; sourceTree = "<group>"; };
 		A6E0BFA469C86BFCE9351F5446E6F857 /* UXMAction.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMAction.swift; sourceTree = "<group>"; };
@@ -145,9 +139,7 @@
 		AE5E61067A5744200E3B01F096DA8A20 /* CGPoint.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		B38DCC9DA7E5DAA0472B91AE5EF008B3 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE8249B812A5EE62F6B946573DC51BCA /* UXMFormSignatureField.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMFormSignatureField.swift; sourceTree = "<group>"; };
-
-		BE8D4B5610212D7AC6111026EC48A617 /* UXMPDFKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = UXMPDFKit.framework; path = UXMPDFKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-
+		BE8D4B5610212D7AC6111026EC48A617 /* UXMPDFKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = UXMPDFKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3CB7E88EF35B9809D0E95AEDE0E49BD /* UXMFormButtonField.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMFormButtonField.swift; sourceTree = "<group>"; };
 		C5AD68BE796217E65B58FCDA27A72913 /* UXMFormViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMFormViewController.swift; sourceTree = "<group>"; };
 		CD15A3295C964BC497218C99FFC45E6E /* CGRect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
@@ -497,7 +489,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1010;
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -601,7 +593,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		EE77F57A3A7BCF8BDEA1EC088A046BC0 /* Sources */ = {
-
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -651,7 +642,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -716,7 +707,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -779,6 +770,8 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 4.2;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;
@@ -843,6 +836,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Debug;

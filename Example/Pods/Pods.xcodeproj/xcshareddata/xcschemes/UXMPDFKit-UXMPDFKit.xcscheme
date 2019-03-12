@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "90EF5352D49F432ABB108C6BE56B2894"
+               BlueprintIdentifier = "D7C5EB5DB8CAEA6BC1D3A2B232DFBF1D"
                BuildableName = "UXMPDFKit.bundle"
                BlueprintName = "UXMPDFKit-UXMPDFKit"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "90EF5352D49F432ABB108C6BE56B2894"
+            BlueprintIdentifier = "D7C5EB5DB8CAEA6BC1D3A2B232DFBF1D"
             BuildableName = "UXMPDFKit.bundle"
             BlueprintName = "UXMPDFKit-UXMPDFKit"
             ReferencedContainer = "container:Pods.xcodeproj">
@@ -63,7 +63,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "90EF5352D49F432ABB108C6BE56B2894"
+            BlueprintIdentifier = "D7C5EB5DB8CAEA6BC1D3A2B232DFBF1D"
             BuildableName = "UXMPDFKit.bundle"
             BlueprintName = "UXMPDFKit-UXMPDFKit"
             ReferencedContainer = "container:Pods.xcodeproj">
