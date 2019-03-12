@@ -27,11 +27,6 @@ it, simply add the following line to your Podfile:
 pod "UXMPDFKit"
 ```
 
-If you wish to use the Swift 2.3 version, use the following instead:
-```ruby
-pod "UXMPDFKit", "~> 0.3.0"
-```
-
 ### Carthage
 
 UXMPDFKit is also available through [Carthage](https://github.com/Carthage/Carthage).

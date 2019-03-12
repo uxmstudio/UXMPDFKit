@@ -18,8 +18,8 @@ class ExampleViewController: UIViewController {
         
         let pdf = UXMPDFViewController(document: document!)
         pdf.annotationController.annotationTypes = [
-//            PDFHighlighterAnnotation.self,
-//            PDFPenAnnotation.self,
+            PDFHighlighterAnnotation.self,
+            PDFPenAnnotation.self,
             UXMTextAnnotation.self,
             UXMSignAnnotation.self,
         ]

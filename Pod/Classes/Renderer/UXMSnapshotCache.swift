@@ -65,7 +65,7 @@ open class UXMQueue {
         renderQueue.addOperation(thumbRender)
     }
     
-    open static func fetchPage(_ document: UXMPDFDocument, page: Int, size: CGSize, completion:((UXMSnapshot) -> Void)?) {
+    public static func fetchPage(_ document: UXMPDFDocument, page: Int, size: CGSize, completion:((UXMSnapshot) -> Void)?) {
         self.sharedQueue.fetchPage(document, page: page, size: size, completion:completion)
     }
 }

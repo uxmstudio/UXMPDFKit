@@ -15,7 +15,7 @@ internal class UXMThumbnailView: UIView {
         imageView = UIImageView()
         imageView.autoresizesSubviews = false
         imageView.isUserInteractionEnabled = false
-        imageView.autoresizingMask = UIViewAutoresizing()
+        imageView.autoresizingMask = UIView.AutoresizingMask()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         
@@ -27,7 +27,7 @@ internal class UXMThumbnailView: UIView {
         autoresizesSubviews = false
         isUserInteractionEnabled = false
         contentMode = .redraw
-        autoresizingMask = UIViewAutoresizing()
+        autoresizingMask = UIView.AutoresizingMask()
         backgroundColor = UIColor.clear
         
         var constraints = NSLayoutConstraint.constraints(withVisualFormat: "H:[image]|", options: .alignAllLastBaseline, metrics: nil, views: [ "superview": self, "image": imageView ])

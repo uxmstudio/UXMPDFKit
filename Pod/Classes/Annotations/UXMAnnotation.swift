@@ -19,7 +19,7 @@ public protocol UXMAnnotation {
     /// Boolean representing if the annotation has been saved
     var saved: Bool { get set }
     
-    weak var delegate: UXMPDFAnnotationEvent? { get set }
+    var delegate: UXMPDFAnnotationEvent? { get set }
     
     /// Force implementations to have an init
     init()

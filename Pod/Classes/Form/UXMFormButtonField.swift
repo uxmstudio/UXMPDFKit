@@ -91,7 +91,7 @@ open class UXMFormButtonField: UXMFormField {
         frame.origin.x += self.frame.origin.x
         frame.origin.y += self.frame.origin.y
 
-        let state = isSelected ? UIControlState.selected : UIControlState.normal
+        let state = isSelected ? UIControl.State.selected : UIControl.State.normal
         var title: NSString = ""
         let titleColor = button.titleColor(for: state) ?? UIColor.black
         let font: UIFont = button.titleLabel!.font
@@ -105,10 +105,10 @@ open class UXMFormButtonField: UXMFormField {
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paragraphStyle.alignment = NSTextAlignment.center
 
-        let attributes: [NSAttributedStringKey:AnyObject] = [
-            NSAttributedStringKey.font: font,
-            NSAttributedStringKey.foregroundColor: titleColor,
-            NSAttributedStringKey.paragraphStyle: paragraphStyle
+        let attributes: [NSAttributedString.Key:AnyObject] = [
+            NSAttributedString.Key.font: font,
+            NSAttributedString.Key.foregroundColor: titleColor,
+            NSAttributedString.Key.paragraphStyle: paragraphStyle
         ]
 
         title.draw(in: frame, withAttributes: attributes)

@@ -9,7 +9,7 @@
 import Foundation
 
 open class UXMAction {
-    open static func fromPDFDictionary(_ sourceDictionary: CGPDFDictionaryRef, documentReference: CGPDFDocument) -> UXMAction? {
+    public static func fromPDFDictionary(_ sourceDictionary: CGPDFDictionaryRef, documentReference: CGPDFDocument) -> UXMAction? {
         var action: UXMAction?
         var destinationName: CGPDFStringRef? = nil
         var destinationString: UnsafePointer<Int8>? = nil
