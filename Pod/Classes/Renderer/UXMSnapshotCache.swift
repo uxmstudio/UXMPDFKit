@@ -53,10 +53,11 @@ open class UXMQueue {
         }
 
         let thumbRender = UXMSnapshotRenderer(snapshot: thumbnail)
-        thumbRender.completionBlock = { [unowned self] in
-            self.rendersInProgress.removeValue(forKey: guid)
+        thumbRender.completionBlock = { [weak self] in
+            guard let context = self else { return }
+            context.rendersInProgress.removeValue(forKey: guid)
             DispatchQueue.main.async {
-                self.progressBlock?(thumbRender.snapshot)
+                context.progressBlock?(thumbRender.snapshot)
                 completion?(thumbRender.snapshot)
             }
         }
