@@ -62,6 +62,10 @@ open class UXMFormFieldObject {
             else if options.type == "Sig" {
                 return self.createSignatureField(options)
             }
+            else if options.type == "Ch" {
+              // Choice list
+              return nil // self.createSignatureField(options)
+            }
         }
         return nil
     }

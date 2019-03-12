@@ -194,7 +194,7 @@ open class UXMAnnotationController: UIViewController {
     func select(annotation: UXMAnnotation?) {
         self.currentAnnotation?.didEnd()
         self.currentAnnotation = annotation
-        self.currentAnnotation?.delegate = self
+//        self.currentAnnotation?.delegate = self
     }
     
     func loadButtons(for annotations: [UXMAnnotation.Type]) {
