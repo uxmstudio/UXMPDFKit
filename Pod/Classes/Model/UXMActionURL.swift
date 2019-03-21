@@ -15,7 +15,8 @@ open class UXMActionURL: UXMAction {
         self.url = url
     }
     
-    public init(stringUrl: String) {
-        self.url = URL(string: stringUrl)!
+    public init?(stringUrl: String) {
+        guard let url = URL(string: stringUrl) else { return nil }
+        self.url = url
     }
 }
