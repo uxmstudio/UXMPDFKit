@@ -316,11 +316,9 @@ open class UXMPageScrubber: UIToolbar {
     }
     
     func refreshScrubber(_ scrubber: UXMPageScrubberTrackControl? = nil) {
-        let innerScrubber = scrubber != nil ? scrubber : self.scrubber
-        guard innerScrubber != nil else { return }
+        let innerScrubber = scrubber ?? self.scrubber
         
-        let page = scrubberPageNumber(self.scrubber)
-        
+        let page = scrubberPageNumber(innerScrubber)
         if page != document.currentPage {
             updatePageNumberText(page)
             updatePageThumbView(page)
@@ -328,7 +326,7 @@ open class UXMPageScrubber: UIToolbar {
             restartTrackTimer()
         }
         
-        innerScrubber!.tag = page
+        innerScrubber.tag = page
     }
     
     @objc func scrubberTouchDown(_ scrubber: UXMPageScrubberTrackControl) {
