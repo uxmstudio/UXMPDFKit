@@ -118,9 +118,11 @@ open class UXMPDFDocument: NSObject, NSCoding {
     }
     
     func loadDocumentInformation() {
-        guard let pdfDocRef = documentRef, let infoDic = pdfDocRef.info else {
-            return
-        }
+        guard let pdfDocRef = documentRef else { return }
+        
+        self.pageCount = pdfDocRef.numberOfPages
+        
+        guard let infoDic = pdfDocRef.info else { return }
         
         var string: CGPDFStringRef? = nil
         
@@ -179,8 +181,6 @@ open class UXMPDFDocument: NSObject, NSCoding {
                 self.modificationDate = ref as Date
             }
         }
-        
-        self.pageCount = pdfDocRef.numberOfPages
     }
     
     func page(at page: Int) -> CGPDFPage? {
