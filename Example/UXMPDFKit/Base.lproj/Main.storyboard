@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uvK-v8-bCe">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uvK-v8-bCe">
+    <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,16 +14,12 @@
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="UXMPDFKit_Example" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
-                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="RQY-pS-dQA" customClass="PDFSinglePageViewer" customModule="UXMPDFKit">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="RQY-pS-dQA" customClass="UXMSinglePageViewer" customModule="UXMPDFKit">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="zJH-Zp-75z">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -34,11 +31,12 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="RQY-pS-dQA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="05Q-6A-GkG"/>
+                            <constraint firstItem="RQY-pS-dQA" firstAttribute="leading" secondItem="2g8-h2-i9n" secondAttribute="leading" id="05Q-6A-GkG"/>
                             <constraint firstItem="RQY-pS-dQA" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="ED6-pG-dE9"/>
-                            <constraint firstAttribute="trailing" secondItem="RQY-pS-dQA" secondAttribute="trailing" id="aN7-kc-VR8"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="RQY-pS-dQA" secondAttribute="bottom" id="dmS-gY-DVS"/>
+                            <constraint firstItem="2g8-h2-i9n" firstAttribute="trailing" secondItem="RQY-pS-dQA" secondAttribute="trailing" id="aN7-kc-VR8"/>
+                            <constraint firstItem="2g8-h2-i9n" firstAttribute="bottom" secondItem="RQY-pS-dQA" secondAttribute="bottom" id="dmS-gY-DVS"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="2g8-h2-i9n"/>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="RQY-pS-dQA" id="dSN-Uw-Om0"/>
@@ -52,16 +50,12 @@
         <scene sceneID="rfK-2O-9GN">
             <objects>
                 <viewController id="YMO-8V-zsq" customClass="ExampleViewController" customModule="UXMPDFKit_Example" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Qol-gp-qy5"/>
-                        <viewControllerLayoutGuide type="bottom" id="nef-rF-CcU"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2p7-Jv-JUY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="OLW-lB-Po9">
-                                <rect key="frame" x="20" y="72" width="335" height="200"/>
+                                <rect key="frame" x="20" y="96" width="335" height="200"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="43y-sh-Ug0">
                                         <rect key="frame" x="0.0" y="0.0" width="335" height="90"/>
@@ -88,10 +82,11 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="OLW-lB-Po9" firstAttribute="leading" secondItem="2p7-Jv-JUY" secondAttribute="leading" constant="20" id="2ML-aI-yRh"/>
-                            <constraint firstItem="OLW-lB-Po9" firstAttribute="top" secondItem="Qol-gp-qy5" secondAttribute="bottom" constant="8" id="4oV-2y-vby"/>
-                            <constraint firstAttribute="trailing" secondItem="OLW-lB-Po9" secondAttribute="trailing" constant="20" id="o5m-yz-k7L"/>
+                            <constraint firstItem="OLW-lB-Po9" firstAttribute="leading" secondItem="YW2-oc-45g" secondAttribute="leading" constant="20" id="2ML-aI-yRh"/>
+                            <constraint firstItem="OLW-lB-Po9" firstAttribute="top" secondItem="YW2-oc-45g" secondAttribute="top" constant="8" id="4oV-2y-vby"/>
+                            <constraint firstItem="YW2-oc-45g" firstAttribute="trailing" secondItem="OLW-lB-Po9" secondAttribute="trailing" constant="20" id="o5m-yz-k7L"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="YW2-oc-45g"/>
                     </view>
                     <navigationItem key="navigationItem" id="Jit-tG-QHX"/>
                 </viewController>
@@ -105,7 +100,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uvK-v8-bCe" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="MGQ-N4-kGz">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
