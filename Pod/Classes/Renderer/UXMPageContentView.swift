@@ -52,7 +52,7 @@ open class UXMPageContentView: UIScrollView, UIScrollViewDelegate {
         bouncesZoom = true
         delegate = self
         isScrollEnabled = true
-        clipsToBounds = true
+        clipsToBounds = false
 
         autoresizingMask = [.flexibleHeight, .flexibleWidth]
 
