@@ -322,8 +322,6 @@ open class UXMPageScrubber: UIToolbar {
         if page != document.currentPage {
             updatePageNumberText(page)
             updatePageThumbView(page)
-            
-            restartTrackTimer()
         }
         
         innerScrubber.tag = page
