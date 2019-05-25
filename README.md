@@ -85,7 +85,7 @@ Form features implemented:
 - [x] Text Fields
 - [x] Checkboxes
 - [ ] Radio Buttons
-- [ ] Choice Boxes
+- [x] Choice Boxes
 
 Form parsing and handling is taken care of by the PDFFormViewController. It takes a document, and then is passed a PDFPageContentView to render form elements onto.
 ```swift
