@@ -14,7 +14,7 @@ struct UXMFormViewOptions {
     var flags: [UXMFormFlag]?
     var name: String = ""
     var exportValue: String = ""
-    var options: [String]?
+    var options: [String]
 }
 
 struct UXMFormFlag: Equatable {

@@ -29,6 +29,7 @@
 		7032A15BD0F431104B465F3E8B32A762 /* UXMAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A072B262F250DC33E58F330C76A6EB1 /* UXMAnnotation.swift */; };
 		720F99DDA7114D95666513296A174F73 /* UXMPDFKit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 27ACB82136688CFC5591D625711E55A0 /* UXMPDFKit-dummy.m */; };
 		741FD8C01E4A5C0DE62FCE1B78C82AA3 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C824D3E4F019CAE35CB2A53885A0277 /* UIImage.swift */; };
+		752764F72298503E00663889 /* UXMChoiceFormField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752764F62298503E00663889 /* UXMChoiceFormField.swift */; };
 		7751CD8A528E5248DD7FD8D0F3549CEA /* UXMThumbnailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51815E9F7C21AD3F26AC430C51499D48 /* UXMThumbnailViewCell.swift */; };
 		7818660B09EA88BAB13E92BA65AD66E4 /* UXMRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FA5CF513688292FB82207DC84F0CD6 /* UXMRenderer.swift */; };
 		86CB3268BFBC7317381943A5B9A817B6 /* UXMActionURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA84BC7F93EC8EBC23A281C4F96ED3A3 /* UXMActionURL.swift */; };
@@ -116,6 +117,7 @@
 		70C3AE2202AFAC854F879DDBD06E8CE5 /* UXMThumbnailViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMThumbnailViewController.swift; sourceTree = "<group>"; };
 		73015568BD9C35CDB6B53C9733D91087 /* UXMPDFKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UXMPDFKit-umbrella.h"; sourceTree = "<group>"; };
 		74BAD51EE893E2622F893C3C45CD9727 /* UXMPageScrubberThumb.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPageScrubberThumb.swift; sourceTree = "<group>"; };
+		752764F62298503E00663889 /* UXMChoiceFormField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UXMChoiceFormField.swift; sourceTree = "<group>"; };
 		78DAD1A3227E5660016A538546AFA10D /* UXMActionGoTo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMActionGoTo.swift; sourceTree = "<group>"; };
 		7C8356BA466A8C36BD5B3F24AF6F18CF /* Pods-UXMPDFKit_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-UXMPDFKit_Example-umbrella.h"; sourceTree = "<group>"; };
 		89E6CA2F27E8278F2CA1A97CB229F0DD /* Pods_UXMPDFKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UXMPDFKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -195,6 +197,7 @@
 				C5AD68BE796217E65B58FCDA27A72913 /* UXMFormViewController.swift */,
 				67CD0163D513FCBDE08B50DC6A5B1C3B /* UXMObjectParser.swift */,
 				AAF3822D400E9763E4108BDC45C9AF7F /* UXMToggleButton.swift */,
+				752764F62298503E00663889 /* UXMChoiceFormField.swift */,
 			);
 			name = Form;
 			path = Pod/Classes/Form;
@@ -496,6 +499,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
@@ -558,6 +562,7 @@
 				DA3D442F70B1A6491DE5D3D3FCFB1D08 /* UXMAnnotationController.swift in Sources */,
 				252148958FE49945B3AFA89A8869FF24 /* UXMAnnotationStore.swift in Sources */,
 				D5521978021295C51A677985735A9C29 /* UXMArray.swift in Sources */,
+				752764F72298503E00663889 /* UXMChoiceFormField.swift in Sources */,
 				F6993C2D24B427728776755607F943DA /* UXMBarButton.swift in Sources */,
 				AA1C8629323D9E6075CB6C5D17ACC588 /* UXMDictionary.swift in Sources */,
 				5F7C8D178C29981F94574AB42A2D480C /* UXMDocumentLink.swift in Sources */,
