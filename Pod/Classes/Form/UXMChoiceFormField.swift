@@ -36,7 +36,6 @@ open class UXMChoiceFormField: UXMFormField {
   init(frame: CGRect, options: Array<String>) {
     super.init(frame: frame)
     self._options = options
-//    let rect = CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height)
     backgroundColor = UIColor.pdfBackgroundBlue().withAlphaComponent(0.7)
     self.layer.cornerRadius = self.frame.size.height/6;
 
@@ -77,28 +76,16 @@ open class UXMChoiceFormField: UXMFormField {
     self.addSubview(_tableView)
   }
 
-  func setupUI(_ opts: Array<String>) {
-
-  }
-
   required public init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func setValue(value: String) {
-    if value is NSNull {
-      self.value = nil
-      return
-    }
-
-    if(value != nil) {
+  func setValue(value: String?) {
+    if let value = value {
       let ind: Int = self._options.index(of: value)!
       self._selectedIndex = ind
-    } else {
-      self._selectedIndex = NSNotFound
+      self._selection.text = value
     }
-
-    self._selection.text = value
   }
 
   override func didSetValue(_ value: AnyObject?) {
@@ -116,10 +103,6 @@ open class UXMChoiceFormField: UXMFormField {
   }
 
   func setOptions(opts: Array<String>) {
-    if opts is NSNull {
-      self.options = []
-      return
-    }
 
     if(_options != opts) {
       _options = opts
@@ -221,7 +204,7 @@ extension UXMChoiceFormField: UITableViewDataSource {
     cell.textLabel?.isOpaque = false
     cell.detailTextLabel?.backgroundColor = .clear
     cell.detailTextLabel?.isOpaque = false
-//    cell.textLabel?.font = UIFont(descriptor: ., size: <#T##CGFloat#>)
+    cell.textLabel?.font = UIFont.systemFont(ofSize: 12)
     cell.textLabel?.adjustsFontSizeToFitWidth = true
     cell.textLabel?.text = _options[indexPath.row]
     cell.textLabel?.textColor = .black

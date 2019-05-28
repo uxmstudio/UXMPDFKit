@@ -23,6 +23,7 @@ open class UXMFormButtonField: UXMFormField {
     open var noOff = false
     open var name = ""
     open var exportValue = ""
+    open var pushButton = false
     
     var isSelected: Bool {
         if let value = self.value as? String {
