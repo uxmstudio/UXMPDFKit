@@ -14,7 +14,7 @@ struct UXMFormViewOptions {
     var flags: [UXMFormFlag]?
     var name: String = ""
     var exportValue: String = ""
-    var options: [String]?
+    var options: [String]
 }
 
 struct UXMFormFlag: Equatable {
@@ -60,7 +60,7 @@ open class UXMFormPage: NSObject {
         contentView.viewDidZoom = { scale in
             formView.updateWithZoom(scale)
         }
-        contentView.sendSubviewToBack(formView)
+      contentView.sendSubviewToBack(formView)
     }
     
     func createFormField(_ dict: UXMDictionary) {

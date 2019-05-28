@@ -48,7 +48,7 @@ open class UXMFormSignatureField: UXMFormField {
         addSubview(signImage)
         addSubview(signButton)
         
-        bringSubviewToFront(signButton)
+      bringSubviewToFront(signButton)
     }
     
     required public init?(coder aDecoder: NSCoder) {

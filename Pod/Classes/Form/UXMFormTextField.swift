@@ -119,8 +119,8 @@ open class UXMFormTextField: UXMFormField {
         }
         
         /// UGLY
-        (text as NSString).draw(in: frame, withAttributes: [
-            NSAttributedString.Key.font: font
+        text.draw(in: frame, withAttributes: [
+          NSAttributedString.Key.font: font
             ])
     }
 

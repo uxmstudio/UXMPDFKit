@@ -15,14 +15,15 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		614D2EE31C8C8A9A00A856CD /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 614D2EE21C8C8A9A00A856CD /* sample.pdf */; };
 		616B61061CF7395100B743A7 /* sample2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 616B61051CF7395100B743A7 /* sample2.pdf */; };
-		61CBF9411D86EB7F00282554 /* sample3.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 61CBF9401D86EB7F00282554 /* sample3.pdf */; };
 		61D3B3771CDE9C1600E7C3A6 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D3B3761CDE9C1600E7C3A6 /* ExampleViewController.swift */; };
+		752764F9229921EE00663889 /* sample_short.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 752764F8229921EE00663889 /* sample_short.pdf */; };
+		754724EE229BEBAC00C5FECB /* sample_radiocheckbox.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 754724ED229BEBAC00C5FECB /* sample_radiocheckbox.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		20EBD11EFF06C30A3117928C /* Pods-UXMPDFKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UXMPDFKit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-UXMPDFKit_Example/Pods-UXMPDFKit_Example.release.xcconfig"; sourceTree = "<group>"; };
 		21803DAC4DC99E3892836720 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		2796C7F95FF0FCF4538111B7 /* UXMPDFKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = UXMPDFKit.podspec; path = ../UXMPDFKit.podspec; sourceTree = "<group>"; };
+		2796C7F95FF0FCF4538111B7 /* UXMPDFKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = UXMPDFKit.podspec; path = ../UXMPDFKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		607FACD01AFB9204008FA782 /* UXMPDFKit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UXMPDFKit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -35,8 +36,9 @@
 		616B61051CF7395100B743A7 /* sample2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample2.pdf; sourceTree = "<group>"; };
 		619D94B81EE7B5FA0009538F /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		61C453CC1E5758B500A7BC7B /* ISSUE_TEMPLATE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = ISSUE_TEMPLATE.md; sourceTree = "<group>"; };
-		61CBF9401D86EB7F00282554 /* sample3.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample3.pdf; sourceTree = "<group>"; };
 		61D3B3761CDE9C1600E7C3A6 /* ExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
+		752764F8229921EE00663889 /* sample_short.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample_short.pdf; sourceTree = "<group>"; };
+		754724ED229BEBAC00C5FECB /* sample_radiocheckbox.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample_radiocheckbox.pdf; sourceTree = "<group>"; };
 		A9FF669EE8472D82692EADE4 /* Pods-UXMPDFKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UXMPDFKit_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UXMPDFKit_Example/Pods-UXMPDFKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		E9B04CB08B51CFCD484BF776 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		EDC69374388E5E5596A4A1B1 /* Pods_UXMPDFKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UXMPDFKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,9 +78,10 @@
 		607FACD21AFB9204008FA782 /* Example for UXMPDFKit */ = {
 			isa = PBXGroup;
 			children = (
+				754724ED229BEBAC00C5FECB /* sample_radiocheckbox.pdf */,
 				614D2EE21C8C8A9A00A856CD /* sample.pdf */,
 				616B61051CF7395100B743A7 /* sample2.pdf */,
-				61CBF9401D86EB7F00282554 /* sample3.pdf */,
+				752764F8229921EE00663889 /* sample_short.pdf */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				61D3B3761CDE9C1600E7C3A6 /* ExampleViewController.swift */,
@@ -163,8 +166,9 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 9592M4L4J8;
+						DevelopmentTeam = 92PG6ZR74V;
 						LastSwiftMigration = "";
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -173,6 +177,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -194,9 +199,10 @@
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
-				61CBF9411D86EB7F00282554 /* sample3.pdf in Resources */,
+				754724EE229BEBAC00C5FECB /* sample_radiocheckbox.pdf in Resources */,
 				616B61061CF7395100B743A7 /* sample2.pdf in Resources */,
 				614D2EE31C8C8A9A00A856CD /* sample.pdf in Resources */,
+				752764F9229921EE00663889 /* sample_short.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,7 +392,9 @@
 			baseConfigurationReference = A9FF669EE8472D82692EADE4 /* Pods-UXMPDFKit_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 9592M4L4J8;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 92PG6ZR74V;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/UXMPDFKit",
@@ -403,6 +411,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.uxmstudio.uxmpdfit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -413,7 +422,9 @@
 			baseConfigurationReference = 20EBD11EFF06C30A3117928C /* Pods-UXMPDFKit_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 9592M4L4J8;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 92PG6ZR74V;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/UXMPDFKit",
@@ -430,6 +441,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.uxmstudio.uxmpdfit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

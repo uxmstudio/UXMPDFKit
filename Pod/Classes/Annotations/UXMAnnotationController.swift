@@ -137,7 +137,7 @@ open class UXMAnnotationController: UIViewController {
         for annotation in annotationsForPage {
             let view = annotation.mutableView()
             contentView.contentView.addSubview(view)
-            contentView.contentView.bringSubviewToFront(view)
+          contentView.contentView.bringSubviewToFront(view)
         }
     }
     
@@ -194,7 +194,7 @@ open class UXMAnnotationController: UIViewController {
     func select(annotation: UXMAnnotation?) {
         self.currentAnnotation?.didEnd()
         self.currentAnnotation = annotation
-        self.currentAnnotation?.delegate = self
+//        self.currentAnnotation?.delegate = self
     }
     
     func loadButtons(for annotations: [UXMAnnotation.Type]) {

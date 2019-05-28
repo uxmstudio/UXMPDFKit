@@ -71,6 +71,7 @@ internal class UXMArray: UXMObject {
             case CGPDFObjectType.array: return arrayAtIndex(index)
             case CGPDFObjectType.dictionary: return dictionaryAtIndex(index)
             case CGPDFObjectType.stream: return streamAtIndex(index)
+            case CGPDFObjectType.null: return nil
             default:
                 break
             }

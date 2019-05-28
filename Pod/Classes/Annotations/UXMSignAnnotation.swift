@@ -109,31 +109,6 @@ extension UXMSignAnnotation: UXMPDFAnnotationButtonable {
   public static var buttonImage: UIImage? { return UIImage.bundledImage("sign") }
 }
 
-//extension UXMSignAnnotation: UITextViewDelegate {
-//  public func textViewDidChange(_ textView: UITextView) {
-//    textView.sizeToFit()
-//
-//    var width: CGFloat = 150.0
-//    if self.view.frame.width > width {
-//      width = self.view.frame.width
-//    }
-//
-//    rect = CGRect(x: self.view.frame.origin.x,
-//                  y: self.view.frame.origin.y,
-//                  width: width,
-//                  height: self.view.frame.height)
-//
-//    if text != textView.text {
-//      text = textView.text
-//    }
-//  }
-//
-//  public func textViewDidEndEditing(_ textView: UITextView) {
-//    textView.isUserInteractionEnabled = false
-//  }
-//}
-
-
 class PDFSignAnnotationView: ResizableView, UXMPDFAnnotationView {
 
   let signExtraPadding: CGFloat = 22.0
