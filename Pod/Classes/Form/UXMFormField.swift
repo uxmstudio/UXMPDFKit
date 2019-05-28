@@ -39,13 +39,14 @@ open class UXMFormFieldObject {
       self.value = value
     }
 
-    if let _defaultValue = dict["DV"] {
+    if let _ = dict["DV"] {} // default Value
 
-    }
+    if let _ = dict["TU"] as? String {} // name
 
     guard let type = dict["FT"] as? String else {
       return
     }
+
     guard let rect = dict.arrayForKey("Rect")?.rect else {
       return
     }
@@ -142,7 +143,6 @@ open class UXMFormFieldObject {
   }
 
   func createDropdownField(_ options: UXMFormViewOptions) -> UXMFormField {
-//    let choices = options.flags?.contains(UXMFormFlag.ChoiceFieldEditable) ?? false
     let field = UXMChoiceFormField(frame: options.rect, options: options.options)
     field.delegate = self
     if let value = self.value {
@@ -165,6 +165,8 @@ open class UXMFormFieldObject {
     let radio = options.flags?.contains(where: { $0 == UXMFormFlag.ButtonRadio }) ?? false
     let field = UXMFormButtonField(frame: options.rect, radio: radio)
     field.name = options.name
+    field.pushButton = options.flags?.contains(where: { $0 == UXMFormFlag.ButtonPushButton }) ?? false
+    field.noOff = options.flags?.contains(where: { $0 == UXMFormFlag.ButtonNoToggleToOff }) ?? false
     field.exportValue = options.exportValue
     field.delegate = self
     if let value = self.value {

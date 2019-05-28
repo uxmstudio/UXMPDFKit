@@ -30,6 +30,7 @@
 		720F99DDA7114D95666513296A174F73 /* UXMPDFKit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 27ACB82136688CFC5591D625711E55A0 /* UXMPDFKit-dummy.m */; };
 		741FD8C01E4A5C0DE62FCE1B78C82AA3 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C824D3E4F019CAE35CB2A53885A0277 /* UIImage.swift */; };
 		752764F72298503E00663889 /* UXMChoiceFormField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752764F62298503E00663889 /* UXMChoiceFormField.swift */; };
+		7564193A229B63540062029B /* _UXMFormButtonField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75641939229B63540062029B /* _UXMFormButtonField.swift */; };
 		7751CD8A528E5248DD7FD8D0F3549CEA /* UXMThumbnailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51815E9F7C21AD3F26AC430C51499D48 /* UXMThumbnailViewCell.swift */; };
 		7818660B09EA88BAB13E92BA65AD66E4 /* UXMRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FA5CF513688292FB82207DC84F0CD6 /* UXMRenderer.swift */; };
 		86CB3268BFBC7317381943A5B9A817B6 /* UXMActionURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA84BC7F93EC8EBC23A281C4F96ED3A3 /* UXMActionURL.swift */; };
@@ -118,6 +119,7 @@
 		73015568BD9C35CDB6B53C9733D91087 /* UXMPDFKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UXMPDFKit-umbrella.h"; sourceTree = "<group>"; };
 		74BAD51EE893E2622F893C3C45CD9727 /* UXMPageScrubberThumb.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMPageScrubberThumb.swift; sourceTree = "<group>"; };
 		752764F62298503E00663889 /* UXMChoiceFormField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UXMChoiceFormField.swift; sourceTree = "<group>"; };
+		75641939229B63540062029B /* _UXMFormButtonField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _UXMFormButtonField.swift; sourceTree = "<group>"; };
 		78DAD1A3227E5660016A538546AFA10D /* UXMActionGoTo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UXMActionGoTo.swift; sourceTree = "<group>"; };
 		7C8356BA466A8C36BD5B3F24AF6F18CF /* Pods-UXMPDFKit_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-UXMPDFKit_Example-umbrella.h"; sourceTree = "<group>"; };
 		89E6CA2F27E8278F2CA1A97CB229F0DD /* Pods_UXMPDFKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UXMPDFKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -190,6 +192,7 @@
 				F7A39153E51A212F32125A463827C621 /* UXMArray.swift */,
 				9FF5E526C9B0388E4ECB9D70406A46B1 /* UXMDictionary.swift */,
 				C3CB7E88EF35B9809D0E95AEDE0E49BD /* UXMFormButtonField.swift */,
+				75641939229B63540062029B /* _UXMFormButtonField.swift */,
 				118993A16DED1B3EF9839AD8E31C8ECC /* UXMFormField.swift */,
 				069C62A72AE4016785F0D745044068C6 /* UXMFormPageView.swift */,
 				BE8249B812A5EE62F6B946573DC51BCA /* UXMFormSignatureField.swift */,
@@ -493,6 +496,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 1010;
+				TargetAttributes = {
+					AA6F04976C20E809DFC05CA90D6CE068 = {
+						LastSwiftMigration = 1020;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -582,6 +590,7 @@
 				42F74805B02C7BAE9EF70F7D93A4816D /* UXMPathAnnotation.swift in Sources */,
 				0DD0A11B57E07D48A968CED6149F7056 /* UXMPDFDocument.swift in Sources */,
 				720F99DDA7114D95666513296A174F73 /* UXMPDFKit-dummy.m in Sources */,
+				7564193A229B63540062029B /* _UXMFormButtonField.swift in Sources */,
 				5D10A4A5E77765384B25F1B39F41B599 /* UXMPDFViewController.swift in Sources */,
 				7818660B09EA88BAB13E92BA65AD66E4 /* UXMRenderer.swift in Sources */,
 				BE4FF9560D49AD759DB908761BD78E64 /* UXMSignAnnotation.swift in Sources */,
@@ -851,6 +860,7 @@
 			baseConfigurationReference = 36B56BCE64FA401C7A97FE7FA069A6C4 /* Pods-UXMPDFKit_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -873,7 +883,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -886,6 +898,7 @@
 			baseConfigurationReference = D7A9AB6A112A4FF5911ECD2983E0FFA4 /* Pods-UXMPDFKit_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -910,6 +923,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
