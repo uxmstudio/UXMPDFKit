@@ -80,12 +80,9 @@ extension UXMSignAnnotation: UXMAnnotation {
   public func drawInContext(_ context: CGContext) {
     UIGraphicsPushContext(context)
 
-    guard let size = self.image?.size else { return }
-    let imageRect = CGRect(origin: rect.origin, size: size)
-
     guard let cgImage = self.image?.cgImage else { return }
     // Draw our CGImage in the context of our PDFAnnotation bounds
-    context.draw(cgImage, in: imageRect)
+    context.draw(cgImage, in: self.rect)
 
     UIGraphicsPopContext()
   }
