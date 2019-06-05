@@ -40,14 +40,12 @@ open class UXMSignAnnotation: NSObject, NSCoding {
     page = aDecoder.decodeObject(forKey: "page") as? Int
     image = aDecoder.decodeObject(forKey: "image") as? UIImage
     rect = aDecoder.decodeCGRect(forKey: "rect")
-//    font = aDecoder.decodeObject(forKey: "font") as! UIFont
   }
 
   public func encode(with aCoder: NSCoder) {
     aCoder.encode(page, forKey: "page")
     aCoder.encode(image, forKey: "image")
     aCoder.encode(rect, forKey: "rect")
-//    aCoder.encode(font, forKey: "font")
   }
 }
 
@@ -80,9 +78,9 @@ extension UXMSignAnnotation: UXMAnnotation {
   public func drawInContext(_ context: CGContext) {
     UIGraphicsPushContext(context)
 
-    guard let cgImage = self.image?.cgImage else { return }
+    guard let image = self.image else { return }
     // Draw our CGImage in the context of our PDFAnnotation bounds
-    context.draw(cgImage, in: self.rect)
+    image.draw(in: self.rect)
 
     UIGraphicsPopContext()
   }
